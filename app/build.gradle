@@ -27,6 +27,8 @@ android {
     }
 }
 
+/*토큰: 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*/
+
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
