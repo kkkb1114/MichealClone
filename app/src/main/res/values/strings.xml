@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">MichaelClone</string>
+    <string name="FuelingRecord">주유 기록</string>
+    <string name="Confirm">완료</string>
+    <string name="location">위치</string>
+    <string name="change">변경</string>
+    <string name="NearbyPlace">가까운 장소 기준</string>
+    <string name="NoPlace">장소 없음</string>
+    <string name="CumulativeLeakDistance">누적 주행 거리</string>
+    <string name="distanceDriven">2,000</string>
+    <string name="km">km</string>
+    <string name="unitMoney">₩</string>
+    <string name="L">L</string>
+    <string name="FuelingAmount">주유금액</string>
+    <string name="fullFuel">가득주유</string>
+    <string name="partialFueling">부분주유</string>
+    <string name="carWash">세차비</string>
+    <string name="fuelVolume">주유량</string>
+    <string name="fuelingRecordMemo">메모, 특이사항\n(250자 이내, 이모티콘 불가)</string>
+    <string name="Confirm_2">확인</string>
+    <string name="Cancel">취소</string>
+    <string name="add_image">사진 추가</string>
+    <string name="Photo_shoot">사진 촬영</string>
+    <string name="Choose_photo">사진 선택</string>
+    <string name="fueling_imageCount">0/5</string>
+</resources>

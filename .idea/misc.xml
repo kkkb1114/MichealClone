@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/drawable/background_white_round.xml" value="0.23645833333333333" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/drawable/circlebackground.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/drawable/ic_launcher_background.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/drawable/vp_item_background_round.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/activity_fueling_record.xml" value="0.25" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/activity_main.xml" value="0.3515625" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/dl_calendar.xml" value="0.25" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/item_vp_fueling.xml" value="0.25" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/itemadd_vp_fueling.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/select_camer_aalbum_dialog.xml" value="0.33" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/sp_nulldropdown.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/xml/file_paths.xml" value="0.2046875" />
+        <entry key="..\:/Users/infocar/AppData/Local/Android/Gradle/caches/transforms-3/f8d734a7d44310d84014d6ed621ec293/transformed/appcompat-1.4.1/res/layout/support_simple_spinner_dropdown_item.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/infocar/MichaelClone/app/src/main/res/layout/activity_fueling_record.xml" value="0.36614583333333334" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11 (2)" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
