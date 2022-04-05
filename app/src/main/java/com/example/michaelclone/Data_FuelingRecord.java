@@ -29,5 +29,4 @@ public class Data_FuelingRecord {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
-
 }

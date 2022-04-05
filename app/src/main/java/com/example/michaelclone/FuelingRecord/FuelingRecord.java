@@ -40,11 +40,14 @@ import com.example.michaelclone.BaseDialog;
 import com.example.michaelclone.Data_FuelingRecord;
 import com.example.michaelclone.DialogManager;
 import com.example.michaelclone.R;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -65,6 +68,7 @@ public class FuelingRecord extends AppCompatActivity {
     VpAp_fueling vpAp_fueling;
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     ArrayList<String> typeList = new ArrayList<>(); // type이 1이면 이미지 적용된 레이아웃, 0이면 이미지 추가 레이아웃
+    String[] array;
 
     // 카메라, 앨범 선택 핸들러
     public static ActivityResultLauncher<Intent> mStartForResult;
@@ -405,14 +409,15 @@ public class FuelingRecord extends AppCompatActivity {
         }
     }
 
-    // 이미지 파일의 경로를 가져올 메소드
+    /*// 이미지 파일의 경로를 가져올 메소드
     private File createImageFile() throws IOException{
         // 파일이름을 세팅 및 저장경로 세팅 및 저장경로 세팅
-        String Path = new SimpleDateFormat("yyyy")
-    }
+        String Path = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+    }*/
 
     // 앨범 .....
-    public String getRealPathFromURI(Uri uri){
+    public String getRealPathFromURI2(Uri uri){
         int column_index = 0;
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = mContext.getContentResolver().query(uri, proj, null, null, null);
@@ -420,6 +425,42 @@ public class FuelingRecord extends AppCompatActivity {
             column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         }
         return cursor.getString(column_index);
+    }
+
+
+    public String getRealPathFromURI(Uri uri){
+        String fullPath = null;
+        final String column = "_data";
+        Cursor cursor = mContext.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null){
+            cursor.moveToFirst();
+            String document_id = cursor.getString(0);
+            if (document_id == null){
+                for (int i=0; i<cursor.getColumnCount(); i++){
+                    if (column.equalsIgnoreCase(cursor.getColumnName(i))){
+                        fullPath = cursor.getString(i);
+                        break;
+                    }
+                }
+            }else {
+                document_id = document_id.substring(document_id.lastIndexOf(".")+1);
+                cursor.close();
+
+                final String[] projection = {column};
+                try {
+                    cursor = mContext.getContentResolver().query(
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            projection, MediaStore.Images.Media._ID + "=?", new String[]{document_id}, null);
+                    if (cursor != null){
+                        cursor.moveToFirst();
+                        fullPath = cursor.getString(cursor.getColumnIndexOrThrow(column));
+                    }
+                } finally {
+                    if (cursor != null) cursor.close();
+                }
+            }
+        }
+        return fullPath;
     }
 
     public void RequestPermission(){

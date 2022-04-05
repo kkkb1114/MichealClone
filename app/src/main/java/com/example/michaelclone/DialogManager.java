@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -44,13 +45,18 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.prolificinteractive.materialcalendarview.OnRangeSelectedListener;
+import com.prolificinteractive.materialcalendarview.format.MonthArrayTitleFormatter;
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class DialogManager extends AlertDialog.Builder {
 
@@ -77,6 +83,7 @@ public class DialogManager extends AlertDialog.Builder {
         Button bt_cancel;
         String NowDate;
         String NowYear;
+        String[] array;
 
         public calenderDialog(@NonNull Context context, TextView tv_date) {
             super(context, R.layout.dl_calendar);
@@ -102,6 +109,24 @@ public class DialogManager extends AlertDialog.Builder {
         }
 
         public void setMaterialCalendarView(){
+
+            /*
+            materialCalendarView.setTitleFormatter(new TitleFormatter() {
+                @Override
+                public CharSequence format(CalendarDay day) {
+                    //calendarDay라는 클래스는 LocalDate클래스를 기반으로 만들어진 클래스다.
+                    //때문에 MaterialCalendarView에서 연/월 보여주기를 커스텀하려면 CalendarDay 객체의 getDate()로 연/월을 구한 다음 LocalDate 객체에 넣어서
+                    // LocalDate로 변환하는 처리가 필요하다.
+                    Date inpuText = day.getDate();
+                    String[] calendarHeaderElements = inpuText.toString().split("-");
+                    StringBuilder calendarHeaderBuilder = new StringBuilder();
+                    calendarHeaderBuilder.append(calendarHeaderElements[0])
+                            .append(" ")
+                            .append(calendarHeaderElements[1]);
+                    return calendarHeaderBuilder.toString();
+                }
+            });*/
+
             // 시간값 계산
             mNow = System.currentTimeMillis(); // 디바이스 기준 표준 시간 적용
 
@@ -259,7 +284,6 @@ public class DialogManager extends AlertDialog.Builder {
         LinearLayout Ln_Camera;
         LinearLayout Ln_Album;
         Data_FuelingRecord data_fuelingRecord;
-        FuelingRecord fuelingRecord = new FuelingRecord();
 
         String rootPath;
         String newPath;
@@ -323,7 +347,7 @@ public class DialogManager extends AlertDialog.Builder {
                     intentAlbum.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
                     intentAlbum.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                     intentAlbum.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    fuelingRecord.mStartForResult.launch(intentAlbum);
+                    FuelingRecord.mStartForResult.launch(intentAlbum);
                     // 지울것!!
                     Log.i("앨범", String.valueOf(data_fuelingRecord.getType()));
                     dismiss();
