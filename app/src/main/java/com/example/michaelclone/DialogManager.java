@@ -1,18 +1,10 @@
 package com.example.michaelclone;
 
-import static android.app.Activity.RESULT_OK;
-
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,37 +18,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.core.content.PermissionChecker;
 
-import com.example.michaelclone.FuelingRecord.FuelingRecord;
+import com.example.michaelclone.FuelingRecord.FuelingRecordActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
-import com.prolificinteractive.materialcalendarview.OnRangeSelectedListener;
-import com.prolificinteractive.materialcalendarview.format.MonthArrayTitleFormatter;
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
 
 public class DialogManager extends AlertDialog.Builder {
 
@@ -333,7 +309,7 @@ public class DialogManager extends AlertDialog.Builder {
                     data_fuelingRecord.setImageUri(String.valueOf(uri)); // 메인 프레그먼트 사용할 uri 문자열로 변환해서 저장
                     //intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                     //intentCamera.putExtra("return-data", true);
-                    FuelingRecord.mStartForResult.launch(intentCamera);
+                    FuelingRecordActivity.mStartForResult.launch(intentCamera);
 
                     // 지울것!!
                     Log.i("카메라", String.valueOf(data_fuelingRecord.getType()));
@@ -347,7 +323,7 @@ public class DialogManager extends AlertDialog.Builder {
                     intentAlbum.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
                     intentAlbum.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                     intentAlbum.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    FuelingRecord.mStartForResult.launch(intentAlbum);
+                    FuelingRecordActivity.mStartForResult.launch(intentAlbum);
                     // 지울것!!
                     Log.i("앨범", String.valueOf(data_fuelingRecord.getType()));
                     dismiss();

@@ -24,6 +24,19 @@
     <string name="Choose_photo">사진 선택</string>
     <string name="fueling_imageCount">0/5</string>
 
+
+    <!--정비/기타 기록-->
+    <string name="maintenanceItems">정비 항목</string>
+    <string name="otherItems">기타 항목</string>
+    <string name="PleaseSelectAnItem">항목을 선택해 주세요</string>
+    <string name="selectionComplete">선택 완료</string>
+    <string name="replaceEvery">마다 교체</string>
+    <string name="month">개월</string>
+    <string name="split">|</string>
+    <string name="MaintenanceItemSelectionRecommend">항목을 선택해 주세요</string>
+    <!--정비/기타 기록-->
+
+    <!--달력-->
     <string-array name="custom_weekdays">
         <item>일</item>
         <item>월</item>
@@ -48,5 +61,6 @@
         <item>11월</item>
         <item>12월</item>
     </string-array>
+    <!--달력-->
 
 </resources>

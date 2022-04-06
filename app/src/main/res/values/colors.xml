@@ -9,4 +9,18 @@
     <color name="white">#FFFFFFFF</color>
     <color name="Red">#E91E63</color>
     <color name="top_color">#8003A9F4</color>
+
+    <!--정비 기록 항목-->
+    <color name="maintenanceItemColor">#80000000</color>
+    <color name="selectionCompleteColor">#1A000000</color>
+    <color name="backColor">#808080</color>
+    <color name="selectionItemBackground">#0D000000</color>
+    <color name="maintenanceTabIndicatorText">#4D000000</color>
+    <color name="maintenanceTabIndicatorTextWSelect">#80000000</color>
+    <color name="maintenanceTabIndicator">#80000000</color>
+    <color name="maintenanceTabBottomLine">#0D000000</color>
+
+
+    <!-- Fully transparent, equivalent to 0x00000000 -->
+    <color name="transparent">#00000000</color>
 </resources>

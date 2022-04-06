@@ -54,7 +54,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
-public class FuelingRecord extends AppCompatActivity {
+public class FuelingRecordActivity extends AppCompatActivity {
 
     ArrayList<Data_FuelingRecord> data_fuelingRecordArrayList;
     Data_FuelingRecord data_fuelingRecord;

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/selectionItemBackground">
+
+        <!--상단 뷰-->
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:src="@drawable/back"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/MaintenanceItemSelectionRecommend"
+                    android:textColor="@color/maintenanceItemColor"
+                    android:textSize="@dimen/MaintenanceItemSelectionCount"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/selectionComplete"
+                    android:textColor="@color/selectionCompleteColor"
+                    android:textSize="@dimen/MaintenanceItemSelectionCount" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <!--상단 뷰-->
+
+        <!--탭 레이아웃-->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_maintenanceOther"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabTextColor="@color/maintenanceTabIndicatorText"
+            app:tabSelectedTextColor="@color/maintenanceTabIndicatorTextWSelect"
+            app:tabIndicatorAnimationMode="linear"
+            android:background="@null"
+            app:tabIndicatorColor="@color/maintenanceItemColor"
+            app:tabIndicatorHeight="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/maintenanceItems" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/otherItems" />
+
+        </com.google.android.material.tabs.TabLayout>
+        <!--탭 레이아웃-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/maintenanceTabBottomLine"
+            app:layout_constraintTop_toBottomOf="@+id/tl_maintenanceOther" />
+
+        <!--탭 레이아웃에 연결된 뷰페이저-->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_maintenanceOther"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tl_maintenanceOther" />
+        <!--탭 레이아웃에 연결된 뷰페이저-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
