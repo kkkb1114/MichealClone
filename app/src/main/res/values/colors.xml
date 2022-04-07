@@ -14,11 +14,13 @@
     <color name="maintenanceItemColor">#80000000</color>
     <color name="selectionCompleteColor">#1A000000</color>
     <color name="backColor">#808080</color>
+    <color name="TransparencyBlack_20">#33000000</color>
     <color name="selectionItemBackground">#0D000000</color>
     <color name="maintenanceTabIndicatorText">#4D000000</color>
     <color name="maintenanceTabIndicatorTextWSelect">#80000000</color>
     <color name="maintenanceTabIndicator">#80000000</color>
     <color name="maintenanceTabBottomLine">#0D000000</color>
+    <color name="SkyBlue">#00D4FF</color>
 
 
     <!-- Fully transparent, equivalent to 0x00000000 -->

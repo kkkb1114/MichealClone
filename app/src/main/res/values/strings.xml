@@ -14,7 +14,7 @@
     <string name="FuelingAmount">주유금액</string>
     <string name="fullFuel">가득주유</string>
     <string name="partialFueling">부분주유</string>
-    <string name="carWash">세차비</string>
+    <string name="carWashCost">세차비</string>
     <string name="fuelVolume">주유량</string>
     <string name="fuelingRecordMemo">메모, 특이사항\n(250자 이내, 이모티콘 불가)</string>
     <string name="Confirm_2">확인</string>
@@ -35,6 +35,55 @@
     <string name="split">|</string>
     <string name="MaintenanceItemSelectionRecommend">항목을 선택해 주세요</string>
     <!--정비/기타 기록-->
+
+
+    <string name="AddNewItem">새 항목 추가</string>
+    <string name="DistanceUnit">km</string>
+    <!--정비 항목-->
+    <string name="engineOil">엔진오일 및 오일필터</string>
+    <string name="airconditionerFilter">에어컨필터(향균필터)</string>
+    <string name="wiperBlade">와이퍼 블레이드</string>
+    <string name="driveBelt">구동벨트</string>
+    <string name="missionOil">미션 오일</string>
+    <string name="Battery">배터리</string>
+    <string name="WarrantyRepair">보증수리</string>
+    <string name="brakeFluid">브레이크 오일</string>
+    <string name="brakePadsAndDiscs">브레이크 패드 및 디스크</string>
+    <string name="accidentRepair">사고수리</string>
+    <string name="airCleanerFilter">에어클리너 필터</string>
+    <string name="Coolant">엔진부동액(냉각수)</string>
+    <string name="fuelFilter">연료필터</string>
+    <string name="exteriorRepairRestoration">외장수리복원</string>
+    <string name="generalRepair">일반수리</string>
+    <string name="sparkPlug">점화플러그</string>
+    <string name="timingBelt">타이밍 벨트</string>
+    <string name="Tire">타이어</string>
+    <string name="tirePosition">타이어 위치</string>
+    <string name="tirePunctureRepair">타이어펑크수리</string>
+    <string name="powerSteeringOil">파워스티어링 오일</string>
+    <string name="wheelAlignman">휠 얼라인먼</string>
+    <!--정비 항목-->
+
+    <!--기타 항목-->
+    <string name="highPass">하이패스</string>
+    <string name="tollFee">톨게이트 비용</string>
+    <string name="parkingFee">주차요금</string>
+    <string name="carWash">세차</string>
+    <string name="fuelAdditive">연료첨가제(불스원샷)</string>
+    <string name="carInspection">자동차검사</string>
+    <string name="vehicleSupplies">차량용품</string>
+    <string name="outdoorProducts">실외용품</string>
+    <string name="indoorProducts">실내용품</string>
+    <string name="carInsurance">자동차 보험</string>
+    <string name="blackBox">블랙박스</string>
+    <string name="trafficFine">교통범칙금</string>
+    <string name="automobileTax">자동차세</string>
+    <string name="tinting">썬팅(틴팅)</string>
+    <string name="sheetMetalPainting">판금도색</string>
+    <string name="navigation">네비게이션</string>
+    <string name="rearCamera">후방카메라</string>
+    <string name="carAudio">카오디오</string>
+    <!--기타 항목-->
 
     <!--달력-->
     <string-array name="custom_weekdays">

@@ -433,7 +433,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
-                        android:hint="@string/carWash"
+                        android:hint="@string/carWashCost"
                         android:textColor="@color/black"
                         android:textColorHint="#000000" />
 

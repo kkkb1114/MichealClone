@@ -70,7 +70,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-            <com.google.android.material.tabs.TabItem
+           <!-- <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/maintenanceItems" />
@@ -78,7 +78,7 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/otherItems" />
+                android:text="@string/otherItems" />-->
 
         </com.google.android.material.tabs.TabLayout>
         <!--탭 레이아웃-->

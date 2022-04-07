@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Ln_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -7,85 +9,107 @@
     <!--이미지-->
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="10dp"
+        android:padding="20dp"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="top"
             android:src="@drawable/ic_fuel_ecomony"/>
 
     </LinearLayout>
     <!--이미지-->
 
-    <!--항목-->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="9"
         android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="@dimen/Item_ItemTextSize"
-            android:text="항목"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/item_distance"
+            <!--항목-->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="거리"
-                android:textSize="@dimen/Item_ItemSubTextSize"/>
+                android:layout_weight="6"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:gravity="center_vertical"
-                android:text="@string/split"
-                android:textSize="@dimen/Item_ItemSubTextSize"/>
+                <TextView
+                    android:id="@+id/tv_itemTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/Item_ItemTextSize"
+                    android:text="항목"/>
 
-            <TextView
-                android:id="@+id/item_month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/month"
-                android:textSize="@dimen/Item_ItemSubTextSize"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/month"
-                android:textSize="@dimen/Item_ItemSubTextSize"/>
+                    <TextView
+                        android:id="@+id/tv_itemDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="거리"
+                        android:textSize="@dimen/Item_ItemSubTextSize"/>
 
-            <TextView
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="5dp"
+                        android:background="@color/TransparencyBlack_20"/>
+
+                    <TextView
+                        android:id="@+id/tv_itemMonth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/month"
+                        android:textSize="@dimen/Item_ItemSubTextSize"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/month"
+                        android:textSize="@dimen/Item_ItemSubTextSize"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/replaceEvery"
+                        android:textSize="@dimen/Item_ItemSubTextSize"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <!--항목-->
+
+            <!--체크 박스-->
+
+            <CheckBox
+                android:id="@+id/cb_itemSelect"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/replaceEvery"
-                android:textSize="@dimen/Item_ItemSubTextSize"/>
+                android:layout_height="match_parent"
+                android:buttonTint="@color/TransparencyBlack_20"
+                android:gravity="center"
+                android:layout_weight="0.5"/>
+            <!--체크 박스-->
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/TransparencyBlack_20"/>
+
     </LinearLayout>
-    <!--항목-->
-
-    <!--체크 박스-->
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="0.5"/>
-    <!--체크 박스-->
 
 </LinearLayout>
