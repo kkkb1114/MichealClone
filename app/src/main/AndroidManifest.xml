@@ -34,6 +34,9 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
+            android:name=".MaintenanceRecords.MaintenanceOtherRecordActivity"
+            android:exported="false" />
+        <activity
             android:name=".MaintenanceRecords.SelectMaintenanceItemActivity"
             android:exported="true"
             android:windowSoftInputMode="stateAlwaysHidden">

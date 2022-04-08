@@ -24,16 +24,24 @@
     <string name="Choose_photo">사진 선택</string>
     <string name="fueling_imageCount">0/5</string>
 
+    <!--잠시 하드코딩해놓은 것 기능 구현하면 지울것-->
+    <string name="location2">안암카공업사</string>
+    <string name="location3">서울특별시 성북구 안암동3가</string>
 
     <!--정비/기타 기록-->
     <string name="maintenanceItems">정비 항목</string>
     <string name="otherItems">기타 항목</string>
     <string name="PleaseSelectAnItem">항목을 선택해 주세요</string>
-    <string name="selectionComplete">선택 완료</string>
+    <string name="selectionConfirm">선택 완료</string>
     <string name="replaceEvery">마다 교체</string>
+    <string name="selectionCount"> 개 항목</string>
     <string name="month">개월</string>
     <string name="split">|</string>
     <string name="MaintenanceItemSelectionRecommend">항목을 선택해 주세요</string>
+    <string name="change_item">+ 항목 변경</string>
+    <string name="maintenanceMode">정비모드</string>
+    <string name="repairShop">정비소</string>
+    <string name="selfMaintenance">자가정비</string>
     <!--정비/기타 기록-->
 
 

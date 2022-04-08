@@ -62,7 +62,7 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
         }else {
             view = layoutInflater.inflate(R.layout.add_item, parent, false);
         }
-        ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view, context);
         return viewHolder;
     }
 
@@ -85,9 +85,11 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
         TextView tv_itemMonth;
         CheckBox cb_itemSelect;
         LinearLayout Ln_item;
+        Context context;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
+            this.context = context;
             setView();
         }
 
@@ -131,8 +133,10 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked){
                         cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#00D4FF")));
+                        SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 0);
                     }else {
                         cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
+                        SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 1);
                     }
                 }
             });

@@ -35,6 +35,7 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/tv_itemCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -43,10 +44,11 @@
                     android:textSize="@dimen/MaintenanceItemSelectionCount"/>
 
                 <TextView
+                    android:id="@+id/tv_selectionConfirm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="right|center_vertical"
-                    android:text="@string/selectionComplete"
+                    android:text="@string/selectionConfirm"
                     android:textColor="@color/selectionCompleteColor"
                     android:textSize="@dimen/MaintenanceItemSelectionCount" />
 
@@ -60,6 +62,7 @@
             android:id="@+id/tl_maintenanceOther"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabGravity="fill"
             app:tabTextColor="@color/maintenanceTabIndicatorText"
             app:tabSelectedTextColor="@color/maintenanceTabIndicatorTextWSelect"
             app:tabIndicatorAnimationMode="linear"
@@ -70,7 +73,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-           <!-- <com.google.android.material.tabs.TabItem
+            <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/maintenanceItems" />
@@ -78,7 +81,7 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/otherItems" />-->
+                android:text="@string/otherItems" />
 
         </com.google.android.material.tabs.TabLayout>
         <!--탭 레이아웃-->

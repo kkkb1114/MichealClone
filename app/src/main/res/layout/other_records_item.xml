@@ -7,26 +7,75 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <!--이미지-->
-    <LinearLayout
-        android:id="@+id/linearLayout7"
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:stretchColumns="*">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_fuel_ecomony" />
+        <TableRow>
+            <!--이미지-->
+            <LinearLayout
+                android:id="@+id/linearLayout7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp">
 
-    </LinearLayout>
-    <!--이미지-->
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_fuel_ecomony" />
+
+            </LinearLayout>
+            <!--이미지-->
+
+            <!--항목-->
+            <TextView
+                android:id="@+id/tv_itemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="항목"
+                android:textColor="@color/black"
+                android:textSize="@dimen/Item_ItemTextSize"
+                android:layout_span="6"/>
+            <!--항목-->
+
+            <!--체크 박스-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_span="2"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+                <CheckBox
+                    android:id="@+id/cb_itemSelect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/TransparencyBlack_20"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <!--체크 박스-->
+        </TableRow>
+
+        <TableRow>
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_column="2"
+                android:layout_span="8"
+                android:layout_marginVertical="5dp"
+                android:background="@color/TransparencyBlack_20" />
+        </TableRow>
+    </TableLayout>
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout2"
@@ -46,41 +95,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!--항목-->
-            <TextView
-                android:id="@+id/tv_itemTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:layout_gravity="center_vertical"
-                android:text="항목"
-                android:textColor="@color/black"
-                android:textSize="@dimen/Item_ItemTextSize" />
-            <!--항목-->
 
-            <!--체크 박스-->
 
-            <CheckBox
-                android:id="@+id/cb_itemSelect"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:buttonTint="@color/TransparencyBlack_20"
-                android:gravity="center"
-                android:layout_gravity="center"/>
-            <!--체크 박스-->
+
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/view3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="10dp"
-            android:background="@color/TransparencyBlack_20"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

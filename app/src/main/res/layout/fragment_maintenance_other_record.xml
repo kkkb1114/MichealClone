@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="1"
+                android:gravity="center"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_mylocation" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:layout_span="3"
+                android:padding="5dp"
+                android:text="@string/maintenanceMode"
+                android:textColor="@color/black"
+                android:textColorHint="#000000" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:layout_span="3"
+                android:padding="5dp"
+                android:text="@string/repairShop"
+                android:textColor="@color/black"
+                android:textColorHint="#000000"
+                android:background="@drawable/vp_item_background_round"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="10dp"
+                android:layout_span="3"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/selfMaintenance"
+                android:textColor="@color/black"
+                android:textColorHint="#000000"
+                android:background="@drawable/vp_item_background_round" />
+
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#33000000" />
+
+        <!--위치 검색-->
+        <TableRow
+            android:id="@+id/tr_moRcord_location" >
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="1"
+                android:gravity="center"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_mylocation" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="9"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/location2"
+                        android:textSize="@dimen/locationTextSize"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/location3"
+                        android:textColor="@color/blackTransparent_50"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/vp_item_background_round"
+                        android:gravity="center"
+                        android:text="@string/change"
+                        android:textColor="@color/black"
+                        app:backgroundTint="@null"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/NearbyPlace"
+                        android:textColor="@color/blackTransparent_20"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_menu_help"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView6"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_diag_close"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView5"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/NoPlace"
+                        android:textColor="@color/blackTransparent_20"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </TableRow>
+        <!--위치 검색-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#33000000" />
+
+        <!--누적 주행 거리-->
+        <TableRow>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_span="1"
+                android:gravity="center"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_fuel_ecomony" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_span="4"
+                android:hint="@string/CumulativeLeakDistance"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:textColorHint="#000000" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_span="4"
+                android:background="@null"
+                android:gravity="right"
+                android:hint="@string/distanceDriven"
+                android:inputType="number"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:textColorHint="#33000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_span="1"
+                android:padding="5dp"
+                android:text="@string/km"
+                android:textColor="#4D000000" />
+        </TableRow>
+        <!--누적 주행 거리-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#33000000" />
+
+        <TableRow>
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_span="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_gallery" />
+
+                <TextView
+                    android:id="@+id/fueling_imageCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fueling_imageCount"
+                    android:textColor="#33000000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_span="9"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_fueling"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#33000000" />
+
+        <!--<View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#33000000" />-->
+
+    </TableLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/vp_item_background_round">
+
+        <LinearLayout
+            android:id="@+id/linearLayout8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_recorditemList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_addRecordItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:padding="9dp"
+                android:text="@string/change_item"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

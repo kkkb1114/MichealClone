@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="Item_ItemTextSize">20sp</dimen>
+    <dimen name="Item_ItemTextSize">15sp</dimen>
     <dimen name="Item_ItemSubTextSize">15sp</dimen>
+    <dimen name="locationTextSize">25sp</dimen>
 
 
     <!--정비 기타 상단 텍스트 사이즈-->

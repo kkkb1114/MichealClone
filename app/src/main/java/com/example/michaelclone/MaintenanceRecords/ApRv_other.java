@@ -112,8 +112,10 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#00D4FF")));
+                        SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 0);
                     } else {
                         cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
+                        SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 1);
                     }
                 }
             });
