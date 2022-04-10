@@ -16,7 +16,6 @@ public class BaseDialog extends Dialog {
         setContentView(layoutId);
         this.mContext = context;
 
-
         setCancelable(true);
         setCanceledOnTouchOutside(false);
 

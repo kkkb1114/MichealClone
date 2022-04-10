@@ -27,6 +27,10 @@
     <color name="blackTransparent_30">#4D000000</color>
     <color name="blackTransparent_40">#66000000</color>
     <color name="blackTransparent_50">#80000000</color>
+    <color name="blackTransparent_60">#99000000</color>
+    <color name="blackTransparent_70">#B3000000</color>
+    <color name="blackTransparent_80">#CC000000</color>
+    <color name="blackTransparent_90">#E6000000</color>
 
 
     <!-- Fully transparent, equivalent to 0x00000000 -->

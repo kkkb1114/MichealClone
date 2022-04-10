@@ -2,15 +2,12 @@ package com.example.michaelclone;
 
 import java.util.ArrayList;
 
-public class Data_FuelingRecord {
+public class Data_Record {
 
     // 주유
     static String imagePath;
     static int type = 0; //type = 0: 카메라, 1: 앨범
     static String ImageUri;
-
-    // 정비 기타
-    static public ArrayList<String> al_itemTitleList = new ArrayList<>();
 
     public String getImageUri() {
         return ImageUri;

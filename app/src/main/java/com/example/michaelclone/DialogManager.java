@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import com.example.michaelclone.FuelingRecord.FuelingRecordActivity;
+import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -259,7 +260,7 @@ public class DialogManager extends AlertDialog.Builder {
         Context context;
         LinearLayout Ln_Camera;
         LinearLayout Ln_Album;
-        Data_FuelingRecord data_fuelingRecord;
+        Data_Record data_Record;
 
         String rootPath;
         String newPath;
@@ -278,7 +279,7 @@ public class DialogManager extends AlertDialog.Builder {
         }
 
         public void setView(){
-            data_fuelingRecord = new Data_FuelingRecord();
+            data_Record = new Data_Record();
             Ln_Camera = findViewById(R.id.Ln_Camera);
             Ln_Album = findViewById(R.id.Ln_Album);
             Ln_Camera.setOnClickListener(this);
@@ -306,13 +307,13 @@ public class DialogManager extends AlertDialog.Builder {
                     } else {
                         uri = Uri.fromFile(file);
                     }
-                    data_fuelingRecord.setImageUri(String.valueOf(uri)); // 메인 프레그먼트 사용할 uri 문자열로 변환해서 저장
+                    data_Record.setImageUri(String.valueOf(uri)); // 메인 프레그먼트 사용할 uri 문자열로 변환해서 저장
                     //intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                     //intentCamera.putExtra("return-data", true);
                     FuelingRecordActivity.mStartForResult.launch(intentCamera);
 
                     // 지울것!!
-                    Log.i("카메라", String.valueOf(data_fuelingRecord.getType()));
+                    Log.i("카메라", String.valueOf(data_Record.getType()));
                     dismiss();
                     break;
                 case R.id.Ln_Album :
@@ -323,9 +324,9 @@ public class DialogManager extends AlertDialog.Builder {
                     intentAlbum.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
                     intentAlbum.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                     intentAlbum.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    FuelingRecordActivity.mStartForResult.launch(intentAlbum);
+                    MaintenanceOtherRecordFragment.mStartForResult.launch(intentAlbum);
                     // 지울것!!
-                    Log.i("앨범", String.valueOf(data_fuelingRecord.getType()));
+                    Log.i("앨범", String.valueOf(data_Record.getType()));
                     dismiss();
                     break;
             }
@@ -333,7 +334,7 @@ public class DialogManager extends AlertDialog.Builder {
 
         // type = 0: 카메라, 1: 앨범
         public void set_CameraAlbum(int type){
-            data_fuelingRecord.setType(type);
+            data_Record.setType(type);
         }
 
 

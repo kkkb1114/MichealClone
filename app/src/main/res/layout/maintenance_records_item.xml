@@ -34,6 +34,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_span="6"
             android:orientation="vertical">
 
@@ -43,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="@dimen/Item_ItemTextSize"
+                android:maxLines="1"
                 android:text="항목"/>
 
             <LinearLayout
@@ -55,8 +57,10 @@
                     android:id="@+id/tv_itemDistance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="거리"
-                    android:textSize="@dimen/Item_ItemSubTextSize"/>
+                    android:maxWidth="@dimen/MaintenanceOtherItemDetail"
+                    android:text="@string/month"
+                    android:textSize="@dimen/Item_ItemSubTextSize"
+                    android:textColor="@color/blackTransparent_50"/>
 
                 <View
                     android:layout_width="2dp"
@@ -68,20 +72,24 @@
                     android:id="@+id/tv_itemMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxWidth="@dimen/MaintenanceOtherItemDetail"
                     android:text="@string/month"
-                    android:textSize="@dimen/Item_ItemSubTextSize"/>
+                    android:textSize="@dimen/Item_ItemSubTextSize"
+                    android:textColor="@color/blackTransparent_50"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/month"
-                    android:textSize="@dimen/Item_ItemSubTextSize"/>
+                    android:textSize="@dimen/Item_ItemSubTextSize"
+                    android:textColor="@color/blackTransparent_50"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/replaceEvery"
-                    android:textSize="@dimen/Item_ItemSubTextSize"/>
+                    android:textSize="@dimen/Item_ItemSubTextSize"
+                    android:textColor="@color/blackTransparent_50"/>
 
             </LinearLayout>
 
@@ -93,9 +101,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_span="2"
-                android:gravity="center"
+                android:gravity="right|center_vertical"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="15dp">
                 <CheckBox
                     android:id="@+id/cb_itemSelect"
                     android:layout_width="wrap_content"
@@ -111,9 +119,9 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
                 android:layout_column="2"
                 android:layout_span="8"
-                android:layout_marginVertical="5dp"
                 android:background="@color/TransparencyBlack_20" />
         </TableRow>
     </TableLayout>

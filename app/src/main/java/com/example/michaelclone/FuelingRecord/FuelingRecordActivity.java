@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
 import android.content.ClipData;
@@ -20,44 +19,34 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.michaelclone.BaseDialog;
-import com.example.michaelclone.Data_FuelingRecord;
+import com.example.michaelclone.Data_Record;
 import com.example.michaelclone.DialogManager;
 import com.example.michaelclone.R;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
 public class FuelingRecordActivity extends AppCompatActivity {
 
-    ArrayList<Data_FuelingRecord> data_fuelingRecordArrayList;
-    Data_FuelingRecord data_fuelingRecord;
+    ArrayList<Data_Record> data_RecordArrayList;
+    Data_Record data_Record;
     LinearLayout ln_date;
     TextView tv_date;
     TextView fueling_imageCount;
@@ -291,17 +280,17 @@ public class FuelingRecordActivity extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result != null){
-                            data_fuelingRecord = new Data_FuelingRecord();
+                            data_Record = new Data_Record();
                             // 지울것!!
                             Log.i("결과", String.valueOf(result.getResultCode()));
-                            if (data_fuelingRecord.getType() == 0 && result.getResultCode() == RESULT_OK) { //todo 카메라
+                            if (data_Record.getType() == 0 && result.getResultCode() == RESULT_OK) { //todo 카메라
                                 Intent intent = result.getData();
 
                                 //cropImage();
                                 // 지울것!!
                                 Log.i("결과", String.valueOf(intent));
                                 // 지울것!!
-                                Log.i("data_fuelingRecord.getType()", String.valueOf(data_fuelingRecord.getType()));
+                                Log.i("data_fuelingRecord.getType()", String.valueOf(data_Record.getType()));
                                 // Bundle로 데이터를 입력
                                 Bundle extras = result.getData().getExtras();
 
@@ -321,7 +310,7 @@ public class FuelingRecordActivity extends AppCompatActivity {
                                 }
                                 // 리사이클러뷰 새로고침
                                 vpAp_fueling.notifyDataSetChanged();
-                            }else if (data_fuelingRecord.getType() == 1 && result.getResultCode() == RESULT_OK){ //todo 앨범
+                            }else if (data_Record.getType() == 1 && result.getResultCode() == RESULT_OK){ //todo 앨범
 
                                 // 여러장을 선택 가능하게 해놓았기에 getClipData()에서 가져와야한다.
                                 if (result != null){
@@ -391,17 +380,17 @@ public class FuelingRecordActivity extends AppCompatActivity {
             PackageManager packageManager = mContext.getPackageManager();
             if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
                 // 지울것!!
-                Log.i("data_fuelingRecord.getImageUri()", data_fuelingRecord.getImageUri());
-                mContext.grantUriPermission("com.android.camera", Uri.parse(data_fuelingRecord.getImageUri()),
+                Log.i("data_fuelingRecord.getImageUri()", data_Record.getImageUri());
+                mContext.grantUriPermission("com.android.camera", Uri.parse(data_Record.getImageUri()),
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 Intent cropIntent = new Intent("com.android.camera.action.CROP");
-                cropIntent.setDataAndType(Uri.parse(data_fuelingRecord.getImageUri()), "image/*");
+                cropIntent.setDataAndType(Uri.parse(data_Record.getImageUri()), "image/*");
 
                 cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 cropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse(data_fuelingRecord.getImageUri()));
+                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse(data_Record.getImageUri()));
                 mStartForResult.launch(cropIntent);
             }
         } catch (Exception e) {

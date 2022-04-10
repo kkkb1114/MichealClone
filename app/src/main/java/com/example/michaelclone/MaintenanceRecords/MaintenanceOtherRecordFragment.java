@@ -10,15 +10,22 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.util.Log;
+import android.view.Display;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,28 +39,36 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.michaelclone.Data_FuelingRecord;
-import com.example.michaelclone.FuelingRecord.VpAp_fueling;
+import com.example.michaelclone.Data_Record;
 import com.example.michaelclone.R;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MaintenanceOtherRecordFragment extends Fragment {
+
     Context context;
+
+    // 선택 항목 리스트
+    RecyclerView rv_MtOtRecorditemList;
+    Ap_MaintenanceOtherRecord ap_maintenanceOtherRecord;
+    ArrayList<String> MaintenanceOtherList = new ArrayList<>();
 
     // 카메라, 앨범 선택 핸들러
     public static ActivityResultLauncher<Intent> mStartForResult;
 
     // 이미지 첨부 변수
-    RecyclerView rv_fueling;
-    VpAp_fueling vpAp_fueling;
+    RecyclerView rv_MtOtImageList;
+    VpAp_maintenanceOther vpAp_maintenanceOther;
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     ArrayList<String> typeList = new ArrayList<>(); // type이 1이면 이미지 적용된 레이아웃, 0이면 이미지 추가 레이아웃
 
-    Data_FuelingRecord data_fuelingRecord;
-    TextView fueling_imageCount;
-    Context mContext;
+    Data_Record data_record;
+    TextView MtOt_imageCount;
+    EditText et_cumulativeMileage;
+    TextView tv_repairShop;
+    TextView tv_selfMaintenance;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,40 +84,75 @@ public class MaintenanceOtherRecordFragment extends Fragment {
         setView(view);
         mStartForResult();
         set_ViewPager(); // type이 1이면 이미지 적용된 레이아웃, 0이면 이미지 추가 레이아웃
+        set_RvSelectItem();
+        setViewAction();
         RequestPermission();
         return view;
     }
 
     public void setView(View view){
-        fueling_imageCount = view.findViewById(R.id.fueling_imageCount);
-        rv_fueling = view.findViewById(R.id.rv_fueling);
+        MtOt_imageCount = view.findViewById(R.id.MtOt_imageCount);
+        rv_MtOtImageList = view.findViewById(R.id.rv_MtOtImageList);
+        rv_MtOtRecorditemList = view.findViewById(R.id.rv_MtOtRecorditemList);
+        et_cumulativeMileage = view.findViewById(R.id.et_cumulativeMileage);
+        tv_repairShop = view.findViewById(R.id.tv_repairShop);
+        tv_selfMaintenance = view.findViewById(R.id.tv_selfMaintenance);
     }
 
+    // 뷰들 예외처리 모음
+    public void setViewAction(){
+        // 누적 주행거리 천단위 콤마 적용
+        et_cumulativeMileage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                String Mileage = et_cumulativeMileage.getText().toString();
+                /**
+                 * 텍스트 두번 가져오면 ,가 포함되서 Long.parseLong가 안되는거다. 그래서 두번째 계산에서 터짐
+                 * **/
+                if(Mileage.contains("[,]")){
+                    Mileage.replaceAll("[,]", "");
+                }
+                long cumulativeMileage = Long.parseLong(et_cumulativeMileage.getText().toString());
+                DecimalFormat decimalFormat = new DecimalFormat("###,###");
+                String calculatedCumulativeMileage = decimalFormat.format(cumulativeMileage);
+                et_cumulativeMileage.setText(calculatedCumulativeMileage);
+                return false;
+            }
+        });
+    }
+
+    // 선택 항목 리사이클러뷰 세팅
+    public void set_RvSelectItem(){
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        rv_MtOtRecorditemList.setLayoutManager(linearLayoutManager);
+        ap_maintenanceOtherRecord = new Ap_MaintenanceOtherRecord(context, Data_MaintenanceRecords.al_itemTitleList);
+        rv_MtOtRecorditemList.setAdapter(ap_maintenanceOtherRecord);
+        ap_maintenanceOtherRecord.notifyDataSetChanged();
+    }
 
     // 뷰페이저 세팅
     public void set_ViewPager(){
         typeList.add("0");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        rv_fueling.setLayoutManager(linearLayoutManager);
-        vpAp_fueling = new VpAp_fueling(mContext, bitmapArrayList, typeList, fueling_imageCount);
-        rv_fueling.setAdapter(vpAp_fueling);
+        rv_MtOtImageList.setLayoutManager(linearLayoutManager);
+        vpAp_maintenanceOther = new VpAp_maintenanceOther(context, bitmapArrayList, typeList, MtOt_imageCount);
+        rv_MtOtImageList.setAdapter(vpAp_maintenanceOther);
     }
-
 
     void cropImage() { //todo 여기서 사용자들이 좀 터진다. 카메라만 관련되면 터지는 것 같다. 해당 라인은 크롭에서 터지는데 이 부분은 좀 알아봐야겠다.
         try {
-            PackageManager packageManager = mContext.getPackageManager();
+            PackageManager packageManager = context.getPackageManager();
             if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-                mContext.grantUriPermission("com.android.camera", Uri.parse(data_fuelingRecord.getImageUri()),
+                context.grantUriPermission("com.android.camera", Uri.parse(data_record.getImageUri()),
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 Intent cropIntent = new Intent("com.android.camera.action.CROP");
-                cropIntent.setDataAndType(Uri.parse(data_fuelingRecord.getImageUri()), "image/*");
+                cropIntent.setDataAndType(Uri.parse(data_record.getImageUri()), "image/*");
 
                 cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 cropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse(data_fuelingRecord.getImageUri()));
+                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse(data_record.getImageUri()));
                 mStartForResult.launch(cropIntent);
             }
         } catch (Exception e) {
@@ -121,7 +171,7 @@ public class MaintenanceOtherRecordFragment extends Fragment {
     public String getRealPathFromURI2(Uri uri){
         int column_index = 0;
         String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = mContext.getContentResolver().query(uri, proj, null, null, null);
+        Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
         if (cursor.moveToFirst()){
             column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         }
@@ -132,7 +182,7 @@ public class MaintenanceOtherRecordFragment extends Fragment {
     public String getRealPathFromURI(Uri uri){
         String fullPath = null;
         final String column = "_data";
-        Cursor cursor = mContext.getContentResolver().query(uri, null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
         if (cursor != null){
             cursor.moveToFirst();
             String document_id = cursor.getString(0);
@@ -149,7 +199,7 @@ public class MaintenanceOtherRecordFragment extends Fragment {
 
                 final String[] projection = {column};
                 try {
-                    cursor = mContext.getContentResolver().query(
+                    cursor = context.getContentResolver().query(
                             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                             projection, MediaStore.Images.Media._ID + "=?", new String[]{document_id}, null);
                     if (cursor != null){
@@ -173,12 +223,33 @@ public class MaintenanceOtherRecordFragment extends Fragment {
                 return;
             }
             if(    shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                Toast.makeText(mContext, "외부 저장소 사용을 위해 읽기/쓰기 필요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "외부 저장소 사용을 위해 읽기/쓰기 필요", Toast.LENGTH_SHORT).show();
             }
 
             requestPermissions(new String[]
                     {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
         }
+    }
+
+    public Bitmap EditImageSize(Bitmap image){
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+
+        Point size = new Point();
+        display.getSize(size);
+        final int pxWidth = size.x;
+        final int pxHeight = size.y;
+
+        if (image.getWidth() > image.getHeight()) {
+            Matrix mat = new Matrix();
+            mat.postRotate(90);
+            Bitmap bitmap = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), mat, true);
+
+            image = Bitmap.createScaledBitmap(bitmap, (int) (pxWidth / 5), (int) (pxHeight / 5), false);
+        } else {
+            image = Bitmap.createScaledBitmap(image, (int) (pxWidth / 5), (int) (pxHeight / 5), false);
+        }
+        return image;
     }
 
     // registerForActivityResult 코드가 길어 메소드로 만듬
@@ -188,8 +259,8 @@ public class MaintenanceOtherRecordFragment extends Fragment {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result != null){
-                            data_fuelingRecord = new Data_FuelingRecord();
-                            if (data_fuelingRecord.getType() == 0 && result.getResultCode() == RESULT_OK) { //todo 카메라
+                            data_record = new Data_Record();
+                            if (data_record.getType() == 0 && result.getResultCode() == RESULT_OK) { //todo 카메라
                                 Intent intent = result.getData();
 
                                 //cropImage();
@@ -209,20 +280,20 @@ public class MaintenanceOtherRecordFragment extends Fragment {
                                     typeList.add("0");
                                 }
                                 // 리사이클러뷰 새로고침
-                                vpAp_fueling.notifyDataSetChanged();
-                            }else if (data_fuelingRecord.getType() == 1 && result.getResultCode() == RESULT_OK){ //todo 앨범
+                                vpAp_maintenanceOther.notifyDataSetChanged();
+                            }else if (data_record.getType() == 1 && result.getResultCode() == RESULT_OK){ //todo 앨범
 
                                 // 여러장을 선택 가능하게 해놓았기에 getClipData()에서 가져와야한다.
                                 if (result != null){
                                     if (result.getData().getClipData() == null){
-                                        Toast.makeText(mContext, "다중선택이 불가한 기기입니다.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, "다중선택이 불가한 기기입니다.", Toast.LENGTH_SHORT).show();
                                     }else {
                                         ClipData clipData = result.getData().getClipData();
                                         if (clipData.getItemCount() >= 6){ // 선택한 사진이 5장 초과면 제한 안내
-                                            Toast.makeText(mContext, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
                                         }else if (clipData.getItemCount() == 1){ // 선택한 사진 1장이면 getClipData에 있는 이미지 리스트중 인덱스가 0에 있는 사진의 uri를 지정해준다.
                                             if (clipData.getItemCount()+bitmapArrayList.size() > 5){ // 선택한 사진 + 이미 있는 사진 개수가 5개 초과면 제한 안내
-                                                Toast.makeText(mContext, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
                                             }else {
                                                 String imagePath = getRealPathFromURI(clipData.getItemAt(0).getUri());
                                                 File file = new File(imagePath);
@@ -236,17 +307,17 @@ public class MaintenanceOtherRecordFragment extends Fragment {
                                                     typeList.add("0");
                                                 }
                                                 // 리사이클러뷰 새로고침
-                                                vpAp_fueling.notifyDataSetChanged();
+                                                vpAp_maintenanceOther.notifyDataSetChanged();
                                             }
                                         }else if (clipData.getItemCount() <= 5){
                                             if (clipData.getItemCount()+bitmapArrayList.size() > 5){ // 선택한 사진 + 이미 있는 사진 개수가 5개 초과면 제한 안내
-                                                Toast.makeText(mContext, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
                                             }else {
                                                 for (int i=0; i<clipData.getItemCount(); i++){
                                                     String imagePath = getRealPathFromURI(clipData.getItemAt(i).getUri());
                                                     File file = new File(imagePath);
                                                     Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                                                    bitmapArrayList.add(bitmap);
+                                                    bitmapArrayList.add(EditImageSize(bitmap)); // 여기에 비트맵을 넣고 크기를 편집하고 다시 비트맵을 반환한다.
                                                 }
                                                 typeList.clear(); // 이미지 추가 아이템을 맨 뒤로 보내야 하기에 초기화 시켜주고 다시 넣는다.
                                                 for (int i=0; i<bitmapArrayList.size(); i++){
@@ -256,11 +327,11 @@ public class MaintenanceOtherRecordFragment extends Fragment {
                                                     typeList.add("0");
                                                 }
                                                 // 리사이클러뷰 셋
-                                                rv_fueling.setAdapter(vpAp_fueling);
-                                                vpAp_fueling.notifyDataSetChanged();
+                                                rv_MtOtImageList.setAdapter(vpAp_maintenanceOther);
+                                                vpAp_maintenanceOther.notifyDataSetChanged();
                                             }
                                         }
-                                        fueling_imageCount.setText(bitmapArrayList.size()+"/5");
+                                        MtOt_imageCount.setText(bitmapArrayList.size()+"/5");
                                     }
                                 }
                             }

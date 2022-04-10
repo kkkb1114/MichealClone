@@ -42,6 +42,8 @@
     <string name="maintenanceMode">정비모드</string>
     <string name="repairShop">정비소</string>
     <string name="selfMaintenance">자가정비</string>
+    <string name="MtOt_ExpenditureAmount">지출금액</string>
+    <string name="MtOt_memoCount">0/250</string>
     <!--정비/기타 기록-->
 
 

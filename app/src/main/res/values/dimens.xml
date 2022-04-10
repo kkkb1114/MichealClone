@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="Item_ItemTextSize">15sp</dimen>
-    <dimen name="Item_ItemSubTextSize">15sp</dimen>
+    <dimen name="Item_ItemSubTextSize">13sp</dimen>
     <dimen name="locationTextSize">25sp</dimen>
 
 
     <!--정비 기타 상단 텍스트 사이즈-->
     <dimen name="MaintenanceItemSelectionCount">15sp</dimen>
     <dimen name="MaintenanceItemSelectionComplete">15sp</dimen>
+    <dimen name="currentTimeText">20dp</dimen>
     <!--정비 기타 상단 텍스트 사이즈-->
+
+    <!--정비/기타 항목 선택 텍스트 사이즈-->
+    <dimen name="MaintenanceOtherItemTitle">70dp</dimen>
+    <dimen name="MaintenanceOtherItemDetail">70dp</dimen>
+    <dimen name="MtOt_ItemMemo">15dp</dimen>
+    <dimen name="MtOt_ItemMemoCount">10dp</dimen>
+    <dimen name="dialogParkingImageHeight">100dp</dimen>
 </resources>

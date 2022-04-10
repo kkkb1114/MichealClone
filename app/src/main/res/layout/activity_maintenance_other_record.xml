@@ -8,63 +8,82 @@
     android:orientation="vertical"
     tools:context=".FuelingRecord.FuelingRecordActivity">
 
-    <!--상단 바-->
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:paddingVertical="10dp"
+        android:stretchColumns="*"
         android:background="#03A9F4">
+        <!--상단 바-->
+        <TableRow>
+                <LinearLayout
+                    android:id="@+id/iv_pageClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_span="1"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/iv_pageClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:gravity="center"
-            android:padding="10dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_diag_close" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_diag_close" />
-        </LinearLayout>
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ln_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/FuelingRecord"
-                android:textColor="@color/white" />
+                <LinearLayout
+                    android:id="@+id/ln_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_span="18"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/FuelingRecord"
+                        android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:textColor="@color/white"
-                android:drawableEnd="@android:drawable/arrow_down_float"/>
-        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_weight="0.3"
-            android:gravity="right"
-            android:text="@string/Confirm"
-            android:textColor="@color/white"
-            android:padding="10dp"/>
-    </LinearLayout>
-    <!--상단 바-->
+                        <TextView
+                            android:id="@+id/tv_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/currentTimeText"
+                            android:textColor="@color/white"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@android:drawable/arrow_down_float"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_span="1"
+                    android:gravity="right"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/Confirm"
+                    android:textColor="@color/white"
+                    android:padding="10dp"/>
+            <!--상단 바-->
+        </TableRow>
+    </TableLayout>
 
     <FrameLayout
         android:id="@+id/fl_RecordPage"

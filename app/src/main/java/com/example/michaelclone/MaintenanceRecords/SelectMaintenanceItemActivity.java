@@ -2,7 +2,6 @@ package com.example.michaelclone.MaintenanceRecords;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
@@ -10,12 +9,9 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.michaelclone.Data_FuelingRecord;
 import com.example.michaelclone.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -33,7 +29,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
 
     // 뷰페이저2
     private ViewPager2 vp_maintenanceOther;
-    private Vp_MaintenancePage_Adapter ad_maintenancePage;
+    private ApVp_MaintenancePage ad_maintenancePage;
 
     static public TextView tv_selectionConfirm;
     static public TextView tv_itemCount;
@@ -82,7 +78,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         tabNameList.add(getResources().getString(R.string.maintenanceItems));
         tabNameList.add(getResources().getString(R.string.otherItems));
 
-        ad_maintenancePage = new Vp_MaintenancePage_Adapter(this, 2);
+        ad_maintenancePage = new ApVp_MaintenancePage(this, 2);
         vp_maintenanceOther.setAdapter(ad_maintenancePage);
 
         new TabLayoutMediator(tl_maintenanceOther, vp_maintenanceOther, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -98,18 +94,18 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     // 0: 항목 선택, 1: 항목 선택 취소
     static public void itemClickChangeCount(Context context, String title, int type){
         if (type == 0){
-            Data_FuelingRecord.al_itemTitleList.add(title);
-            tv_itemCount.setText(Data_FuelingRecord.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
+            Data_MaintenanceRecords.al_itemTitleList.add(title);
+            tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
             SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
             SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
         }else {
-            Data_FuelingRecord.al_itemTitleList.remove(title);
-            if (Data_FuelingRecord.al_itemTitleList.size() <= 0){
+            Data_MaintenanceRecords.al_itemTitleList.remove(title);
+            if (Data_MaintenanceRecords.al_itemTitleList.size() <= 0){
                 tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
                 SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
                 SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(false);
             }else {
-                tv_itemCount.setText(Data_FuelingRecord.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
+                tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
             }
         }
     }
