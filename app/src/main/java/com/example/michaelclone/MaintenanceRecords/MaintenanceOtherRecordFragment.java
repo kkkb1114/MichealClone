@@ -7,11 +7,13 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,8 +50,9 @@ import com.example.michaelclone.R;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class MaintenanceOtherRecordFragment extends Fragment {
+public class MaintenanceOtherRecordFragment extends Fragment implements View.OnClickListener {
 
     Context context;
 
@@ -69,6 +75,7 @@ public class MaintenanceOtherRecordFragment extends Fragment {
     EditText et_cumulativeMileage;
     TextView tv_repairShop;
     TextView tv_selfMaintenance;
+    TableRow tr_moRcord_location;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +93,7 @@ public class MaintenanceOtherRecordFragment extends Fragment {
         set_ViewPager(); // type이 1이면 이미지 적용된 레이아웃, 0이면 이미지 추가 레이아웃
         set_RvSelectItem();
         setViewAction();
+        setOnClick();
         RequestPermission();
         return view;
     }
@@ -97,6 +105,7 @@ public class MaintenanceOtherRecordFragment extends Fragment {
         et_cumulativeMileage = view.findViewById(R.id.et_cumulativeMileage);
         tv_repairShop = view.findViewById(R.id.tv_repairShop);
         tv_selfMaintenance = view.findViewById(R.id.tv_selfMaintenance);
+        tr_moRcord_location = view.findViewById(R.id.tr_moRcord_location);
     }
 
     // 뷰들 예외처리 모음
@@ -119,6 +128,31 @@ public class MaintenanceOtherRecordFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    public void setOnClick(){
+        tv_repairShop.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tv_repairShop:
+                /*context.getResources().getDrawable(R.drawable.check) 처럼 안드로이드에서
+                drawable과 color를 위해 사용하였던 함수 getDrawable과 getColor를 더 이상 사용할 수 없게 되었다.
+                이제부터는 ResourcesCompat를 이용해 주어야 한다.*/
+
+                // 이게 엑티비티에서는 ContextCompat 이게 먹히는데 프래그먼트에서 안먹힌다. 이유를 알아보자.
+                tv_repairShop.setCompoundDrawables(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.check));
+                tv_repairShop.setBackground(ResourcesCompat.getDrawable(getResources().getDrawable(R.drawable.check), null));
+                // 정비소 정비이면 위치 뷰를 보이게 꺼낸다.
+                tv_repairShop.setVisibility(View.VISIBLE);
+            case R.id.tv_selfMaintenance:
+                tv_selfMaintenance.setCompoundDrawables();
+                tv_selfMaintenance.setBackground();
+                // 자가 정비이면 위치 뷰를 보이지 않게 숨긴다.
+                tr_moRcord_location.setVisibility(View.GONE);
+        }
     }
 
     // 선택 항목 리사이클러뷰 세팅
