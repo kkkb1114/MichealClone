@@ -121,8 +121,8 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 /**
                  * 텍스트 두번 가져오면 ,가 포함되서 Long.parseLong가 안되는거다. 그래서 두번째 계산에서 터짐
                  * **/
-                if(Mileage.contains("[,]")){
-                    Mileage.replaceAll("[,]", "");
+                if(Mileage.contains(",")){
+                    Mileage.replaceAll(",", "");
                 }
                 long cumulativeMileage = Long.parseLong(et_cumulativeMileage.getText().toString());
                 DecimalFormat decimalFormat = new DecimalFormat("###,###");

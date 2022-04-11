@@ -6,10 +6,15 @@
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/selectionItemBackground">
+        android:background="@color/selectionItemBackground"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <!--상단 뷰-->
         <LinearLayout
@@ -27,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:padding="10dp"
-                android:src="@drawable/back"/>
+                android:src="@drawable/back" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,7 +46,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/MaintenanceItemSelectionRecommend"
                     android:textColor="@color/maintenanceItemColor"
-                    android:textSize="@dimen/MaintenanceItemSelectionCount"/>
+                    android:textSize="@dimen/MaintenanceItemSelectionCount" />
 
                 <TextView
                     android:id="@+id/tv_selectionConfirm"
@@ -62,16 +67,16 @@
             android:id="@+id/tl_maintenanceOther"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabTextColor="@color/maintenanceTabIndicatorText"
-            app:tabSelectedTextColor="@color/maintenanceTabIndicatorTextWSelect"
-            app:tabIndicatorAnimationMode="linear"
             android:background="@null"
-            app:tabIndicatorColor="@color/maintenanceItemColor"
-            app:tabIndicatorHeight="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:tabGravity="fill"
+            app:tabIndicatorAnimationMode="linear"
+            app:tabIndicatorColor="@color/maintenanceItemColor"
+            app:tabIndicatorHeight="3dp"
+            app:tabSelectedTextColor="@color/maintenanceTabIndicatorTextWSelect"
+            app:tabTextColor="@color/maintenanceTabIndicatorText">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -87,6 +92,7 @@
         <!--탭 레이아웃-->
 
         <View
+            android:id="@+id/view4"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@color/maintenanceTabBottomLine"
@@ -102,6 +108,6 @@
             app:layout_constraintTop_toBottomOf="@+id/tl_maintenanceOther" />
         <!--탭 레이아웃에 연결된 뷰페이저-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
