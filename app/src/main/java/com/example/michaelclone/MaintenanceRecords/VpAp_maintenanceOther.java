@@ -103,10 +103,8 @@ public class VpAp_maintenanceOther extends RecyclerView.Adapter<VpAp_maintenance
 
         public void bindItem(int position, ViewHolder holder){
             if(typeList.get(position).equals("0")){
-                Log.i(":asd", "asd");
                 setItemaddClick();
             }else {
-                Log.i(":111", "222");
                 WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
 
@@ -114,6 +112,9 @@ public class VpAp_maintenanceOther extends RecyclerView.Adapter<VpAp_maintenance
                 display.getSize(size);
                 final int pxWidth = size.x;
                 final int pxHeight = size.y;
+
+                Log.i("pxWidth", String.valueOf(pxWidth));
+                Log.i("pxHeight", String.valueOf(pxHeight));
                 iv_fuelingItem.setImageBitmap(setItemImage(bitmapArrayList.get(position), pxWidth, pxHeight));
                 setItemClick(position);
             }
@@ -122,14 +123,16 @@ public class VpAp_maintenanceOther extends RecyclerView.Adapter<VpAp_maintenance
         // 아이템 이미지 크기 편집
         public Bitmap setItemImage(Bitmap bitmap, int pxWidth, int pxHeight){
             try {
+                Log.i("bitmap", String.valueOf(bitmap.getWidth()));
+                Log.i("bitmap", String.valueOf(bitmap.getHeight()));
                 if (bitmap.getWidth() > bitmap.getHeight()) {
                     Matrix mat = new Matrix();
                     mat.postRotate(90);
                     Bitmap correctBmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
 
-                   return bitmap = Bitmap.createScaledBitmap(correctBmp, (int) (pxWidth / 2.5), (int) (pxHeight / 2.5), false);
+                   return Bitmap.createScaledBitmap(correctBmp, (int) (pxWidth / 4), (int) (pxHeight / 8), false);
                 } else {
-                    return bitmap = Bitmap.createScaledBitmap(bitmap, (int) (pxWidth / 2.5), (int) (pxHeight / 2.5), false);
+                    return Bitmap.createScaledBitmap(bitmap, (int) (pxWidth / 4), (int) (pxHeight / 8), false);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

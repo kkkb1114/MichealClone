@@ -132,6 +132,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
 
     public void setOnClick(){
         tv_repairShop.setOnClickListener(this);
+        tv_selfMaintenance.setOnClickListener(this);
     }
 
     @Override
@@ -143,13 +144,13 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 이제부터는 ResourcesCompat를 이용해 주어야 한다.*/
 
                 // 이게 엑티비티에서는 ContextCompat 이게 먹히는데 프래그먼트에서 안먹힌다. 이유를 알아보자.
-                tv_repairShop.setCompoundDrawables(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.check));
-                tv_repairShop.setBackground(ResourcesCompat.getDrawable(getResources().getDrawable(R.drawable.check), null));
+               /* tv_repairShop.setCompoundDrawables(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.check));
+                tv_repairShop.setBackground(ResourcesCompat.getDrawable(getResources().getDrawable(R.drawable.check), null));*/
                 // 정비소 정비이면 위치 뷰를 보이게 꺼낸다.
-                tv_repairShop.setVisibility(View.VISIBLE);
+                tr_moRcord_location.setVisibility(View.VISIBLE);
             case R.id.tv_selfMaintenance:
-                tv_selfMaintenance.setCompoundDrawables();
-                tv_selfMaintenance.setBackground();
+             /*   tv_selfMaintenance.setCompoundDrawables();
+                tv_selfMaintenance.setBackground();*/
                 // 자가 정비이면 위치 뷰를 보이지 않게 숨긴다.
                 tr_moRcord_location.setVisibility(View.GONE);
         }
