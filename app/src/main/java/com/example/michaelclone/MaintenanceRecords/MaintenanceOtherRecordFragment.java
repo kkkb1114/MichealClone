@@ -77,6 +77,9 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     TextView tv_selfMaintenance;
     TableRow tr_moRcord_location;
 
+    // 카메라 찍을때 처음 일반 촬영하고 크롭으로 넘어가게끔 만들기 위한 변수
+    boolean imageCrop = false;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,16 +146,34 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 drawable과 color를 위해 사용하였던 함수 getDrawable과 getColor를 더 이상 사용할 수 없게 되었다.
                 이제부터는 ResourcesCompat를 이용해 주어야 한다.*/
 
+                tv_selfMaintenance.setBackground(context.getResources().getDrawable(R.drawable.bt_round_transparent, null));
+                tv_selfMaintenance.setTextColor(context.getResources().getColor(R.color.blackTransparent_20));
+
                 // 이게 엑티비티에서는 ContextCompat 이게 먹히는데 프래그먼트에서 안먹힌다. 이유를 알아보자.
-               /* tv_repairShop.setCompoundDrawables(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.check));
-                tv_repairShop.setBackground(ResourcesCompat.getDrawable(getResources().getDrawable(R.drawable.check), null));*/
+                Drawable img = getContext().getResources().getDrawable(R.drawable.check);
+                img.setBounds(0, 0, 60, 60);
+                tv_repairShop.setCompoundDrawables(img, null, null, null);
+                tv_selfMaintenance.setCompoundDrawables(null, null, null, null);
+                tv_repairShop.setBackground(context.getResources().getDrawable(R.drawable.bt_round_black, null));
+                tv_repairShop.setTextColor(context.getResources().getColor(R.color.white));
                 // 정비소 정비이면 위치 뷰를 보이게 꺼낸다.
                 tr_moRcord_location.setVisibility(View.VISIBLE);
+                break;
             case R.id.tv_selfMaintenance:
              /*   tv_selfMaintenance.setCompoundDrawables();
                 tv_selfMaintenance.setBackground();*/
+
+                tv_repairShop.setBackground(context.getResources().getDrawable(R.drawable.bt_round_transparent, null));
+                tv_repairShop.setTextColor(context.getResources().getColor(R.color.blackTransparent_20));
+                Drawable img2 = getContext().getResources().getDrawable(R.drawable.check);
+                img2.setBounds(0, 0, 60, 60);
+                tv_selfMaintenance.setCompoundDrawables(img2, null, null, null);
+                tv_repairShop.setCompoundDrawables(null, null, null, null);
+                tv_selfMaintenance.setBackground(context.getResources().getDrawable(R.drawable.bt_round_black, null));
+                tv_selfMaintenance.setTextColor(context.getResources().getColor(R.color.white));
                 // 자가 정비이면 위치 뷰를 보이지 않게 숨긴다.
                 tr_moRcord_location.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -178,6 +199,8 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         try {
             PackageManager packageManager = context.getPackageManager();
             if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+                // 지울것!!
+                Log.i("data_fuelingRecord.getImageUri()", data_record.getImageUri());
                 context.grantUriPermission("com.android.camera", Uri.parse(data_record.getImageUri()),
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
@@ -296,26 +319,36 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                         if (result != null){
                             data_record = new Data_Record();
                             if (data_record.getType() == 0 && result.getResultCode() == RESULT_OK) { //todo 카메라
-                                Intent intent = result.getData();
 
-                                //cropImage();
-                                // Bundle로 데이터를 입력
-                                Bundle extras = result.getData().getExtras();
+                                // 처음 촬영을 하고 크롭을 시킨다.
+                                if(!imageCrop){
 
-                                // Bitmap으로 컨버전
-                                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                                    cropImage();
+                                    imageCrop = true;
+                                // 크롭이 완료되면 다시 크롭 체크 변수를 false로 변경한다.
+                                }else {
+                                    Intent intent = result.getData();
 
-                                // 이미지뷰에 Bitmap으로 이미지를 입력
-                                bitmapArrayList.add(imageBitmap);
-                                typeList.clear(); // 이미지 추가 아이템을 맨 뒤로 보내야 하기에 초기화 시켜주고 다시 넣는다.
-                                for (int i=0; i<bitmapArrayList.size(); i++){
-                                    typeList.add("1");
+                                    // Bundle로 데이터를 입력
+                                    Bundle extras = result.getData().getExtras();
+
+                                    // Bitmap으로 컨버전
+                                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+                                    // 이미지뷰에 Bitmap으로 이미지를 입력
+                                    bitmapArrayList.add(imageBitmap);
+                                    typeList.clear(); // 이미지 추가 아이템을 맨 뒤로 보내야 하기에 초기화 시켜주고 다시 넣는다.
+                                    for (int i=0; i<bitmapArrayList.size(); i++){
+                                        typeList.add("1");
+                                    }
+                                    if (bitmapArrayList.size() < 5){ // 이미지 리스트가 5이하면 이미지 추가 버튼 생성
+                                        typeList.add("0");
+                                    }
+                                    // 리사이클러뷰 새로고침
+                                    vpAp_maintenanceOther.notifyDataSetChanged();
+                                    imageCrop = false;
                                 }
-                                if (bitmapArrayList.size() < 5){ // 이미지 리스트가 5이하면 이미지 추가 버튼 생성
-                                    typeList.add("0");
-                                }
-                                // 리사이클러뷰 새로고침
-                                vpAp_maintenanceOther.notifyDataSetChanged();
+
                             }else if (data_record.getType() == 1 && result.getResultCode() == RESULT_OK){ //todo 앨범
 
                                 // 여러장을 선택 가능하게 해놓았기에 getClipData()에서 가져와야한다.

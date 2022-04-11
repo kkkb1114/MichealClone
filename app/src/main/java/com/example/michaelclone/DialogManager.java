@@ -310,7 +310,7 @@ public class DialogManager extends AlertDialog.Builder {
                     data_Record.setImageUri(String.valueOf(uri)); // 메인 프레그먼트 사용할 uri 문자열로 변환해서 저장
                     //intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                     //intentCamera.putExtra("return-data", true);
-                    FuelingRecordActivity.mStartForResult.launch(intentCamera);
+                    MaintenanceOtherRecordFragment.mStartForResult.launch(intentCamera);
 
                     // 지울것!!
                     Log.i("카메라", String.valueOf(data_Record.getType()));
