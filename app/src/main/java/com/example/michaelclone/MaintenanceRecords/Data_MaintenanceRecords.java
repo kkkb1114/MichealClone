@@ -7,4 +7,8 @@ public class Data_MaintenanceRecords {
     // 정비 기타
     static public ArrayList<String> al_itemTitleList = new ArrayList<>();
 
+    public void al_itemTitleListresetData(){
+        al_itemTitleList.clear();
+    }
+
 }

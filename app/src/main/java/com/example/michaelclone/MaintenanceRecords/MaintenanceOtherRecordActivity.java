@@ -23,6 +23,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private MaintenanceOtherRecordFragment maintenanceOtherRecordFragment;
+    private locationSearchFragment locationSearchFragment;
 
     LinearLayout ln_date;
     TextView tv_date;
@@ -42,7 +43,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity {
             mContext = this;
             setView();
             setTextView();
-            setFragment();
+            setFragment(1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,11 +106,22 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity {
         return DAY_OF_WEEK;
     }
 
-    public void setFragment(){
+    public void setFragment(int fragment){
         fragmentManager = getSupportFragmentManager();
         maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment();
+        locationSearchFragment = new locationSearchFragment();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fl_RecordPage, maintenanceOtherRecordFragment).commitAllowingStateLoss();
+        switch (fragment){
+            case 1:
+                //fragmentTransaction.replace(R.id.fl_RecordPage, maintenanceOtherRecordFragment).commitAllowingStateLoss();
+                fragmentTransaction.replace(R.id.fl_RecordPage, maintenanceOtherRecordFragment);
+                fragmentTransaction.commit();
+                break;
+            case 2:
+                fragmentTransaction.replace(R.id.fl_RecordPage, locationSearchFragment);
+                fragmentTransaction.commit();
+                break;
+        }
     }
 
 }

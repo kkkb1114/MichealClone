@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.michaelclone.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
 
@@ -68,6 +69,7 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView tv_itemTitle;
         CheckBox cb_itemSelect;
         LinearLayout Ln_item;
@@ -111,11 +113,15 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
+                        // 체크박스의 리스너를 null로 초기화
+                        cb_itemSelect.setOnCheckedChangeListener(null);
+                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 0);
                         cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#00D4FF")));
-                        SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 0);
                     } else {
+                        // 체크박스의 리스너를 null로 초기화
+                        cb_itemSelect.setOnCheckedChangeListener(null);
+                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 1);
                         cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
-                        SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 1);
                     }
                 }
             });

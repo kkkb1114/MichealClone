@@ -3,6 +3,7 @@ package com.example.michaelclone.MaintenanceRecords;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.michaelclone.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.ViewHolder> {
 
@@ -25,7 +27,6 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
     ArrayList<String> ItemDistanceList;
     ArrayList<String> ItemLifeSpanList;
     ArrayList<Integer> ItemTypeList;
-
     Context context;
 
     /**
@@ -33,7 +34,8 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
      *
      * **/
 
-    public ApRv_maintenance(Context context, ArrayList<String> ItemTitleList, ArrayList<String> ItemDistanceList, ArrayList<String> ItemLifeSpanList, ArrayList<Integer> ItemTypeList){
+    public ApRv_maintenance(Context context, ArrayList<String> ItemTitleList, ArrayList<String> ItemDistanceList, ArrayList<String> ItemLifeSpanList,
+                            ArrayList<Integer> ItemTypeList){
         this.ItemTitleList = ItemTitleList;
         this.ItemDistanceList = ItemDistanceList;
         this.ItemLifeSpanList = ItemLifeSpanList;
@@ -87,6 +89,7 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
         LinearLayout Ln_item;
         Context context;
 
+
         public ViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
             this.context = context;
@@ -108,7 +111,7 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
             tv_itemDistance.setText(ItemDistanceList.get(position));
             tv_itemMonth.setText(ItemLifeSpanList.get(position));
 
-            cb_setChecked();
+            cb_setChecked(position);
             Ln_item.setOnClickListener(clickListener);
         }
 
@@ -127,16 +130,16 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
             }
         };
 
-        public void cb_setChecked(){
+        public void cb_setChecked(int position){
             cb_itemSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked){
-                        cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#00D4FF")));
-                        SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 0);
+                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 0);
+                            cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#00D4FF")));
                     }else {
-                        cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
-                        SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 1);
+                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 1);
+                            cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
                     }
                 }
             });

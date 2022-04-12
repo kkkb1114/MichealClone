@@ -38,6 +38,7 @@ public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_Maintenan
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_MtOt_ItemTitle.setText(al_itemTitleList.get(position));
+        holder.GoneMaintenanceItemLine(position);
     }
 
     @Override
@@ -51,6 +52,7 @@ public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_Maintenan
         TextView tv_MtOtItemMemoCount;
         EditText et_MtOt_ItemPrice;
         EditText et_MtOtItemMemo;
+        View View_maintenanceItemLine;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +65,14 @@ public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_Maintenan
             tv_MtOtItemMemoCount = itemView.findViewById(R.id.tv_MtOtItemMemoCount);
             et_MtOt_ItemPrice = itemView.findViewById(R.id.et_MtOt_ItemPrice);
             et_MtOtItemMemo = itemView.findViewById(R.id.et_MtOtItemMemo);
+            View_maintenanceItemLine = itemView.findViewById(R.id.View_maintenanceItemLine);
+        }
+
+        // 아이템 마지막은 구분선이 계속 생기면 아래 구분선이 2개가 되기때문에 없애준다.
+        public void GoneMaintenanceItemLine(int position){
+            if (al_itemTitleList.size() == 1 || position == al_itemTitleList.size()-1){
+                View_maintenanceItemLine.setVisibility(View.GONE);
+            }
         }
 
         public void setViewAction(){
@@ -90,14 +100,11 @@ public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_Maintenan
             et_MtOt_ItemPrice.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    String Mileage = et_MtOt_ItemPrice.getText().toString();
+                    String Mileage = v.getText().toString();
                     /**
                      * 텍스트 두번 가져오면 ,가 포함되서 Long.parseLong가 안되는거다. 그래서 두번째 계산에서 터짐
                      * **/
-                    if(Mileage.contains("[,]")){
-                        Mileage.replaceAll("[,]", "");
-                    }
-                    long cumulativeMileage = Long.parseLong(et_MtOt_ItemPrice.getText().toString());
+                    long cumulativeMileage =  Long.parseLong(Mileage.replace(",", ""));
                     DecimalFormat decimalFormat = new DecimalFormat("###,###");
                     String calculatedCumulativeMileage = decimalFormat.format(cumulativeMileage);
                     et_MtOt_ItemPrice.setText(calculatedCumulativeMileage);

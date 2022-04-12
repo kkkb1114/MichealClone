@@ -41,6 +41,10 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_maintenance_records);
         context = this;
 
+        // 일단 만약 해당 페이지가 생성되는데 데이터가 초기화 안되어 있으면 초기화 한다. (항목 변경 기능이 아직 안되어 있어서 오롯이 보여주기만을 위한 기능이며 항목 변경 기능 만들면 바꿀 예정)
+        if (Data_MaintenanceRecords.al_itemTitleList != null){
+            Data_MaintenanceRecords.al_itemTitleList.clear();
+        }
         // 뷰 초기화
         setView();
         // 테이블 레이아웃 뷰 추가
@@ -90,22 +94,26 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     }
 
     /*항목을 클릭할때마다 클릭하여 체크된 항목이 0개일경우 선택완료 버튼을 잠궈버리며 1개 이상이면 선택완료로 다음 페이지에
-    넘어갈수 있게 했다.*/
+    넘어갈수 있게 했다.
+    또한 리사이클러뷰는 뷰를 재활용하기에 체크되있는 상태에서 그냥 스크롤하면 그대로 체크 true상태의 뷰가 딸려올수 있어 수동 체크와 리사이클러뷰를 스크롤해서 자동으로 체크된 자동 체크를
+    구분해서 예외처리 한다.*/
     // 0: 항목 선택, 1: 항목 선택 취소
-    static public void itemClickChangeCount(Context context, String title, int type){
-        if (type == 0){
-            Data_MaintenanceRecords.al_itemTitleList.add(title);
-            tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
-            SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
-            SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
-        }else {
-            Data_MaintenanceRecords.al_itemTitleList.remove(title);
-            if (Data_MaintenanceRecords.al_itemTitleList.size() <= 0){
-                tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
-                SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
-                SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(false);
-            }else {
+    static public void itemClickChangeCount(Context context, String title, int CheckedItemCount){
+        if (CheckedItemCount == 0){
+            // 리사이클러뷰 스크롤로 인한 지동 추가가 아니면 실행
+                Data_MaintenanceRecords.al_itemTitleList.add(title);
                 tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
+                SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
+                SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
+        }else {
+            // 리사이클러뷰 스크롤로 인한 지동 추가가 아니면 실행
+                Data_MaintenanceRecords.al_itemTitleList.remove(title);
+                if (Data_MaintenanceRecords.al_itemTitleList.size() <= 0){
+                    tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
+                    SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
+                    SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(false);
+                }else {
+                    tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
             }
         }
     }

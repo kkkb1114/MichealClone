@@ -3,6 +3,7 @@ package com.example.michaelclone;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -308,8 +309,8 @@ public class DialogManager extends AlertDialog.Builder {
                         uri = Uri.fromFile(file);
                     }
                     data_Record.setImageUri(String.valueOf(uri)); // 메인 프레그먼트 사용할 uri 문자열로 변환해서 저장
-                    //intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                    //intentCamera.putExtra("return-data", true);
+                    intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    intentCamera.putExtra("return-data", true);
                     MaintenanceOtherRecordFragment.mStartForResult.launch(intentCamera);
 
                     // 지울것!!

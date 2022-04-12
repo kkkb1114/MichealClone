@@ -62,7 +62,8 @@ public class MaintenanceFragment extends Fragment {
 
         // 정비 항목
         rv_maintenance.setLayoutManager(linearLayoutManager);
-        apRv_maintenance = new ApRv_maintenance(context, ItemTitleList_maintenance, ItemDistanceList_maintenance, ItemLifeSpanList_maintenance, ItemTypeList_maintenance);
+        apRv_maintenance = new ApRv_maintenance(context, ItemTitleList_maintenance, ItemDistanceList_maintenance, ItemLifeSpanList_maintenance,
+                ItemTypeList_maintenance);
         rv_maintenance.setAdapter(apRv_maintenance);
         apRv_maintenance.notifyDataSetChanged();
     }

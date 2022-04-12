@@ -111,6 +111,7 @@
                                 android:layout_weight="9.9"
                                 android:background="@null"
                                 android:gravity="right"
+                                android:maxLength="13"
                                 android:inputType="number"
                                 android:maxLines="1"
                                 android:padding="5dp"
@@ -192,6 +193,7 @@
         </TableLayout>
 
         <View
+            android:id="@+id/View_maintenanceItemLine"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="10dp"

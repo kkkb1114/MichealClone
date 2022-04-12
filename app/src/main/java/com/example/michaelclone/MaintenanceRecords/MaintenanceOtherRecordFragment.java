@@ -17,6 +17,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.util.Log;
@@ -27,7 +28,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +54,7 @@ import com.example.michaelclone.R;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class MaintenanceOtherRecordFragment extends Fragment implements View.OnClickListener {
@@ -69,6 +74,8 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     VpAp_maintenanceOther vpAp_maintenanceOther;
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     ArrayList<String> typeList = new ArrayList<>(); // type이 1이면 이미지 적용된 레이아웃, 0이면 이미지 추가 레이아웃
+    ArrayAdapter<String> arrayAdapter;
+    String[] locationChangeSpinner = {"변경"};
 
     Data_Record data_record;
     TextView MtOt_imageCount;
@@ -76,6 +83,10 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     TextView tv_repairShop;
     TextView tv_selfMaintenance;
     TableRow tr_moRcord_location;
+    View View_maintenanceLocationLine;
+    Spinner sp_changeLocation;
+
+    MaintenanceOtherRecordActivity maintenanceOtherRecordActivity;
 
     // 카메라 찍을때 처음 일반 촬영하고 크롭으로 넘어가게끔 만들기 위한 변수
     boolean imageCrop = false;
@@ -90,6 +101,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_maintenance_other_record, container, false);
+        maintenanceOtherRecordActivity = new MaintenanceOtherRecordActivity();
 
         setView(view);
         mStartForResult();
@@ -109,7 +121,10 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         tv_repairShop = view.findViewById(R.id.tv_repairShop);
         tv_selfMaintenance = view.findViewById(R.id.tv_selfMaintenance);
         tr_moRcord_location = view.findViewById(R.id.tr_moRcord_location);
+        View_maintenanceLocationLine = view.findViewById(R.id.View_maintenanceLocationLine);
+        sp_changeLocation = view.findViewById(R.id.sp_changeLocation);
     }
+
 
     // 뷰들 예외처리 모음
     public void setViewAction(){
@@ -117,14 +132,11 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         et_cumulativeMileage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String Mileage = et_cumulativeMileage.getText().toString();
+                String Mileage = v.getText().toString();
                 /**
                  * 텍스트 두번 가져오면 ,가 포함되서 Long.parseLong가 안되는거다. 그래서 두번째 계산에서 터짐
                  * **/
-                if(Mileage.contains(",")){
-                    Mileage.replaceAll(",", "");
-                }
-                long cumulativeMileage = Long.parseLong(et_cumulativeMileage.getText().toString());
+                long cumulativeMileage = Long.parseLong(Mileage.replace(",", ""));
                 DecimalFormat decimalFormat = new DecimalFormat("###,###");
                 String calculatedCumulativeMileage = decimalFormat.format(cumulativeMileage);
                 et_cumulativeMileage.setText(calculatedCumulativeMileage);
@@ -158,6 +170,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 tv_repairShop.setTextColor(context.getResources().getColor(R.color.white));
                 // 정비소 정비이면 위치 뷰를 보이게 꺼낸다.
                 tr_moRcord_location.setVisibility(View.VISIBLE);
+                View_maintenanceLocationLine.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_selfMaintenance:
              /*   tv_selfMaintenance.setCompoundDrawables();
@@ -173,6 +186,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 tv_selfMaintenance.setTextColor(context.getResources().getColor(R.color.white));
                 // 자가 정비이면 위치 뷰를 보이지 않게 숨긴다.
                 tr_moRcord_location.setVisibility(View.GONE);
+                View_maintenanceLocationLine.setVisibility(View.GONE);
                 break;
         }
     }
@@ -195,13 +209,15 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         rv_MtOtImageList.setAdapter(vpAp_maintenanceOther);
     }
 
-    void cropImage() { //todo 여기서 사용자들이 좀 터진다. 카메라만 관련되면 터지는 것 같다. 해당 라인은 크롭에서 터지는데 이 부분은 좀 알아봐야겠다.
+
+
+    void cropImage() {
         try {
             PackageManager packageManager = context.getPackageManager();
             if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
                 // 지울것!!
                 Log.i("data_fuelingRecord.getImageUri()", data_record.getImageUri());
-                context.grantUriPermission("com.android.camera", Uri.parse(data_record.getImageUri()),
+                /*context.grantUriPermission("com.android.camera", Uri.parse(data_record.getImageUri()),
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 Intent cropIntent = new Intent("com.android.camera.action.CROP");
@@ -210,7 +226,20 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 cropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse(data_record.getImageUri()));
+                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse(data_record.getImageUri()));*/
+                // 이미지를 가져온 이후의 리사이즈할 이미지 크기를 결정합니다.
+                // 이후에 이미지 크롭 어플리케이션을 호출하게 됩니다.
+                String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+                Uri pictureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
+                Intent cropIntent = new Intent("com.android.camera.action.CROP");
+                cropIntent.setDataAndType(pictureUri, "image/*");
+
+                cropIntent.putExtra("outputX", 200); //크롭한 이미지 x축 크기
+                cropIntent.putExtra("outputY", 200); //크롭한 이미지 y축 크기
+                cropIntent.putExtra("aspectX", 1); //크롭 박스의 x축 비율
+                cropIntent.putExtra("aspectY", 1); //크롭 박스의 y축 비율
+                cropIntent.putExtra("scale", true);
+                cropIntent.putExtra("return-data", true);
                 mStartForResult.launch(cropIntent);
             }
         } catch (Exception e) {
