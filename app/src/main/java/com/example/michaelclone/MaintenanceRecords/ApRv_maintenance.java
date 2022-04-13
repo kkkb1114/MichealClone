@@ -82,11 +82,15 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_itemTitle;
-        TextView tv_itemDistance;
-        TextView tv_itemMonth;
-        CheckBox cb_itemSelect;
-        LinearLayout Ln_item;
+        TextView tv_maintenance_itemTitle;
+        TextView tv_maintenance_itemDistance;
+        TextView tv_maintenance_itemMonth;
+        TextView tv_maintenance_itemSubText01;
+        TextView tv_maintenance_itemSubText02;
+        CheckBox cb_maintenance_itemSelect;
+        View View_maintenance_itemDividingLine;
+        View View_maintenance_itemDividingLine02;
+        LinearLayout Ln_maintenance_item;
         Context context;
 
 
@@ -97,33 +101,37 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
         }
 
         public void setView(){
-            tv_itemTitle = itemView.findViewById(R.id.tv_itemTitle);
-            tv_itemDistance = itemView.findViewById(R.id.tv_itemDistance);
-            tv_itemMonth = itemView.findViewById(R.id.tv_itemMonth);
-            cb_itemSelect = itemView.findViewById(R.id.cb_itemSelect);
-            Ln_item = itemView.findViewById(R.id.Ln_item);
+            tv_maintenance_itemTitle = itemView.findViewById(R.id.tv_maintenance_itemTitle);
+            tv_maintenance_itemDistance = itemView.findViewById(R.id.tv_maintenance_itemDistance);
+            tv_maintenance_itemMonth = itemView.findViewById(R.id.tv_maintenance_itemMonth);
+            tv_maintenance_itemSubText01 = itemView.findViewById(R.id.tv_maintenance_itemSubText01);
+            tv_maintenance_itemSubText02 = itemView.findViewById(R.id.tv_maintenance_itemSubText02);
+            cb_maintenance_itemSelect = itemView.findViewById(R.id.cb_maintenance_itemSelect);
+            View_maintenance_itemDividingLine = itemView.findViewById(R.id.View_maintenance_itemDividingLine);
+            View_maintenance_itemDividingLine02 = itemView.findViewById(R.id.View_maintenance_itemDividingLine02);
+            Ln_maintenance_item = itemView.findViewById(R.id.Ln_maintenance_item);
         }
 
         public void bindView(int position, ArrayList<String> ItemTitleList, ArrayList<String> ItemDistanceList
                 , ArrayList<String> ItemLifeSpanList){
 
-            tv_itemTitle.setText(ItemTitleList.get(position));
-            tv_itemDistance.setText(ItemDistanceList.get(position));
-            tv_itemMonth.setText(ItemLifeSpanList.get(position));
+            tv_maintenance_itemTitle.setText(ItemTitleList.get(position));
+            tv_maintenance_itemDistance.setText(ItemDistanceList.get(position));
+            tv_maintenance_itemMonth.setText(ItemLifeSpanList.get(position));
 
             cb_setChecked(position);
-            Ln_item.setOnClickListener(clickListener);
+            Ln_maintenance_item.setOnClickListener(clickListener);
         }
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()){
-                    case R.id.Ln_item:
-                        if (cb_itemSelect.isChecked()){
-                            cb_itemSelect.setChecked(false);
+                    case R.id.tv_maintenance_itemMonth:
+                        if (cb_maintenance_itemSelect.isChecked()){
+                            cb_maintenance_itemSelect.setChecked(false);
                         }else {
-                            cb_itemSelect.setChecked(true);
+                            cb_maintenance_itemSelect.setChecked(true);
                         }
                         break;
                 }
@@ -131,15 +139,15 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
         };
 
         public void cb_setChecked(int position){
-            cb_itemSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            cb_maintenance_itemSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked){
-                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 0);
-                            cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#00D4FF")));
+                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_maintenance_itemTitle.getText().toString(), 0);
+                        cb_maintenance_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#00D4FF")));
                     }else {
-                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_itemTitle.getText().toString(), 1);
-                            cb_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
+                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_maintenance_itemTitle.getText().toString(), 1);
+                        cb_maintenance_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
                     }
                 }
             });

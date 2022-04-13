@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:paddingVertical="10dp"
         android:stretchColumns="*"
-        android:background="#03A9F4">
+        android:background="#2BC6FF">
         <!--상단 바-->
         <TableRow>
                 <LinearLayout
@@ -46,7 +46,7 @@
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/FuelingRecord"
+                        android:text="@string/maintenanceOtherRecord"
                         android:textColor="@color/white" />
 
                     <LinearLayout

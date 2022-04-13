@@ -14,7 +14,7 @@
     <!--정비/기타 항목 선택 텍스트 사이즈-->
     <dimen name="MaintenanceOtherItemTitle">70dp</dimen>
     <dimen name="MaintenanceOtherItemDetail">70dp</dimen>
-    <dimen name="MtOt_ItemMemo">15dp</dimen>
+    <dimen name="MtOt_ItemMemo">12dp</dimen>
     <dimen name="MtOt_ItemMemoCount">10dp</dimen>
     <dimen name="dialogParkingImageHeight">100dp</dimen>
 </resources>

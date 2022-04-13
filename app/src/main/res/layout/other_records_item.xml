@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/Ln_item"
+    android:id="@+id/Ln_other_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -34,7 +34,7 @@
 
             <!--항목-->
             <TextView
-                android:id="@+id/tv_itemTitle"
+                android:id="@+id/tv_other_itemTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -53,7 +53,7 @@
                 android:orientation="horizontal"
                 android:padding="15dp">
                 <CheckBox
-                    android:id="@+id/cb_itemSelect"
+                    android:id="@+id/cb_other_itemSelect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/TransparencyBlack_20"
@@ -65,7 +65,7 @@
 
         <TableRow>
             <View
-                android:id="@+id/view3"
+                android:id="@+id/View_other_itemDividingLine"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_column="2"

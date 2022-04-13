@@ -3,6 +3,7 @@ package com.example.michaelclone.MaintenanceRecords;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.michaelclone.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_MaintenanceOtherRecord.ViewHolder> {
 
@@ -109,6 +111,27 @@ public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_Maintenan
                     String calculatedCumulativeMileage = decimalFormat.format(cumulativeMileage);
                     et_MtOt_ItemPrice.setText(calculatedCumulativeMileage);
                     return false;
+                }
+            });
+
+            // 누적 지출 금액 입력할때마다 동작
+            et_MtOt_ItemPrice.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (et_MtOt_ItemPrice.getText().toString().matches("0")){
+                        // 맨 처음 앞자리가 0이면 더이상 입력 못하게 지운다
+                        et_MtOt_ItemPrice.setText("");
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
                 }
             });
         }

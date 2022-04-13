@@ -29,6 +29,7 @@
     <string name="location3">서울특별시 성북구 안암동3가</string>
 
     <!--정비/기타 기록-->
+    <string name="maintenanceOtherRecord">정비/기타</string>
     <string name="maintenanceItems">정비 항목</string>
     <string name="otherItems">기타 항목</string>
     <string name="PleaseSelectAnItem">항목을 선택해 주세요</string>

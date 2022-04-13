@@ -21,8 +21,12 @@
     <color name="maintenanceTabIndicator">#80000000</color>
     <color name="maintenanceTabBottomLine">#0D000000</color>
     <color name="SkyBlue">#00D4FF</color>
+    <color name="stateBar">#1A7799</color>
+    <color name="touchBlock">#D3D3D3</color>
 
     <!--정비 기록 텍스트-->
+    <color name="blackTransparent_5">#0D000000</color>
+    <color name="blackTransparent_10">#1A000000</color>
     <color name="blackTransparent_20">#33000000</color>
     <color name="blackTransparent_30">#4D000000</color>
     <color name="blackTransparent_40">#66000000</color>
