@@ -82,7 +82,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         tabNameList.add(getResources().getString(R.string.maintenanceItems));
         tabNameList.add(getResources().getString(R.string.otherItems));
 
-        ad_maintenancePage = new ApVp_MaintenancePage(this, 2);
+        ad_maintenancePage = new ApVp_MaintenancePage(this, 2, context);
         vp_maintenanceOther.setAdapter(ad_maintenancePage);
 
         new TabLayoutMediator(tl_maintenanceOther, vp_maintenanceOther, new TabLayoutMediator.TabConfigurationStrategy() {

@@ -23,15 +23,16 @@ public class MaintenanceFragment extends Fragment {
     RecyclerView rv_maintenance;
     ApRv_maintenance apRv_maintenance;
 
-    // 정비 항목
+    Context context;
+
+    /*// 정비 항목
     ArrayList<String> ItemTitleList_maintenance = new ArrayList<>();
     ArrayList<String> ItemDistanceList_maintenance = new ArrayList<>();
     ArrayList<String> ItemLifeSpanList_maintenance = new ArrayList<>();
-    ArrayList<Integer> ItemTypeList_maintenance = new ArrayList<>();
+    ArrayList<Integer> ItemTypeList_maintenance = new ArrayList<>();*/
 
-    Context context;
-
-    public MaintenanceFragment() {
+    public MaintenanceFragment(ApRv_maintenance apRv_maintenance) {
+        this.apRv_maintenance = apRv_maintenance;
     }
 
     @Override
@@ -56,19 +57,17 @@ public class MaintenanceFragment extends Fragment {
     }
 
     public void setRecyclerView(RecyclerView rv_maintenance){
-        SettingItemList();
+        //SettingItemList();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
         // 정비 항목
         rv_maintenance.setLayoutManager(linearLayoutManager);
-        apRv_maintenance = new ApRv_maintenance(context, ItemTitleList_maintenance, ItemDistanceList_maintenance, ItemLifeSpanList_maintenance,
-                ItemTypeList_maintenance);
         rv_maintenance.setAdapter(apRv_maintenance);
         apRv_maintenance.notifyDataSetChanged();
     }
 
-    public void SettingItemList(){
+   /* public void SettingItemList(){
 
         // 정비 항목
         DecimalFormat decimalFormat = new DecimalFormat("###,###");
@@ -103,7 +102,7 @@ public class MaintenanceFragment extends Fragment {
         }
         ItemTypeList_maintenance.add(1);
 
-    }
+    }*/
 
     public String getResourcesString(int id){
         return getResources().getString(id);

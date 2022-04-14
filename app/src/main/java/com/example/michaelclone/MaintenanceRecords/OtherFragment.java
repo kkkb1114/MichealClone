@@ -21,6 +21,7 @@ public class OtherFragment extends Fragment {
 
     RecyclerView rv_other;
     ApRv_other apRv_other;
+    ApRv_maintenance apRv_maintenance;
 
     // 기타 항목
     ArrayList<String> ItemTitleList_other = new ArrayList<>();
@@ -28,7 +29,8 @@ public class OtherFragment extends Fragment {
 
     Context context;
 
-    public OtherFragment() {
+    public OtherFragment(ApRv_maintenance apRv_maintenance) {
+        this.apRv_maintenance = apRv_maintenance;
     }
 
     @Override
@@ -59,7 +61,7 @@ public class OtherFragment extends Fragment {
 
         // 기타 항목
         rv_other.setLayoutManager(linearLayoutManager);
-        apRv_other = new ApRv_other(context, ItemTitleList_other, ItemTypeList_other);
+        apRv_other = new ApRv_other(context, ItemTitleList_other, ItemTypeList_other, apRv_maintenance);
         rv_other.setAdapter(apRv_other);
         apRv_other.notifyDataSetChanged();
     }
