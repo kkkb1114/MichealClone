@@ -14,7 +14,7 @@ public class Data_MaintenanceRecords {
     static public ArrayList<String> al_itemTitleList = new ArrayList<>();
 
     //static public HashMap
-    static public int MaintenanceSingleItemPosition;
+    static public String MaintenanceSingleItemTitle = "null";
     static public boolean MaintenanceSingleItemboolean = false;
 
     public void al_itemTitleListresetData(){

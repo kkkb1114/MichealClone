@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 
 public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
 
+    ArrayList<String> singleItemTitleList = new ArrayList<>();
     ArrayList<String> ItemTitleList;
     ArrayList<Integer> ItemTypeList;
     ArrayList<ViewHolder> holderArrayList = new ArrayList<>();
@@ -129,10 +131,32 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
         }
 
         public void itemBlock(){
+            String other_itemTitle = tv_other_itemTitle.getText().toString();
             if (Data_MaintenanceRecords.MaintenanceSingleItemboolean){
-                tv_other_itemTitle.setTextColor(Color.parseColor("#D3D3D3"));
+                if (!other_itemTitle.equals(context.getResources().getString(R.string.carInsurance)) && !other_itemTitle.equals(Data_MaintenanceRecords.MaintenanceSingleItemTitle) ||
+                        !other_itemTitle.equals(context.getResources().getString(R.string.trafficFine)) && !other_itemTitle.equals(Data_MaintenanceRecords.MaintenanceSingleItemTitle) ||
+                        !other_itemTitle.equals(context.getResources().getString(R.string.automobileTax)) && !other_itemTitle.equals(Data_MaintenanceRecords.MaintenanceSingleItemTitle)){
+
+                    tv_other_itemTitle.setTextColor(Color.parseColor("#D3D3D3"));
+                    cb_other_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#D3D3D3")));
+                    View_other_itemDividingLine.setBackgroundColor(Color.parseColor("#D3D3D3"));
+                    cb_other_itemSelect.setClickable(false);
+                    Ln_other_item.setClickable(false);
+                }else {
+                    Toast.makeText(context, other_itemTitle +" "+ context.getResources().getString(R.string.selectSingleItemToast), Toast.LENGTH_SHORT).show();
+                }
+
             }else {
-                tv_other_itemTitle.setTextColor(Color.parseColor("#000000"));
+                if (!other_itemTitle.equals(context.getResources().getString(R.string.carInsurance)) && !other_itemTitle.equals(Data_MaintenanceRecords.MaintenanceSingleItemTitle) ||
+                        !other_itemTitle.equals(context.getResources().getString(R.string.trafficFine)) && !other_itemTitle.equals(Data_MaintenanceRecords.MaintenanceSingleItemTitle) ||
+                        !other_itemTitle.equals(context.getResources().getString(R.string.automobileTax)) && !other_itemTitle.equals(Data_MaintenanceRecords.MaintenanceSingleItemTitle)){
+
+                    tv_other_itemTitle.setTextColor(Color.parseColor("#000000"));
+                    cb_other_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
+                    View_other_itemDividingLine.setBackgroundColor(Color.parseColor("#33000000"));
+                    cb_other_itemSelect.setClickable(true);
+                    Ln_other_item.setClickable(true);
+                }
             }
         }
 
@@ -146,13 +170,13 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
                             SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_other_itemTitle.getText().toString(), 0);
 
                             // 단일 항목들 체크
-                            singleItemCheck(position);
+                            singleItemCheck(true);
                         } else {
                             cb_other_itemSelect.setChecked(false);
                             SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_other_itemTitle.getText().toString(), 1);
 
                             // 단일 항목들 체크
-                            singleItemCheck(position);
+                            singleItemCheck(false);
                         }
                         break;
                     case R.id.cb_other_itemSelect:
@@ -161,13 +185,13 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
                             SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_other_itemTitle.getText().toString(), 0);
 
                             // 단일 항목들 체크
-                            singleItemCheck(position);
+                            singleItemCheck(true);
                         } else {
                             cb_other_itemSelect.setChecked(false);
                             SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_other_itemTitle.getText().toString(), 1);
 
                             // 단일 항목들 체크
-                            singleItemCheck(position);
+                            singleItemCheck(false);
                         }
                         break;
                 }
@@ -189,24 +213,27 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
 
                         // 체크박스가 변할때마다 onBindViewHolder에서 받아온 position값에 위치한 checkedHashMap boolean값을 변경해준다.
                         checkedHashMap_other.replace(position, false);
-                        // 단일 항목들 체크
-                        singleItemCheck(position);
                     }
                 }
             });
         }
 
         /*단일 항목을 체크 할때마다 해당 단일 항목을 제외한 나머지 항목은 전부 터치를 못하게 막는다.*/
-        public void singleItemCheck(int position){
-            Log.i("11", "11");
+        public void singleItemCheck(boolean Checked){
                 String itemTitle = tv_other_itemTitle.getText().toString();
                 if (itemTitle.equals(context.getResources().getString(R.string.carInsurance)) ||
                         itemTitle.equals(context.getResources().getString(R.string.trafficFine)) ||
                         itemTitle.equals(context.getResources().getString(R.string.automobileTax))){
 
-                    Log.i("22", "22");
-                    Data_MaintenanceRecords.MaintenanceSingleItemPosition = position;
-                    Data_MaintenanceRecords.MaintenanceSingleItemboolean = true;
+                    if (Checked){
+                        Data_MaintenanceRecords.MaintenanceSingleItemboolean = true;
+                        Data_MaintenanceRecords.MaintenanceSingleItemTitle = tv_other_itemTitle.getText().toString();
+                        singleItemTitleList.add(tv_other_itemTitle.getText().toString());
+                    }else {
+                        Data_MaintenanceRecords.MaintenanceSingleItemboolean = false;
+                        Data_MaintenanceRecords.MaintenanceSingleItemTitle = "null";
+                        singleItemTitleList.remove(tv_other_itemTitle.getText().toString());
+                    }
                     notifyDataSetChanged();
                     apRv_maintenance.notifyDataSetChanged();
                 }

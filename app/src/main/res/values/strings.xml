@@ -96,6 +96,10 @@
     <string name="carAudio">카오디오</string>
     <!--기타 항목-->
 
+    <!--단일 항목 선택 알림-->
+    <string name="selectSingleItemToast">항목은 단일 입력만 가능합니다.</string>
+    <!--단일 항목 선택 알림-->
+
     <!--달력-->
     <string-array name="custom_weekdays">
         <item>일</item>

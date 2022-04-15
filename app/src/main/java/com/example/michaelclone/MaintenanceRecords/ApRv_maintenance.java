@@ -74,6 +74,8 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
         if (ItemTypeList.get(position) == 0){
             holder.bindView(position, ItemTitleList, ItemDistanceList, ItemLifeSpanList);
             checkCheckBox(holder, position);
+            // 지울것!!
+            Log.i("정비 항목 새로고침", "onBindViewHolder");
         }
     }
 
@@ -138,6 +140,8 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
         public void bindView(int position, ArrayList<String> ItemTitleList, ArrayList<String> ItemDistanceList
                 , ArrayList<String> ItemLifeSpanList){
 
+            // 지울것!!
+            Log.i("정비 항목 새로고침", "bindView");
             tv_maintenance_itemTitle.setText(ItemTitleList.get(position));
             tv_maintenance_itemDistance.setText(ItemDistanceList.get(position));
             tv_maintenance_itemMonth.setText(ItemLifeSpanList.get(position));
@@ -161,8 +165,19 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
                 View_maintenance_itemDividingLine02.setBackgroundColor(Color.parseColor("#1A000000"));
                 cb_maintenance_itemSelect.setClickable(false);
                 Ln_maintenance_item.setClickable(false);
+                // 지울것!!
+                Log.i("정비 항목 새로고침", "itemBlock");
             }else {
-
+                tv_maintenance_itemTitle.setTextColor(Color.parseColor("#000000"));
+                tv_maintenance_itemDistance.setTextColor(Color.parseColor("#80000000"));
+                tv_maintenance_itemMonth.setTextColor(Color.parseColor("#80000000"));
+                tv_maintenance_itemSubText01.setTextColor(Color.parseColor("#80000000"));
+                tv_maintenance_itemSubText02.setTextColor(Color.parseColor("#80000000"));
+                cb_maintenance_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
+                View_maintenance_itemDividingLine.setBackgroundColor(Color.parseColor("#33000000"));
+                View_maintenance_itemDividingLine02.setBackgroundColor(Color.parseColor("#33000000"));
+                cb_maintenance_itemSelect.setClickable(true);
+                Ln_maintenance_item.setClickable(true);
             }
         }
 
@@ -201,11 +216,15 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
                         checkedHashMap_maintenance.replace(position, true);
                         cb_maintenance_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#00D4FF")));
 
+                        // 지울것!!
+                        Log.i("정비 항목 새로고침", "cb_setChecked_1");
                     }else {
                         // 체크박스가 변할때마다 onBindViewHolder에서 받아온 position값에 위치한 checkedHashMap boolean값을 변경해준다.
                         checkedHashMap_maintenance.replace(position, false);
                         cb_maintenance_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
 
+                        // 지울것!!
+                        Log.i("정비 항목 새로고침", "cb_setChecked_2");
                     }
                 }
             });
