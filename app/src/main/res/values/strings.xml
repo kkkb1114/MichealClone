@@ -96,8 +96,15 @@
     <string name="carAudio">카오디오</string>
     <!--기타 항목-->
 
+    <!--기록 페이지-->
+    <string name="HistoryPageFullTab">전체</string>
+    <string name="HistoryPageMaintenanceOthers">정비/기타</string>
+    <!--기록 페이지-->
+
     <!--단일 항목 선택 알림-->
     <string name="selectSingleItemToast">항목은 단일 입력만 가능합니다.</string>
+    <string name="year">년</string>
+    <string name="totalExpenditure">총 지출</string>
     <!--단일 항목 선택 알림-->
 
     <!--달력-->

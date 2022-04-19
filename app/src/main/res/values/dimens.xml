@@ -17,4 +17,8 @@
     <dimen name="MtOt_ItemMemo">12dp</dimen>
     <dimen name="MtOt_ItemMemoCount">10dp</dimen>
     <dimen name="dialogParkingImageHeight">100dp</dimen>
+
+    <!--메인기록페이지-->
+    <dimen name="mainhistoryPageYearTextSize">10sp</dimen>
+    <dimen name="mainhistoryPageYearDataTextSize">15sp</dimen>
 </resources>

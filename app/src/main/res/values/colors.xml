@@ -36,6 +36,17 @@
     <color name="blackTransparent_80">#CC000000</color>
     <color name="blackTransparent_90">#E6000000</color>
 
+    <!--기록 페이지-->
+    <color name="mainhistorypageItemColor">#D1D1D1</color>
+    <color name="mainhistorypageTopColor">#2C2C2C</color>
+    <color name="mainhistorypageselectionItemBackground">#0D000000</color>
+    <color name="mainhistorypageTabIndicatorText">#ABABAB</color>
+    <color name="mainhistorypageIndicatorTextWSelect">#80000000</color>
+    <color name="mainhistorypageIndicator">#80000000</color>
+    <color name="mainhistorypageBottomLine">#0D000000</color>
+    <color name="mainhistoryPageYearItemBackground">#55D7A7</color>
+    <color name="mainhistoryPageYearText">#80000000</color>
+    <!--기록 페이지-->
 
     <!-- Fully transparent, equivalent to 0x00000000 -->
     <color name="transparent">#00000000</color>
