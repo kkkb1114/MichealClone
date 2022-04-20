@@ -18,12 +18,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MaintenanceOtherRecordActivity extends AppCompatActivity {
+public class MaintenanceOtherRecordActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private MaintenanceOtherRecordFragment maintenanceOtherRecordFragment;
     private locationSearchFragment locationSearchFragment;
+
+    TextView maintenanceOtherRecordComplete;
 
     LinearLayout ln_date;
     TextView tv_date;
@@ -42,7 +44,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity {
         try {
             mContext = this;
             setView();
-            setTextView();
+            setActionView();
             setFragment(1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,18 +54,27 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity {
     public void setView(){
         tv_date = findViewById(R.id.tv_date);
         ln_date = findViewById(R.id.ln_date);
+        maintenanceOtherRecordComplete = findViewById(R.id.maintenanceOtherRecordComplete);
     }
 
     // 상단 날짜 텍스트뷰 동작 세팅
-    public void setTextView() {
-        tv_date.setText(getDate()+getDateDay(mDate));
-        DialogManager.calenderDialog calenderDialog = new DialogManager.calenderDialog(mContext, tv_date);
-        ln_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    public void setActionView() {
+        ln_date.setOnClickListener(this);
+        maintenanceOtherRecordComplete.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.ln_date:
+                tv_date.setText(getDate()+getDateDay(mDate));
+                DialogManager.calenderDialog calenderDialog = new DialogManager.calenderDialog(mContext, tv_date);
                 calenderDialog.show();
-            }
-        });
+                break;
+            case R.id.maintenanceOtherRecordComplete:
+
+                break;
+        }
     }
 
     // 현재 시간 구하기

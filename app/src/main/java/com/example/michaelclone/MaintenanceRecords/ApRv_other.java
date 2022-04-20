@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.michaelclone.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
@@ -31,6 +33,9 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
     Context context;
     boolean setChecked = false;
     ApRv_maintenance apRv_maintenance;
+
+    // 시간
+    String strNow;
 
     public ApRv_other(Context context, ArrayList<String> ItemTitleList, ArrayList<Integer> ItemTypeList, ApRv_maintenance apRv_maintenance) {
         this.context = context;
@@ -238,5 +243,44 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
                     apRv_maintenance.notifyDataSetChanged();
                 }
         }
+
+        public void SelectItemDataSave(){
+            Data_MaintenanceRecords.al_carbookRecordItemCategoryCodeList.add("ㅁㄴㅇ");
+            Data_MaintenanceRecords.al_carbookRecordItemCategoryNameList.add(tv_other_itemTitle.getText().toString());
+            Data_MaintenanceRecords.al_carbookRecordItemExpenseMemoList.add("");
+            Data_MaintenanceRecords.al_carbookRecordItemExpenseCostList.add(0.0);
+            Data_MaintenanceRecords.al_carbookRecordItemIsHiddenList.add(0);
+            Data_MaintenanceRecords.al_carbookRecordItemRegTimeList.add(strNow);
+            Data_MaintenanceRecords.al_carbookRecordItemUpdateTimeList.add(strNow);
+        }
+
+        public void SelectItemDataRemove(){
+            Data_MaintenanceRecords.al_carbookRecordItemCategoryCodeList.remove("ㅁㄴㅇ");
+            Data_MaintenanceRecords.al_carbookRecordItemCategoryNameList.remove(tv_other_itemTitle.getText().toString());
+            Data_MaintenanceRecords.al_carbookRecordItemExpenseMemoList.remove("");
+            Data_MaintenanceRecords.al_carbookRecordItemExpenseCostList.remove(0.0);
+            Data_MaintenanceRecords.al_carbookRecordItemIsHiddenList.remove(0);
+            Data_MaintenanceRecords.al_carbookRecordItemRegTimeList.remove(strNow);
+            Data_MaintenanceRecords.al_carbookRecordItemUpdateTimeList.remove(strNow);
+        }
+
+        // 현재시간 구하기
+        public Date nowTime(){
+            Date nowDate = null;
+            try {
+                // 타임 피커 뜨는 현재 시간
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+                strNow = simpleDateFormat.format(date);
+                nowDate = simpleDateFormat.parse(strNow);
+
+                Log.i("nowTime", strNow);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return nowDate;
+        }
+
     }
 }

@@ -100,7 +100,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     // 0: 항목 선택, 1: 항목 선택 취소
     static public void itemClickChangeCount(Context context, String title, int CheckedItemCount){
         if (CheckedItemCount == 0){
-            // 리사이클러뷰 스크롤로 인한 지동 추가가 아니면 실행
+            // 리사이클러뷰 스크롤로 인한 자동 추가가 아니면 실행
                 Data_MaintenanceRecords.al_itemTitleList.add(title);
                 tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
                 SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));

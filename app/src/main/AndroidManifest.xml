@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MichaelClone">
         <activity
-            android:name=".MaintenanceRecords.SelectMaintenanceItemActivity"
+            android:name=".MaintenanceRecords.MaintenanceOtherRecordActivity"
             android:exported="false" />
         <activity
             android:name=".FuelingRecord.FuelingRecordActivity"
@@ -37,10 +37,10 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MaintenanceRecords.MaintenanceOtherRecordActivity"
+            android:name=".MainRecord.MainrecordActivity"
             android:exported="false" />
         <activity
-            android:name=".MainRecord.MainrecordActivity"
+            android:name=".MaintenanceRecords.SelectMaintenanceItemActivity"
             android:exported="true"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
