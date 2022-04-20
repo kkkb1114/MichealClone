@@ -70,6 +70,10 @@ public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_Maintenan
             View_maintenanceItemLine = itemView.findViewById(R.id.View_maintenanceItemLine);
         }
 
+        public void addItemData(int position){
+
+        }
+
         // 아이템 마지막은 구분선이 계속 생기면 아래 구분선이 2개가 되기때문에 없애준다.
         public void GoneMaintenanceItemLine(int position){
             if (al_itemTitleList.size() == 1 || position == al_itemTitleList.size()-1){

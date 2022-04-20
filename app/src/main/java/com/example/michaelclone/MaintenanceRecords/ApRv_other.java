@@ -244,7 +244,7 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
                 }
         }
 
-        public void SelectItemDataSave(){
+        /*public void SelectItemDataSave(){
             Data_MaintenanceRecords.al_carbookRecordItemCategoryCodeList.add("ㅁㄴㅇ");
             Data_MaintenanceRecords.al_carbookRecordItemCategoryNameList.add(tv_other_itemTitle.getText().toString());
             Data_MaintenanceRecords.al_carbookRecordItemExpenseMemoList.add("");
@@ -262,7 +262,7 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
             Data_MaintenanceRecords.al_carbookRecordItemIsHiddenList.remove(0);
             Data_MaintenanceRecords.al_carbookRecordItemRegTimeList.remove(strNow);
             Data_MaintenanceRecords.al_carbookRecordItemUpdateTimeList.remove(strNow);
-        }
+        }*/
 
         // 현재시간 구하기
         public Date nowTime(){

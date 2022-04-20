@@ -77,7 +77,7 @@ public class MainRecordItem_DB extends SQLiteOpenHelper {
     // 데이터베이스 삭제하기
     public Integer deleteData(String id){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "_id = ? ",new String[]{id});
+        return db.delete(TABLE_NAME, "carbookRecordId = ? ",new String[]{id});
     }
 
     //데이터베이스 수정하기
@@ -88,7 +88,7 @@ public class MainRecordItem_DB extends SQLiteOpenHelper {
         contentValues.put(COL_2,name);
         contentValues.put(COL_3,phone);
         contentValues.put(COL_4,address);
-        db.update(TABLE_NAME,contentValues,"_id = ?", new String[] { id });
+        db.update(TABLE_NAME,contentValues,"carbookRecordId = ?", new String[] { id });
         return true;
     }
 }

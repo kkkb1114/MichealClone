@@ -42,7 +42,6 @@ public class MainRecord_DB extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
         onCreate(db);
-
     }
 
     // 데이터베이스 추가하기 insert
