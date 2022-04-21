@@ -64,7 +64,6 @@ public class MainRecordItem_DB extends SQLiteOpenHelper {
             return false;
         else
             return true;
-
     }
 
     //데이터베이스 항목 읽어오기 Read
@@ -74,21 +73,15 @@ public class MainRecordItem_DB extends SQLiteOpenHelper {
         return  res;
     }
 
-    // 데이터베이스 삭제하기
-    public Integer deleteData(String id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "carbookRecordId = ? ",new String[]{id});
-    }
-
-    //데이터베이스 수정하기
-    public boolean updateData(String id, String name, String phone, String address){
+    //데이터베이스 수정하기 (항목 테이블은 기록 테이블 id, 항목 분류 코드를 이용하며 항목 코드는 바)
+    public boolean updateData(String carbookRecordId, String carbookRecordItemCategoryCode, String phone, String address){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_1,id);
-        contentValues.put(COL_2,name);
+        contentValues.put(COL_1,carbookRecordId);
+        contentValues.put(COL_2,carbookRecordItemCategoryCode);
         contentValues.put(COL_3,phone);
         contentValues.put(COL_4,address);
-        db.update(TABLE_NAME,contentValues,"carbookRecordId = ?", new String[] { id });
+        db.update(TABLE_NAME,contentValues,"carbookRecordId = ? AND carbookRecordItemCategoryCode = ?", new String[] { carbookRecordId , carbookRecordItemCategoryCode});
         return true;
     }
 }

@@ -17,13 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.michaelclone.R;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_MaintenanceOtherRecord.ViewHolder> {
 
     Context context;
     ArrayList<String> al_itemTitleList;
+    String strNow;
 
     public Ap_MaintenanceOtherRecord(Context context, ArrayList<String> al_itemTitleList){
         this.context = context;
@@ -41,11 +44,74 @@ public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_Maintenan
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_MtOt_ItemTitle.setText(al_itemTitleList.get(position));
         holder.GoneMaintenanceItemLine(position);
+
+        // 항목 아이템 EditText 적힐떄마다 해쉬맵에 저장
+        getItemEditTextData(holder, position);
     }
 
     @Override
     public int getItemCount() {
         return al_itemTitleList.size();
+    }
+
+    public void getItemEditTextData(ViewHolder holder, int position){
+        String ApRv_otherHashMapKey = "ApRv_other"+position;
+        Data_MaintenanceRecords.al_carbookRecordItemExpenseMemoList.put(ApRv_otherHashMapKey, holder.et_MtOtItemMemo.getText().toString());
+        Data_MaintenanceRecords.al_carbookRecordItemExpenseCostList.put(ApRv_otherHashMapKey, holder.et_MtOt_ItemPrice.getText().toString());
+    }
+
+    // 이렇게 전부 필요 데이터를 하나하나 전부 해쉬맵에 저장하면 로직이 너무 복잡해지기에 차라리 해당 데이터 클래스를 따로 만들어서 객체 하나만 사용하라고 하심(싱글톤 패턴)
+    /*public void SelectItemDataSave(ViewHolder holder, int position){
+        String ApRv_otherHashMapKey = "ApRv_other"+position;
+        Data_MaintenanceRecords.al_carbookRecordItemPositionList.put(ApRv_otherHashMapKey, position);
+        Data_MaintenanceRecords.al_carbookRecordItemCategoryCodeList.put(ApRv_otherHashMapKey, "ㅁㄴㅇ");
+        Data_MaintenanceRecords.al_carbookRecordItemCategoryNameList.put(ApRv_otherHashMapKey, holder.tv_MtOt_ItemTitle.getText().toString());
+        Data_MaintenanceRecords.al_carbookRecordItemExpenseMemoList.put(ApRv_otherHashMapKey, "");
+        Data_MaintenanceRecords.al_carbookRecordItemExpenseCostList.put(ApRv_otherHashMapKey, 0.0);
+        Data_MaintenanceRecords.al_carbookRecordItemIsHiddenList.put(ApRv_otherHashMapKey, 0);
+        Data_MaintenanceRecords.al_carbookRecordItemRegTimeList.put(ApRv_otherHashMapKey, strNow);
+        Data_MaintenanceRecords.al_carbookRecordItemUpdateTimeList.put(ApRv_otherHashMapKey, strNow);
+        test();
+    }
+
+    public void SelectItemDataRemove(ViewHolder holder, int position){
+        String ApRv_otherHashMapKey = "ApRv_other"+position;
+        //Data_MaintenanceRecords.al_carbookRecordItemPositionList.remove(ApRv_otherHashMapKey);
+        Data_MaintenanceRecords.al_carbookRecordItemCategoryCodeList.remove(ApRv_otherHashMapKey);
+        Data_MaintenanceRecords.al_carbookRecordItemCategoryNameList.remove(ApRv_otherHashMapKey);
+        Data_MaintenanceRecords.al_carbookRecordItemExpenseMemoList.remove(ApRv_otherHashMapKey);
+        Data_MaintenanceRecords.al_carbookRecordItemExpenseCostList.remove(ApRv_otherHashMapKey);
+        Data_MaintenanceRecords.al_carbookRecordItemIsHiddenList.remove(ApRv_otherHashMapKey);
+        Data_MaintenanceRecords.al_carbookRecordItemRegTimeList.remove(ApRv_otherHashMapKey);
+        Data_MaintenanceRecords.al_carbookRecordItemUpdateTimeList.remove(ApRv_otherHashMapKey);
+        test();
+    }
+
+    public void test(){
+        for (int i=0; i<Data_MaintenanceRecords.al_carbookRecordItemPositionList.size(); i++){
+            if (Data_MaintenanceRecords.al_carbookRecordItemCategoryCodeList.get("ApRv_other"+i) != null){
+                Log.i("test / "+"ApRv_other"+i, Data_MaintenanceRecords.al_carbookRecordItemCategoryCodeList.get("ApRv_other"+i)+"/"+
+                        Data_MaintenanceRecords.al_carbookRecordItemCategoryNameList.get("ApRv_other"+i));
+            }
+        }
+    }*/
+
+    // 현재시간 구하기
+    public Date nowTime(){
+        Date nowDate = null;
+        try {
+            // 타임 피커 뜨는 현재 시간
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+            strNow = simpleDateFormat.format(date);
+            nowDate = simpleDateFormat.parse(strNow);
+
+            Log.i("nowTime", strNow);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return nowDate;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

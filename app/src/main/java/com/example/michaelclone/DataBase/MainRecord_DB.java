@@ -40,8 +40,7 @@ public class MainRecord_DB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
-        onCreate(db);
+
     }
 
     // 데이터베이스 추가하기 insert
@@ -68,12 +67,6 @@ public class MainRecord_DB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from "+TABLE_NAME,null);
         return  res;
-    }
-
-    // 데이터베이스 삭제하기
-    public Integer deleteData(String id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "_id = ? ",new String[]{id});
     }
 
     //데이터베이스 수정하기

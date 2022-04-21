@@ -19,20 +19,39 @@ public class Data_MaintenanceRecords {
 
 
     // DB 저장할 기록 데이터 모음
-    static public ArrayList<String> al_carbookRecordRepairModeList = new ArrayList<>();
-    static public ArrayList<String> al_carbookRecordExpendDateList = new ArrayList<>();
-    static public ArrayList<String> al_carbookRecordIsHiddenList = new ArrayList<>();
-    static public ArrayList<String> al_carbookRecordTotalDistanceList = new ArrayList<>();
-    static public ArrayList<String> al_carbookRecordRegTimeList = new ArrayList<>();
-    static public ArrayList<String> al_carbookRecordUpdateTimeList = new ArrayList<>();
+    static public HashMap<String, Integer> al_carbookRecordRepairModeList = new HashMap<>();
+    static public HashMap<String, String> al_carbookRecordExpendDateList = new HashMap<>();
+    static public HashMap<String, Integer> al_carbookRecordIsHiddenList = new HashMap<>();
+    static public HashMap<String, Integer> al_carbookRecordTotalDistanceList = new HashMap<>();
+    static public HashMap<String, String> al_carbookRecordRegTimeList = new HashMap<>();
+    static public HashMap<String, String> al_carbookRecordUpdateTimeList = new HashMap<>();
 
     // DB 저장할 정비/기타 데이터 모음
-    static public ArrayList<String> al_carbookRecordItemCategoryCodeList = new ArrayList<>();
-    static public ArrayList<String> al_carbookRecordItemCategoryNameList = new ArrayList<>();
-    static public ArrayList<String> al_carbookRecordItemExpenseMemoList = new ArrayList<>();
-    static public ArrayList<Double> al_carbookRecordItemExpenseCostList = new ArrayList<>();
-    static public ArrayList<Integer> al_carbookRecordItemIsHiddenList = new ArrayList<>();
-    static public ArrayList<String> al_carbookRecordItemRegTimeList = new ArrayList<>();
-    static public ArrayList<String> al_carbookRecordItemUpdateTimeList = new ArrayList<>();
+    static public HashMap<String, Integer> al_carbookRecordItemPositionList = new HashMap<>();
+    static public HashMap<String, String> al_carbookRecordItemCategoryCodeList = new HashMap<>();
+    static public HashMap<String, String> al_carbookRecordItemCategoryNameList = new HashMap<>();
+    static public HashMap<String, String> al_carbookRecordItemExpenseMemoList = new HashMap<>();
+    static public HashMap<String, String> al_carbookRecordItemExpenseCostList = new HashMap<>();
+    static public HashMap<String, Integer> al_carbookRecordItemIsHiddenList = new HashMap<>();
+    static public HashMap<String, String> al_carbookRecordItemRegTimeList = new HashMap<>();
+    static public HashMap<String, String> al_carbookRecordItemUpdateTimeList = new HashMap<>();
 
+    //static public HashMap<String, CarbookItem> carbookItemHashMap = new HashMap<>();
+    //String , String , Int , String
+
+    //싱글톤
+
+
+
+
+    static public void ItemDataClear(){
+        al_carbookRecordItemPositionList.clear();
+        al_carbookRecordItemCategoryCodeList.clear();
+        al_carbookRecordItemCategoryNameList.clear();
+        al_carbookRecordItemExpenseMemoList.clear();
+        al_carbookRecordItemExpenseCostList.clear();
+        al_carbookRecordItemIsHiddenList.clear();
+        al_carbookRecordItemRegTimeList.clear();
+        al_carbookRecordItemUpdateTimeList.clear();
+    }
 }
