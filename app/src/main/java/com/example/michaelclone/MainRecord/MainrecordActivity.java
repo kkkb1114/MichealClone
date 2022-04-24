@@ -9,11 +9,17 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.michaelclone.DataBase.MainRecordItem;
 import com.example.michaelclone.DataBase.MainRecordItem_DB;
+import com.example.michaelclone.DataBase.MainRecordItem_DataBridge;
 import com.example.michaelclone.DataBase.MainRecord_DB;
+import com.example.michaelclone.DataBase.Main_DataBridge;
+import com.example.michaelclone.DataBase.MichaelClone_DBHelper;
 import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordFragment;
 import com.example.michaelclone.MaintenanceRecords.locationSearchFragment;
 import com.example.michaelclone.R;
+
+import java.util.ArrayList;
 
 public class MainrecordActivity extends AppCompatActivity {
 
@@ -34,18 +40,28 @@ public class MainrecordActivity extends AppCompatActivity {
 
         setFragment(1);
         setDB();
-
-        mainRecord_db.insertData(0,
+        MainRecordItem_DataBridge mainRecordItemDataBridge = new MainRecordItem_DataBridge();
+        mainRecordItemDataBridge.MainRecordItemInsert(new MainRecordItem(0,
                 "bbb",
-                0,
-                0.5,
+                "asd",
+                "asd",
                 "eee",
-                "fff");
+                0,
+                "asd",
+                "asd"));
+        ArrayList<MainRecordItem> mainRecordItems = new MainRecordItem_DB().getMainRecordItemList();
+
+        if(MichaelClone_DBHelper.michaelCloneDbHelper_Instance == null){
+            Log.i("111", "null");
+        }else {
+            Log.i("222", "not null");
+        }
+        //Log.i("123", mainRecordItems.get(0).carbookRecordItemRegTime);
     }
 
     public void setDB(){
         mainRecord_db = new MainRecord_DB(context, 1);
-        mainRecordItem_db = new MainRecordItem_DB(context, 1);
+        mainRecordItem_db = MainRecordItem_DB.getInstance(context, "MainRecord.db", null, 1);
     }
 
     public void setFragment(int fragment){

@@ -3,11 +3,13 @@ package com.example.michaelclone.DataBase;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 public class MichaelClone_DBHelper extends SQLiteOpenHelper {
 
+    static String DATABASE_NAME = "MainRecord.db";
     public static MichaelClone_DBHelper michaelCloneDbHelper_Instance;
     public static SQLiteDatabase writeableDataBase;
     public static SQLiteDatabase readableDataBase;
@@ -41,8 +43,9 @@ public class MichaelClone_DBHelper extends SQLiteOpenHelper {
     public MichaelClone_DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         try {
+            Log.i("테이블 생성", "테이블 생성");
             SQLiteDatabase db = getWritableDatabase();
-            db.execSQL("CREATE TABLE IF NOT EXISTS MainRecord (_id PRIMARY KEY AUTOINCREMENT, carbookRecordRepairMode INTEGER, carbookRecordExpendDate TEXT," +
+            db.execSQL("CREATE TABLE IF NOT EXISTS MainRecord (_id INTEGER PRIMARY KEY AUTOINCREMENT, carbookRecordRepairMode INTEGER, carbookRecordExpendDate TEXT," +
                     "carbookRecordIsHidden INTEGER, carbookRecordTotalDistance REAL, carbookRecordRegTime TEXT, carbookRecordUpdateTime TEXT)");
             db.execSQL("CREATE TABLE IF NOT EXISTS MainRecordItem (carbookRecordId INTEGER, carbookRecordItemCategoryCode TEXT, carbookRecordItemCategoryName TEXT," +
                     "carbookRecordItemExpenseMemo TEXT, carbookRecordItemExpenseCost REAL, carbookRecordItemIsHidden INTEGER, carbookRecordItemRegTime TEXT, " +
