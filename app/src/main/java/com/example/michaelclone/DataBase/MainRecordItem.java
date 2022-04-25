@@ -6,7 +6,7 @@ public class MainRecordItem {
     public String carbookRecordItemCategoryName;
     public String carbookRecordItemExpenseMemo;
     public String carbookRecordItemExpenseCost;
-    public int carbookRecordItemIsHidden;
+    public int carbookRecordItemIsHidden = 0;
     public String carbookRecordItemRegTime;
     public String carbookRecordItemUpdateTime;
 
@@ -23,6 +23,17 @@ public class MainRecordItem {
         this.carbookRecordItemUpdateTime = carbookRecordItemUpdateTime;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "MainRecordItem{" +
+                "carbookRecordId=" + carbookRecordId +
+                ", carbookRecordItemCategoryCode='" + carbookRecordItemCategoryCode + '\'' +
+                ", carbookRecordItemCategoryName='" + carbookRecordItemCategoryName + '\'' +
+                ", carbookRecordItemExpenseMemo='" + carbookRecordItemExpenseMemo + '\'' +
+                ", carbookRecordItemExpenseCost='" + carbookRecordItemExpenseCost + '\'' +
+                ", carbookRecordItemIsHidden=" + carbookRecordItemIsHidden +
+                ", carbookRecordItemRegTime='" + carbookRecordItemRegTime + '\'' +
+                ", carbookRecordItemUpdateTime='" + carbookRecordItemUpdateTime + '\'' +
+                '}';
+    }
 }

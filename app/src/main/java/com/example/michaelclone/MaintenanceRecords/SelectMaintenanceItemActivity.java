@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.michaelclone.DataBase.MainRecordItem;
+import com.example.michaelclone.DataBase.MainRecordItem_DB;
+import com.example.michaelclone.DataBase.MainRecord_Data;
 import com.example.michaelclone.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -50,6 +53,8 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         // 테이블 레이아웃 뷰 추가
         setTabLayout();
         setDatatransferNextPage();
+
+        MainRecordItem_DB mainRecordItem_db = MainRecordItem_DB.getInstance(context, "MainRecord.db", null, 1);
     }
 
     public void setView(){
@@ -105,6 +110,17 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
                 SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
                 SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
+
+            //todo 객체
+                MainRecordItem mainRecordItem = new MainRecordItem(0,
+                        null,
+                        title,
+                        null,
+                        null,
+                        0,
+                        null,
+                        null);
+            MainRecord_Data.mainRecordItemArrayList.add(mainRecordItem);
         }else {
             // 리사이클러뷰 스크롤로 인한 지동 추가가 아니면 실행
                 Data_MaintenanceRecords.al_itemTitleList.remove(title);
@@ -115,6 +131,17 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 }else {
                     tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
             }
+            //todo 객체
+            MainRecordItem mainRecordItem = new MainRecordItem(0,
+                    null,
+                    title,
+                    null,
+                    null,
+                    0,
+                    null,
+                    null);
+            MainRecord_Data.mainRecordItemArrayList.remove(mainRecordItem);
+
         }
     }
 }

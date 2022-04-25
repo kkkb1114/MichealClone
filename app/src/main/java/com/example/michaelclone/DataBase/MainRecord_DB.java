@@ -10,7 +10,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 public class MainRecord_DB extends SQLiteOpenHelper {
-    static final String DATABASE_NAME = "MainRecord.db";
+    static final String DATABASE_NAME = "MichaelClone.db";
     static final String TABLE_NAME = "carbookRecord";
 
     // 테이블 항목

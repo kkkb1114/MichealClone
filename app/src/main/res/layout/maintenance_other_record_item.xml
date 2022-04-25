@@ -104,19 +104,19 @@
                             android:layout_height="match_parent"
                             android:gravity="right|center_vertical">
 
-                            <EditText
-                                android:id="@+id/et_MtOt_ItemPrice"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="9.9"
-                                android:background="@null"
-                                android:gravity="right"
-                                android:maxLength="13"
-                                android:inputType="number"
-                                android:maxLines="1"
-                                android:padding="5dp"
-                                android:textColor="#000000"
-                                android:textColorHint="#33000000" />
+                                <EditText
+                                    android:id="@+id/et_MtOt_ItemPrice"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="9.9"
+                                    android:background="@null"
+                                    android:gravity="right"
+                                    android:maxLength="13"
+                                    android:inputType="number"
+                                    android:maxLines="1"
+                                    android:padding="5dp"
+                                    android:textColor="#000000"
+                                    android:textColorHint="#33000000" />
 
                             <TextView
                                 android:layout_width="wrap_content"

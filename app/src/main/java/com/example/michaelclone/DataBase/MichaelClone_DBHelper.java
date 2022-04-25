@@ -9,16 +9,16 @@ import androidx.annotation.Nullable;
 
 public class MichaelClone_DBHelper extends SQLiteOpenHelper {
 
-    static String DATABASE_NAME = "MainRecord.db";
+    static String DATABASE_NAME = "MichaelClone.db";
     public static MichaelClone_DBHelper michaelCloneDbHelper_Instance;
     public static SQLiteDatabase writeableDataBase;
     public static SQLiteDatabase readableDataBase;
 
     public static synchronized MichaelClone_DBHelper getInstance(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         if (michaelCloneDbHelper_Instance == null){
-            michaelCloneDbHelper_Instance = new MichaelClone_DBHelper(context.getApplicationContext(), name, factory, version);
+            michaelCloneDbHelper_Instance = new MichaelClone_DBHelper(context.getApplicationContext(), DATABASE_NAME, factory, version);
             writeableDataBase = michaelCloneDbHelper_Instance.getWritableDatabase();
-            writeableDataBase = michaelCloneDbHelper_Instance.getReadableDatabase();
+            readableDataBase = michaelCloneDbHelper_Instance.getReadableDatabase();
         }
         return michaelCloneDbHelper_Instance;
     }
@@ -47,7 +47,7 @@ public class MichaelClone_DBHelper extends SQLiteOpenHelper {
             SQLiteDatabase db = getWritableDatabase();
             db.execSQL("CREATE TABLE IF NOT EXISTS MainRecord (_id INTEGER PRIMARY KEY AUTOINCREMENT, carbookRecordRepairMode INTEGER, carbookRecordExpendDate TEXT," +
                     "carbookRecordIsHidden INTEGER, carbookRecordTotalDistance REAL, carbookRecordRegTime TEXT, carbookRecordUpdateTime TEXT)");
-            db.execSQL("CREATE TABLE IF NOT EXISTS MainRecordItem (carbookRecordId INTEGER, carbookRecordItemCategoryCode TEXT, carbookRecordItemCategoryName TEXT," +
+            db.execSQL("CREATE TABLE IF NOT EXISTS MainRecordItem (_id INTEGER PRIMARY KEY AUTOINCREMENT, carbookRecordId INTEGER, carbookRecordItemCategoryCode TEXT, carbookRecordItemCategoryName TEXT," +
                     "carbookRecordItemExpenseMemo TEXT, carbookRecordItemExpenseCost REAL, carbookRecordItemIsHidden INTEGER, carbookRecordItemRegTime TEXT, " +
                     "carbookRecordItemUpdateTime TEXT)");
         } catch (Exception e) {

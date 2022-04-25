@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -24,14 +25,16 @@ public class MainRecordItem_DB{
     }
 
     // 데이터베이스 추가하기 insert
-    public void MainRecordItemDB_insert(int carbookRecordId, String carbookRecordItemCategoryCode, String carbookRecordItemCategoryName, String carbookRecordItemExpenseMemo,
-                              String carbookRecordItemExpenseCost, int carbookRecordItemIsHidden, String carbookRecordItemRegTime, String carbookRecordItemUpdateTime){
+    public void MainRecordItemDB_insert(MainRecordItem mainRecordItem){
+
+        Log.e("tewst","mainRecordItem : " + mainRecordItem);
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
             db.beginTransaction();
-            db.execSQL("INSERT INTO MainRecordItem VALUES ("+carbookRecordId+" , " +"'"+ carbookRecordItemCategoryCode +"'"+" , "
-                    +"'"+ carbookRecordItemCategoryName +"'"+  ", " +"'"+ carbookRecordItemExpenseMemo +"'"+", "
-                    +"'"+ carbookRecordItemExpenseCost +"'"+" , "+carbookRecordItemIsHidden+" , "+"'"+carbookRecordItemRegTime+"'"+" , "+"'"+carbookRecordItemUpdateTime +"'"+" );");
+            db.execSQL("INSERT INTO MainRecordItem VALUES ("+mainRecordItem.carbookRecordId+" , " +"'"+ mainRecordItem.carbookRecordItemCategoryCode +"'"+" , "
+                    +"'"+ mainRecordItem.carbookRecordItemCategoryName +"'"+  ", " +"'"+ mainRecordItem.carbookRecordItemExpenseMemo +"'"+", "
+                    +"'"+ mainRecordItem.carbookRecordItemExpenseCost +"'"+" , "+mainRecordItem.carbookRecordItemIsHidden+" , "+"'"+mainRecordItem.carbookRecordItemRegTime+"'"
+                    +" , "+"'"+mainRecordItem.carbookRecordItemUpdateTime +"'"+" );");
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -44,7 +47,7 @@ public class MainRecordItem_DB{
     }
 
     public ArrayList<MainRecordItem> getMainRecordItemList(){
-            //MainRecordItem_DB mainRecordItem_db = MainRecordItem_DB.getInstance(Main_DataBridge.getMainContext(),"MainRecord.db",null,1);
+            //MainRecordItem_DB mainRecordItem_db = MainRecordItem_DB.getInstance(Main_DataBridge.getMainContext(),"MichaelClone.db",null,1);
             ArrayList<MainRecordItem> mainRecordItems = new ArrayList<>();
             mainRecordItems = getMainRecordItemArrayList();
             return mainRecordItems;
