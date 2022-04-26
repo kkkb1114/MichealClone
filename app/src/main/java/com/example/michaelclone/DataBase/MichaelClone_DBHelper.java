@@ -45,9 +45,9 @@ public class MichaelClone_DBHelper extends SQLiteOpenHelper {
         try {
             Log.i("테이블 생성", "테이블 생성");
             SQLiteDatabase db = getWritableDatabase();
-            db.execSQL("CREATE TABLE IF NOT EXISTS MainRecord (_id INTEGER PRIMARY KEY AUTOINCREMENT, carbookRecordRepairMode INTEGER, carbookRecordExpendDate TEXT," +
+            db.execSQL("CREATE TABLE IF NOT EXISTS carbookRecord (_id INTEGER PRIMARY KEY AUTOINCREMENT, carbookRecordRepairMode INTEGER, carbookRecordExpendDate TEXT," +
                     "carbookRecordIsHidden INTEGER, carbookRecordTotalDistance REAL, carbookRecordRegTime TEXT, carbookRecordUpdateTime TEXT)");
-            db.execSQL("CREATE TABLE IF NOT EXISTS MainRecordItem (_id INTEGER PRIMARY KEY AUTOINCREMENT, carbookRecordId INTEGER, carbookRecordItemCategoryCode TEXT, carbookRecordItemCategoryName TEXT," +
+            db.execSQL("CREATE TABLE IF NOT EXISTS carbookRecordItem (_id INTEGER PRIMARY KEY AUTOINCREMENT, carbookRecordId INTEGER, carbookRecordItemCategoryCode TEXT, carbookRecordItemCategoryName TEXT," +
                     "carbookRecordItemExpenseMemo TEXT, carbookRecordItemExpenseCost REAL, carbookRecordItemIsHidden INTEGER, carbookRecordItemRegTime TEXT, " +
                     "carbookRecordItemUpdateTime TEXT)");
         } catch (Exception e) {

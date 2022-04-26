@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class MainRecordItem_DB{
 
     public static MainRecordItem_DB mainRecordItemDB_Instance;
-    static final String TABLE_NAME = "carbookRecordItem";
+    final String TABLE_NAME = "carbookRecordItem";
 
     // 메인 DB가 생성되어 있지 않으면 생성한다.
     public static synchronized MainRecordItem_DB getInstance(@Nullable Context context, String name, SQLiteDatabase.CursorFactory factory,int version) {
@@ -31,7 +31,7 @@ public class MainRecordItem_DB{
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
             db.beginTransaction();
-            db.execSQL("INSERT INTO MainRecordItem VALUES ("+mainRecordItem.carbookRecordId+" , " +"'"+ mainRecordItem.carbookRecordItemCategoryCode +"'"+" , "
+            db.execSQL("INSERT INTO carbookRecordItem VALUES (null, "+mainRecordItem.carbookRecordId+" , " +"'"+ mainRecordItem.carbookRecordItemCategoryCode +"'"+" , "
                     +"'"+ mainRecordItem.carbookRecordItemCategoryName +"'"+  ", " +"'"+ mainRecordItem.carbookRecordItemExpenseMemo +"'"+", "
                     +"'"+ mainRecordItem.carbookRecordItemExpenseCost +"'"+" , "+mainRecordItem.carbookRecordItemIsHidden+" , "+"'"+mainRecordItem.carbookRecordItemRegTime+"'"
                     +" , "+"'"+mainRecordItem.carbookRecordItemUpdateTime +"'"+" );");
@@ -46,17 +46,34 @@ public class MainRecordItem_DB{
         }
     }
 
+    public void MainRecordDB_update(MainRecordItem mainRecordItem, int _id, int carbookRecordId){
+        try {
+            SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
+        db.execSQL("UPDATE carbookRecordItem SET carbookRecordItemCategoryCode = " + mainRecordItem.carbookRecordItemCategoryCode + ", "
+                + "carbookRecordItemCategoryName = " + "'"+ mainRecordItem.carbookRecordItemCategoryName +"'" + ","
+                + "carbookRecordItemExpenseMemo = " + mainRecordItem.carbookRecordItemExpenseMemo + ","
+                + "carbookRecordItemExpenseCost = " + mainRecordItem.carbookRecordItemExpenseCost + ","
+                + "carbookRecordItemIsHidden = " + "'"+ mainRecordItem.carbookRecordItemIsHidden +"'" + ","
+                + "carbookRecordRegTime = " + "'"+ mainRecordItem.carbookRecordItemRegTime +"'" + ","
+                + "carbookRecordUpdateTime = " + "'"+ mainRecordItem.carbookRecordItemUpdateTime +"'"
+                + "WHERE _id = " + _id + "AND carbookRecordId ="+ carbookRecordId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+
+        }
+    }
+
     public ArrayList<MainRecordItem> getMainRecordItemList(){
-            //MainRecordItem_DB mainRecordItem_db = MainRecordItem_DB.getInstance(Main_DataBridge.getMainContext(),"MichaelClone.db",null,1);
-            ArrayList<MainRecordItem> mainRecordItems = new ArrayList<>();
-            mainRecordItems = getMainRecordItemArrayList();
-            return mainRecordItems;
+            /*ArrayList<MainRecordItem> mainRecordItems = new ArrayList<>();
+            mainRecordItems = getMainRecordItemArrayList();*/
+            return getMainRecordItemArrayList();
     }
 
     public ArrayList<MainRecordItem> getMainRecordItemArrayList(){
         try{
             //Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM MainRecordItem WHERE carbookRecordId = "+ 0, null);
-            Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM MainRecordItem", null);
+            Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem", null);
             ArrayList<MainRecordItem> mainRecordItemArrayList = new ArrayList<>();
             mainRecordItemArrayList = getMainRecordItemCursor(cursor, mainRecordItemArrayList);
             return mainRecordItemArrayList;

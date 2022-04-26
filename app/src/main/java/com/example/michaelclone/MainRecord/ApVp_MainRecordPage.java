@@ -29,15 +29,15 @@ public class ApVp_MainRecordPage extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-       /* switch (position){
+        switch (position){
             case 0:
-                apRv_mainRecordPage = create_apRv_maintenance();
+                apRv_mainRecordPage = create_apRv_MainTotalPage();
                 return new MainrecordMaintenanceItemsPageFragment(apRv_mainRecordPage);
             case 1:
                 return new MainTotalPageFragment(apRv_mainRecordPage);
             default:
                 return null;
-        }*/
+        }
         return null;
     }
 
@@ -46,11 +46,11 @@ public class ApVp_MainRecordPage extends FragmentStateAdapter {
         return pageNum;
     }
 
-   /* public ApRv_MainRecordPage create_apRv_maintenance(){
+    public ApRv_MainRecordPage create_apRv_MainTotalPage(){
         setting_apRv_mainRecordPage();
         return new ApRv_MainRecordPage(context, ItemTitleList_maintenance, ItemDistanceList_maintenance, ItemLifeSpanList_maintenance,
                 ItemTypeList_maintenance);
-    }*/
+    }
 
     public void setting_apRv_mainRecordPage(){
 

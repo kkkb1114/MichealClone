@@ -9,75 +9,65 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-public class MainRecord_DB extends SQLiteOpenHelper {
-    static final String DATABASE_NAME = "MichaelClone.db";
-    static final String TABLE_NAME = "carbookRecord";
+import java.util.ArrayList;
 
-    // 테이블 항목
-    public final String COL_1 = "_id";
-    public final String COL_2 = "carbookRecordRepairMode";
-    public final String COL_3 = "carbookRecordExpendDate";
-    public final String COL_4 = "carbookRecordIsHidden";
-    public final String COL_5 = "carbookRecordTotalDistance";
-    public final String COL_6 = "carbookRecordRegTime";
-    public final String COL_7 = "carbookRecordUpdateTime";
+public class MainRecord_DB {
 
-    public MainRecord_DB(@Nullable Context context, int version) {
-        super(context, DATABASE_NAME,null, version);
+    final String TABLE_NAME = "carbookRecord";
 
+    public static synchronized MainRecord_DB getInstance(@Nullable Context context, String name, SQLiteDatabase.CursorFactory factory,int version){
+        if (MichaelClone_DBHelper.michaelCloneDbHelper_Instance == null){
+            MichaelClone_DBHelper.michaelCloneDbHelper_Instance = MichaelClone_DBHelper.getInstance(context, name, factory, version);
+        }
+        return new MainRecord_DB();
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "carbookRecordRepairMode INTEGER DEFAULT 0, " +
-                "carbookRecordExpendDate TEXT, " +
-                "carbookRecordIsHidden INTEGER DEFAULT 0, " +
-                "carbookRecordTotalDistance REAL DEFAULT 0.0," +
-                "carbookRecordRegTime TEXT," +
-                "carbookRecordUpdateTime TEXT)");
+    public void MainRecordDB_insert(MainRecord mainRecord){
+        try {
+            SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
+            db.execSQL("INSERT INTO carbookRecord VALUES (null, "+mainRecord.carbookRecordRepairMode+" , " +"'"+mainRecord.carbookRecordExpendDate+"'"+" , "
+                    +mainRecord.carbookRecordIsHidden+" , "+"'"+mainRecord.carbookRecordTotalDistance+"'"+","+"'"+mainRecord.carbookRecordRegTime+"'"+","
+                    +"'"+mainRecord.carbookRecordUpdateTime+"'"+");");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+    public void MainRecordDB_update(MainRecord mainRecord, int _id){
+        try {
+            SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
+            db.execSQL("UPDATE carbookRecord SET carbookRecordRepairMode = " + mainRecord.carbookRecordRepairMode + ", "
+                    + "carbookRecordExpendDate = " + "'"+ mainRecord.carbookRecordExpendDate +"'" + ","
+                    + "carbookRecordIsHidden = " + mainRecord.carbookRecordIsHidden + ","
+                    + "carbookRecordTotalDistance = " + "'"+ mainRecord.carbookRecordTotalDistance +"'" + ","
+                    + "carbookRecordRegTime = " + "'"+ mainRecord.carbookRecordRegTime +"'" + ","
+                    + "carbookRecordUpdateTime = " + "'"+ mainRecord.carbookRecordUpdateTime +"'" + ","
+                    + "WHERE _id = " + _id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    // 데이터베이스 추가하기 insert
-    public boolean insertData(int carbookRecordRepairMode, String carbookRecordExpendDate, int carbookRecordIsHidden, double carbookRecordTotalDistance,
-                              String carbookRecordRegTime, String carbookRecordUpdateTime){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_2,carbookRecordRepairMode);
-        contentValues.put(COL_3,carbookRecordExpendDate);
-        contentValues.put(COL_4,carbookRecordIsHidden);
-        contentValues.put(COL_5,carbookRecordTotalDistance);
-        contentValues.put(COL_6,carbookRecordRegTime);
-        contentValues.put(COL_7,carbookRecordUpdateTime);
-        long result = db.insert(TABLE_NAME, null,contentValues);
-        if(result == -1)
-            return false;
-        else
-            return true;
-
+    public ArrayList<MainRecord> getMainRecordList(){
+        try {
+            Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecord", null);
+            ArrayList<MainRecord> mainRecords = new ArrayList<>();
+            mainRecords = getMainRecordCursor(cursor, mainRecords);
+            return mainRecords;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    //데이터베이스 항목 읽어오기 Read
-    public Cursor getAllData(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME,null);
-        return  res;
-    }
+    private ArrayList<MainRecord> getMainRecordCursor(Cursor cursor, ArrayList<MainRecord> mainRecords){
+        while (cursor.moveToNext()){
+            MainRecord mainRecord = new MainRecord(cursor.getInt(0), cursor.getString(1), cursor.getInt(2), cursor.getString(3),
+                    cursor.getString(4), cursor.getString(5));
 
-    //데이터베이스 수정하기
-    public boolean updateData(String id, String name, String phone, String address){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_1,id);
-        contentValues.put(COL_2,name);
-        contentValues.put(COL_3,phone);
-        contentValues.put(COL_4,address);
-        db.update(TABLE_NAME,contentValues,"_id = ?", new String[] { id });
-        return true;
+            mainRecords.add(mainRecord);
+        }
+        cursor.close();
+        return mainRecords;
     }
 }

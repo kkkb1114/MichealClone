@@ -33,6 +33,7 @@ public class MainrecordActivity extends AppCompatActivity {
     MainrecordFragment mainrecordFragment;
     Context context;
 
+    //TODO FrameLayout 위에 툴바 넣을 예정이다. (아직 안넣음.)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,20 +42,10 @@ public class MainrecordActivity extends AppCompatActivity {
 
         setFragment(1);
         setDB();
-
-        ArrayList<MainRecordItem> mainRecordItems = new MainRecordItem_DB().getMainRecordItemList();
-
-        if(MichaelClone_DBHelper.michaelCloneDbHelper_Instance == null){
-            Log.i("111", "null");
-        }else {
-            Log.i("222", "not null");
-            Log.i("333", mainRecordItems.get(0).carbookRecordItemCategoryName);
-        }
-        //Log.i("123", mainRecordItems.get(0).carbookRecordItemRegTime);
     }
 
     public void setDB(){
-        mainRecord_db = new MainRecord_DB(context, 1);
+        mainRecord_db = MainRecord_DB.getInstance(context, "MichaelClone.db", null, 1);
         mainRecordItem_db = MainRecordItem_DB.getInstance(context, "MichaelClone.db", null, 1);
     }
 

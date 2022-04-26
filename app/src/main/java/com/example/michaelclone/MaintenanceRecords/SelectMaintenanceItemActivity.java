@@ -74,6 +74,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
             }
         });
         // 클릭 이벤트를 지정한 후에 막아야 막힌다.
+        // 선택 항목이 없으면 클릭을 막는다.
         tv_selectionConfirm.setClickable(false);
     }
 
@@ -104,6 +105,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     구분해서 예외처리 한다.*/
     // 0: 항목 선택, 1: 항목 선택 취소
     static public void itemClickChangeCount(Context context, String title, int CheckedItemCount){
+        MainRecordItem mainRecordItem = null;
         if (CheckedItemCount == 0){
             // 리사이클러뷰 스크롤로 인한 자동 추가가 아니면 실행
                 Data_MaintenanceRecords.al_itemTitleList.add(title);
@@ -111,8 +113,8 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
                 SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
 
-            //todo 객체
-                MainRecordItem mainRecordItem = new MainRecordItem(0,
+            //db용
+                mainRecordItem = new MainRecordItem(0,
                         null,
                         title,
                         null,
@@ -131,15 +133,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 }else {
                     tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
             }
-            //todo 객체
-            MainRecordItem mainRecordItem = new MainRecordItem(0,
-                    null,
-                    title,
-                    null,
-                    null,
-                    0,
-                    null,
-                    null);
+           
             MainRecord_Data.mainRecordItemArrayList.remove(mainRecordItem);
 
         }

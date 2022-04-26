@@ -45,6 +45,7 @@
     <color name="mainhistorypageIndicator">#80000000</color>
     <color name="mainhistorypageBottomLine">#0D000000</color>
     <color name="mainhistoryPageYearItemBackground">#55D7A7</color>
+    <color name="mainhistoryPageMonthItemBackground">#F2F2F0</color>
     <color name="mainhistoryPageYearText">#80000000</color>
     <!--기록 페이지-->
 

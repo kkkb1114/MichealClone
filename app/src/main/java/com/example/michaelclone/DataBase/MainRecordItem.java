@@ -1,14 +1,14 @@
 package com.example.michaelclone.DataBase;
 
 public class MainRecordItem {
-    public int carbookRecordId;
-    public String carbookRecordItemCategoryCode;
-    public String carbookRecordItemCategoryName;
-    public String carbookRecordItemExpenseMemo;
-    public String carbookRecordItemExpenseCost;
-    public int carbookRecordItemIsHidden = 0;
-    public String carbookRecordItemRegTime;
-    public String carbookRecordItemUpdateTime;
+        public int carbookRecordId;
+        public String carbookRecordItemCategoryCode;
+        public String carbookRecordItemCategoryName;
+        public String carbookRecordItemExpenseMemo;
+        public String carbookRecordItemExpenseCost;
+        public int carbookRecordItemIsHidden;
+        public String carbookRecordItemRegTime;
+        public String carbookRecordItemUpdateTime;
 
 
     public MainRecordItem(int carbookRecordId, String carbookRecordItemCategoryCode, String carbookRecordItemCategoryName, String carbookRecordItemExpenseMemo,

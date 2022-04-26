@@ -14,5 +14,4 @@ public class MainRecordItem_DataBridge {
     public void getMainRecordItemList(){
 
     }
-
 }

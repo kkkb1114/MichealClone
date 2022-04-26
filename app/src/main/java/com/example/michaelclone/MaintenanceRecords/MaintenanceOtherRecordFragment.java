@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -48,6 +49,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.michaelclone.DataBase.MainRecord;
+import com.example.michaelclone.DataBase.MainRecordItem;
+import com.example.michaelclone.DataBase.MainRecord_Data;
 import com.example.michaelclone.Data_Record;
 import com.example.michaelclone.R;
 
@@ -103,6 +107,16 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         View view = inflater.inflate(R.layout.fragment_maintenance_other_record, container, false);
         maintenanceOtherRecordActivity = new MaintenanceOtherRecordActivity();
 
+        MainRecord mainRecord = new MainRecord(0,
+                null,
+                0,
+                null,
+                null,
+                null);
+        MainRecord_Data.mainRecordArrayList.add(mainRecord);
+        // 정비 모드를 클릭하지 않았을 때를 대비해서 미리 정비소 모드로 지정해 놓는다.
+        MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode = 0;
+
         setView(view);
         mStartForResult();
         set_ViewPager(); // type이 1이면 이미지 적용된 레이아웃, 0이면 이미지 추가 레이아웃
@@ -110,6 +124,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         setViewAction();
         setOnClick();
         RequestPermission();
+
         return view;
     }
 
@@ -143,6 +158,26 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 return false;
             }
         });
+
+        // 텍스트 바뀔때마다 MainRecord_Data.mainRecordArrayList안에 있는 mainRecord에 데이터 삽입
+        TextWatcher textWatcherCumulativeMileage = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                MainRecord_Data.mainRecordArrayList.get(0).carbookRecordTotalDistance = s.toString();
+            }
+        };
+
+        et_cumulativeMileage.addTextChangedListener(textWatcherCumulativeMileage);
     }
 
     public void setOnClick(){
@@ -153,6 +188,8 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            // 정비 모드 클릭할때마다 MainRecord_Data.mainRecordArrayList에 carbookRecordRepairMode를 지정해준다.
+            // 0: 정비소, 1: 자가정비
             case R.id.tv_repairShop:
                 /*context.getResources().getDrawable(R.drawable.check) 처럼 안드로이드에서
                 drawable과 color를 위해 사용하였던 함수 getDrawable과 getColor를 더 이상 사용할 수 없게 되었다.
@@ -171,6 +208,10 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 // 정비소 정비이면 위치 뷰를 보이게 꺼낸다.
                 tr_moRcord_location.setVisibility(View.VISIBLE);
                 View_maintenanceLocationLine.setVisibility(View.VISIBLE);
+
+                // 정비 모드 
+                MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode = 0;
+                
                 break;
             case R.id.tv_selfMaintenance:
              /*   tv_selfMaintenance.setCompoundDrawables();
@@ -187,6 +228,10 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 // 자가 정비이면 위치 뷰를 보이지 않게 숨긴다.
                 tr_moRcord_location.setVisibility(View.GONE);
                 View_maintenanceLocationLine.setVisibility(View.GONE);
+
+                // 정비 모드
+                MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode = 1;
+
                 break;
         }
     }
@@ -208,8 +253,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         vpAp_maintenanceOther = new VpAp_maintenanceOther(context, bitmapArrayList, typeList, MtOt_imageCount);
         rv_MtOtImageList.setAdapter(vpAp_maintenanceOther);
     }
-
-
 
     void cropImage() {
         try {
