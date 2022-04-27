@@ -2,6 +2,7 @@ package com.example.michaelclone.MainRecord;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +45,8 @@ public class MainrecordFragment extends Fragment {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_mainrecordpage, container, false);
         setView(view);
-        setTabLayout();
         getMainrecordDataList();
+        setTabLayout();
 
         return view;
     }
@@ -75,5 +76,6 @@ public class MainrecordFragment extends Fragment {
         MainRecord_DataBridge mainRecordDataBridge = new MainRecord_DataBridge();
         MainRecord_Data.MainRecordPageRecordArrayList = mainRecordDataBridge.MainRecordSelect();
         MainRecord_Data.MainRecordPageRecordItemArrayList = mainRecordDataBridge.MainRecordItemSelect();
+        Log.i("최종 빼냄?", String.valueOf(mainRecordDataBridge.MainRecordItemSelect()));
     }
 }

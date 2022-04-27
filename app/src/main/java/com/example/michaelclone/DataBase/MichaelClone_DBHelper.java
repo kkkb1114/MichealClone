@@ -16,7 +16,7 @@ public class MichaelClone_DBHelper extends SQLiteOpenHelper {
 
     public static synchronized MichaelClone_DBHelper getInstance(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         if (michaelCloneDbHelper_Instance == null){
-            michaelCloneDbHelper_Instance = new MichaelClone_DBHelper(context.getApplicationContext(), DATABASE_NAME, factory, version);
+            michaelCloneDbHelper_Instance = new MichaelClone_DBHelper(context.getApplicationContext(), "MichaelClone.db", factory, version);
             writeableDataBase = michaelCloneDbHelper_Instance.getWritableDatabase();
             readableDataBase = michaelCloneDbHelper_Instance.getReadableDatabase();
         }

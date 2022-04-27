@@ -45,6 +45,7 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
+        Log.i("아이템 선택 리사이클러뷰 ㄱㄱ?", "222");
         // 0: 항목 레이아웃, 1: 항목 추가 버튼
         if (ItemTypeList.get(position) == 0) {
             return 0;

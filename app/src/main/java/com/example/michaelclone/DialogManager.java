@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
+import com.example.michaelclone.DataBase.MainRecord_Data;
 import com.example.michaelclone.FuelingRecord.FuelingRecordActivity;
 import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -76,6 +77,7 @@ public class DialogManager extends AlertDialog.Builder {
             setMaterialCalendarView();
             tv_dl_cal_date.setText(NowDate+getDateDay(mDate));
             tv_dl_cal_year.setText(NowYear);
+
         }
 
         public void initView(){
@@ -145,6 +147,9 @@ public class DialogManager extends AlertDialog.Builder {
 
             tv_dl_cal_date.setText(NowDate+getDateDay(date.getDate()));
             tv_dl_cal_year.setText(NowYear);
+            
+            // 날짜 선택할때마다 DB 저장용 ArrayList에 . 없앤 후 저장
+            MainRecord_Data.mainRecordArrayList.get(0).carbookRecordExpendDate = NowDate.replace(".", "");
         }
 
 

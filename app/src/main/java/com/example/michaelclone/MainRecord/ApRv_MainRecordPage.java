@@ -1,6 +1,7 @@
 package com.example.michaelclone.MainRecord;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,19 @@ import java.util.ArrayList;
 public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPage.ViewHolder> {
     Context context;
     ArrayList<Integer> ViewTypeList;
+    MainRecord_Data mainRecord_data;
     public ApRv_MainRecordPage(Context context, ArrayList<Integer> ViewTypeList){
         this.context = context;
         this.ViewTypeList = ViewTypeList;
+
+        mainRecord_data = new MainRecord_Data();
+        Log.i("리사이클러뷰 ㄱㄱ?", "111");
+        Log.i("리사이클러뷰 ㄱㄱ?", String.valueOf(ViewTypeList.get(0)));
     }
 
     @Override
-    public int getItemViewType(int position){
+    public int getItemViewType(int position) {
+        Log.i("리사이클러뷰 ㄱㄱ?", "222");
         if (ViewTypeList.get(position) == 0){
             return 0;
         }else if (ViewTypeList.get(position) == 1){
@@ -36,6 +43,7 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.i("리사이클러뷰 ㄱㄱ?", "333");
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // viewType 0: 연도뷰, 1: 월뷰, 2: 기록뷰
         View view;
@@ -55,12 +63,13 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.i("리사이클러뷰 ㄱㄱ?", "444");
         if (ViewTypeList.get(position) == 0){
-            holder.tv_mainrecordYear.setText(MainRecord_Data.MainRecordPageRecordArrayList.get(0).carbookRecordExpendDate.split(".")[0]);
-            holder.tv_mainrecordYearCost.setText(String.valueOf(MainRecord_Data.CostCalculation()));
+            holder.tv_mainrecordYear.setText(MainRecord_Data.MainRecordPageRecordArrayList.get(0).carbookRecordExpendDate);
+            holder.tv_mainrecordYearCost.setText(String.valueOf(mainRecord_data.CostCalculation()));
         }else if (ViewTypeList.get(position) == 1){
-            holder.tv_mainrecordMonth.setText(MainRecord_Data.MainRecordPageRecordArrayList.get(0).carbookRecordExpendDate.split(".")[0]);
-            holder.tv_mainrecordMonthCost.setText(String.valueOf(MainRecord_Data.CostCalculation()));
+            holder.tv_mainrecordMonth.setText(MainRecord_Data.MainRecordPageRecordArrayList.get(0).carbookRecordExpendDate);
+            holder.tv_mainrecordMonthCost.setText(String.valueOf(mainRecord_data.CostCalculation()));
         }else {
 
         }
@@ -73,6 +82,7 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        Context context;
         int ViewType;
         TextView tv_mainrecordYear;
         TextView tv_mainrecordYearCost;
@@ -83,6 +93,8 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
         public ViewHolder(@NonNull View itemView, Context context, int ViewType) {
             super(itemView);
             this.ViewType = ViewType;
+            this.context = context;
+            setView();
         }
 
         public void setView(){

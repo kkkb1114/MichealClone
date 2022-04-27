@@ -72,10 +72,14 @@ public class MainRecordItem_DB{
 
     public ArrayList<MainRecordItem> getMainRecordItemArrayList(){
         try{
+            Log.i("빼내고 있나?", "222");
             //Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM MainRecordItem WHERE carbookRecordId = "+ 0, null);
-            Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem", null);
+            Cursor cursor = null;
+            cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem", null);
+
             ArrayList<MainRecordItem> mainRecordItemArrayList = new ArrayList<>();
             mainRecordItemArrayList = getMainRecordItemCursor(cursor, mainRecordItemArrayList);
+            Log.i("빼내고 있나?11", String.valueOf(mainRecordItemArrayList));
             return mainRecordItemArrayList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,12 +89,14 @@ public class MainRecordItem_DB{
 
 
     private ArrayList<MainRecordItem> getMainRecordItemCursor(Cursor cursor, ArrayList<MainRecordItem> mainRecordItems){
+        Log.i("빼내고 있나?", "333");
         while(cursor.moveToNext()){
             MainRecordItem mainRecordItem = new MainRecordItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
                     cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getString(6),
                     cursor.getString(7));
 
             mainRecordItems.add(mainRecordItem);
+            Log.i("빼내고 있나?22", String.valueOf(mainRecordItem));
         }
         cursor.close();
         return mainRecordItems;

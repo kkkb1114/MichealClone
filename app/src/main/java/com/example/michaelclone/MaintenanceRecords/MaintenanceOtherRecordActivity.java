@@ -87,7 +87,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     MainRecord_DataBridge mainRecordDataBridge = new MainRecord_DataBridge();
 
                     MainRecord_Data.mainRecordArrayList.get(0).carbookRecordIsHidden = 0;
-                    MainRecord_Data.mainRecordArrayList.get(0).carbookRecordExpendDate = tv_date.getText().toString();
                     // 솔직히 여기에 넣지 않고 다이렉트로 넣어도 상관없지만 나중에 MainRecord에 변수로 선언 해놓기도 했고 나중에 내가 봤을때는 다이렉트로 넣었을 거라는 생각은
                     // 하지 않을 것 같아 이렇게 넣는다.
                     MainRecord_Data.mainRecordArrayList.get(0).carbookRecordUpdateTime = new Time_DataBridge().getRealTime();
