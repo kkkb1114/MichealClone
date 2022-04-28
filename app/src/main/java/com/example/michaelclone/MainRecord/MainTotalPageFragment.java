@@ -36,12 +36,13 @@ public class MainTotalPageFragment extends Fragment {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_mainrecord_totalpage, container, false);
         setView(view);
+        setRecyclerView(rv_mainTotalPage);
 
         return view;
     }
 
     public void setView(View view){
-        rv_mainTotalPage = view.findViewById(R.id.rv_maintenance);
+        rv_mainTotalPage = view.findViewById(R.id.rv_mainrecordTotalPage);
     }
 
     public void setRecyclerView(RecyclerView rv_mainTotalPage){

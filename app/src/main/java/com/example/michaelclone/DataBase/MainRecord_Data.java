@@ -1,5 +1,7 @@
 package com.example.michaelclone.DataBase;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 public class MainRecord_Data {

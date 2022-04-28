@@ -25,7 +25,7 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
 
         mainRecord_data = new MainRecord_Data();
         Log.i("리사이클러뷰 ㄱㄱ?", "111");
-        Log.i("리사이클러뷰 ㄱㄱ?", String.valueOf(ViewTypeList.get(0)));
+        Log.i("리사이클러뷰 ㄱㄱ?", String.valueOf(this.ViewTypeList.get(0)));
     }
 
     @Override

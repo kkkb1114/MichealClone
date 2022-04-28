@@ -36,6 +36,7 @@ public class MainrecordMaintenanceItemsPageFragment extends Fragment {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_mainrecord_maintenanceitemspage, container, false);
         setView(view);
+        setRecyclerView(rv_mainrecordMaintenanceItemspage);
 
         return view;
     }

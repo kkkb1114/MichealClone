@@ -113,7 +113,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
                 SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
 
-            //db용
+            //db용 항목 선택시 아이템 하나씩 추가하고 추후 null 데이터는 데이터 입력 구간에서 삽입해준다.
                 mainRecordItem = new MainRecordItem(0,
                         null,
                         title,
@@ -133,7 +133,8 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 }else {
                     tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
             }
-           
+
+            //db용 항목 선택 해제시 아예 없애버린다.
             MainRecord_Data.mainRecordItemArrayList.remove(mainRecordItem);
 
         }
