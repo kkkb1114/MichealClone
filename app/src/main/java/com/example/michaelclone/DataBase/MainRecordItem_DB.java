@@ -64,6 +64,16 @@ public class MainRecordItem_DB{
         }
     }
 
+    public void MainRecordDB_delete(MainRecordItem mainRecordItem, int _id, int carbookRecordId){
+        try {
+            SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
+            db.execSQL("UPDATE carbookRecordItem SET carbookRecordItemIsHidden = "+ mainRecordItem.carbookRecordItemIsHidden +","
+                    + "WHERE _id = "+ _id + "AND carbookRecordId = "+ carbookRecordId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public ArrayList<MainRecordItem> getMainRecordItemList(){
             /*ArrayList<MainRecordItem> mainRecordItems = new ArrayList<>();
             mainRecordItems = getMainRecordItemArrayList();*/
@@ -91,9 +101,10 @@ public class MainRecordItem_DB{
     private ArrayList<MainRecordItem> getMainRecordItemCursor(Cursor cursor, ArrayList<MainRecordItem> mainRecordItems){
         Log.i("빼내고 있나?", "333");
         while(cursor.moveToNext()){
-            MainRecordItem mainRecordItem = new MainRecordItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
-                    cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getString(6),
-                    cursor.getString(7));
+            //todo 여기서 cursor.getInt(0)으로 id 값을 받을수 있지 않을까 했는데 안받아져서 일단 뺐다.
+            MainRecordItem mainRecordItem = new MainRecordItem(cursor.getInt(1), cursor.getString(2), cursor.getString(3),
+                    cursor.getString(4), cursor.getString(5), cursor.getInt(6), cursor.getString(7),
+                    cursor.getString(8));
 
             mainRecordItems.add(mainRecordItem);
             Log.i("빼내고 있나?22", String.valueOf(mainRecordItem));

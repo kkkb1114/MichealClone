@@ -77,5 +77,6 @@ public class MainrecordFragment extends Fragment {
         MainRecord_Data.MainRecordPageRecordArrayList = mainRecordDataBridge.MainRecordSelect();
         MainRecord_Data.MainRecordPageRecordItemArrayList = mainRecordDataBridge.MainRecordItemSelect();
         Log.i("최종 빼냄?", String.valueOf(mainRecordDataBridge.MainRecordItemSelect()));
+        Log.i("최종 빼냄?", String.valueOf(MainRecord_Data.MainRecordPageRecordItemArrayList.get(0).carbookRecordItemExpenseCost));
     }
 }

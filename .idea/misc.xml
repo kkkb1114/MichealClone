@@ -23,15 +23,13 @@
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/fragment_mainhistorypage.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/fragment_mainrecord_maintenanceitemspage.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/fragment_mainrecord_totalpage.xml" value="0.2368659420289855" />
-        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/fragment_mainrecordpage.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/fragment_mainrecordtotalpage.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/fragment_maintenance_other_record.xml" value="0.25" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/item_vp_fueling.xml" value="0.25" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/item_vp_maintenanceother.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/itemadd_vp_fueling.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/mainrecord_item.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/mainrecordmonth_item.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/mainrecordyear_item.xml" value="0.33" />
+        <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/mainrecordyear_item.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/mainrecordyearitem.xml" value="0.5" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/maintenance_other_record_item.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/infocar/AndroidStudioProjects/MichaelClone/app/src/main/res/layout/maintenance_records_fragment.xml" value="0.33" />
@@ -54,6 +52,7 @@
         <entry key="..\:/Users/infocar/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_dropdown_item_1line.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/infocar/MichaelClone/app/src/main/res/layout/activity_fueling_record.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/kkkb1114/AndroidStudioProjects/MichealClone1/app/src/main/res/layout/activity_mainrecord.xml" value="0.20108695652173914" />
+        <entry key="..\:/Users/kkkb1114/AndroidStudioProjects/MichealClone1/app/src/main/res/layout/fragment_mainrecord_totalpage.xml" value="0.19114583333333332" />
       </map>
     </option>
   </component>
