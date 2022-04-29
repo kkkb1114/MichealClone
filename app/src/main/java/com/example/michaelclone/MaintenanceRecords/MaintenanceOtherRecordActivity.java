@@ -44,6 +44,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     long mNow;
     Date mDate;
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd");
+    SimpleDateFormat mFormat_saveOnly = new SimpleDateFormat("yyyyMMdd");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +54,8 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         try {
             mContext = this;
             setView();
-            setActionView();
             setFragment(1);
+            setActionView();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,7 +78,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     public void onClick(View view){
         switch (view.getId()){
             case R.id.ln_date:
-                tv_date.setText(getDate()+getDateDay(mDate));
+                //tv_date.setText(getDate()+getDateDay(mDate));
                 DialogManager.calenderDialog calenderDialog = new DialogManager.calenderDialog(mContext, tv_date);
                 calenderDialog.show();
                 break;
@@ -85,11 +86,12 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                 try {
                     // 정비 기록 데이터 저장
                     MainRecord_DataBridge mainRecordDataBridge = new MainRecord_DataBridge();
+                    Time_DataBridge time_dataBridge = new Time_DataBridge();
 
                     MainRecord_Data.mainRecordArrayList.get(0).carbookRecordIsHidden = 0;
                     // 솔직히 여기에 넣지 않고 다이렉트로 넣어도 상관없지만 나중에 MainRecord에 변수로 선언 해놓기도 했고 나중에 내가 봤을때는 다이렉트로 넣었을 거라는 생각은
                     // 하지 않을 것 같아 이렇게 넣는다.
-                    MainRecord_Data.mainRecordArrayList.get(0).carbookRecordUpdateTime = new Time_DataBridge().getRealTime();
+                    MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRegTime = new Time_DataBridge().getRealTime();
                     MainRecord_Data.mainRecordArrayList.get(0).carbookRecordUpdateTime = new Time_DataBridge().getRealTime();
 
                     mainRecordDataBridge.MainRecordInsert(new MainRecord(MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode,
@@ -104,9 +106,11 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     for (int i=0; i<MainRecord_Data.mainRecordItemArrayList.size(); i++){
                         MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemCategoryCode = "123";
                         MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemIsHidden = 0;
-                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordId = 0;
-                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemRegTime = new Time_DataBridge().getRealTime();
-                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemUpdateTime = new Time_DataBridge().getRealTime();
+                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordId = mainRecordDataBridge.MainRecordItemSelectRecordLastId();
+                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemRegTime = time_dataBridge.getRealTime();
+                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemUpdateTime = time_dataBridge.getRealTime();
+
+                        Log.i("!!!", String.valueOf(mainRecordDataBridge.MainRecordItemSelectRecordLastId()));
 
                         mainRecordItemDataBridge.MainRecordItemInsert(new MainRecordItem(MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordId,
                                 MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemCategoryCode,
@@ -138,6 +142,8 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         mNow = System.currentTimeMillis(); // 디바이스 기준 표준 시간 적용
         mDate = new Date(mNow);            // Date 객체에 디바이스 표준 시간 적용
 
+        // 사용자가 달력 날짜를 선택한다고 지정할때를 대비해서 처음에 사용자 선택 날짜를 오늘로 지정할때 미리 오늘 날짜로 연월일을 디비 저장용 해당 기록 지출 날짜로 지정해놓는다.
+        MainRecord_Data.mainRecordArrayList.get(0).carbookRecordExpendDate = mFormat_saveOnly.format(mDate);
         return mFormat.format(mDate);      // SimpleDateFormat에 적용된 양식으로 시간값 문자열 반환
     }
 

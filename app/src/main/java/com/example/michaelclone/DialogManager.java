@@ -53,6 +53,7 @@ public class DialogManager extends AlertDialog.Builder {
         SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd");
         SimpleDateFormat mFormat_mmdd = new SimpleDateFormat("MM월 dd일");
         SimpleDateFormat mFormat_yyyy = new SimpleDateFormat("yyyy");
+        SimpleDateFormat mFormat_saveOnly = new SimpleDateFormat("yyyyMMdd");
 
         MaterialCalendarView materialCalendarView;
         TextView tv_dl_cal_date;
@@ -123,9 +124,12 @@ public class DialogManager extends AlertDialog.Builder {
                 public void onClick(View v) {
                     String date = mFormat.format(materialCalendarView.getSelectedDate().getDate());
                     Date date2 = materialCalendarView.getSelectedDate().getDate();
-                    // 지울것!!
-                    Log.i("getSelectedDate", String.valueOf(materialCalendarView.getSelectedDate()));
                     tv_date.setText(date+getDateDay(date2));
+
+                    // 기록 확인 클릭시 선택한 날짜를 디비 저장용 해당 기록 지출 날짜로 지정해놓는다.
+                    MainRecord_Data.mainRecordArrayList.get(0).carbookRecordExpendDate = mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate());
+                    // 지울것!!
+                    Log.i("getSelectedDate", mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate()));
                     dismiss();
                 }
             });

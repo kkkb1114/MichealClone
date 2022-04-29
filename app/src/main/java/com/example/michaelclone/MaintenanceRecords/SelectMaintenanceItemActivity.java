@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.michaelclone.DataBase.MainRecord;
 import com.example.michaelclone.DataBase.MainRecordItem;
 import com.example.michaelclone.DataBase.MainRecordItem_DB;
 import com.example.michaelclone.DataBase.MainRecord_Data;
@@ -50,6 +51,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         }
         // 뷰 초기화
         setView();
+        setMainRecord();
         // 테이블 레이아웃 뷰 추가
         setTabLayout();
         setDatatransferNextPage();
@@ -62,6 +64,16 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         vp_maintenanceOther = findViewById(R.id.vp_maintenanceOther);
         tv_itemCount = findViewById(R.id.tv_itemCount);
         tv_selectionConfirm = findViewById(R.id.tv_selectionConfirm);
+    }
+
+    public void setMainRecord(){
+        MainRecord mainRecord = new MainRecord(0,
+                null,
+                0,
+                null,
+                null,
+                null);
+        MainRecord_Data.mainRecordArrayList.add(mainRecord);
     }
 
     public void setDatatransferNextPage(){
@@ -108,20 +120,20 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         MainRecordItem mainRecordItem = null;
         if (CheckedItemCount == 0){
             // 리사이클러뷰 스크롤로 인한 자동 추가가 아니면 실행
-                Data_MaintenanceRecords.al_itemTitleList.add(title);
-                tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
-                SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
-                SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
+            Data_MaintenanceRecords.al_itemTitleList.add(title);
+            tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
+            SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
+            SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
 
-            //db용
-                mainRecordItem = new MainRecordItem(0,
-                        null,
-                        title,
-                        null,
-                        null,
-                        0,
-                        null,
-                        null);
+            // 선택할때마다 바로 집어넣고 취소하면 뺀다.
+            mainRecordItem = new MainRecordItem(0,
+                    null,
+                    title,
+                    null,
+                    null,
+                    0,
+                    null,
+                    null);
             MainRecord_Data.mainRecordItemArrayList.add(mainRecordItem);
         }else {
             // 리사이클러뷰 스크롤로 인한 지동 추가가 아니면 실행
@@ -133,7 +145,8 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 }else {
                     tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
             }
-           
+
+            // 선택할때마다 바로 집어넣고 취소하면 뺀다.
             MainRecord_Data.mainRecordItemArrayList.remove(mainRecordItem);
 
         }

@@ -107,13 +107,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         View view = inflater.inflate(R.layout.fragment_maintenance_other_record, container, false);
         maintenanceOtherRecordActivity = new MaintenanceOtherRecordActivity();
 
-        MainRecord mainRecord = new MainRecord(0,
-                null,
-                0,
-                null,
-                null,
-                null);
-        MainRecord_Data.mainRecordArrayList.add(mainRecord);
         // 정비 모드를 클릭하지 않았을 때를 대비해서 미리 정비소 모드로 지정해 놓는다.
         MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode = 0;
 

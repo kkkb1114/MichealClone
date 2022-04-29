@@ -21,4 +21,9 @@ public class MainRecord_DataBridge {
         Log.i("빼내고 있나?", "111");
         return mainRecordItem_db.getMainRecordItemList();
     }
+
+    public int MainRecordItemSelectRecordLastId(){
+        MainRecord_DB mainRecord_db = MainRecord_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
+        return mainRecord_db.getCarbookRecordLastId();
+    }
 }
