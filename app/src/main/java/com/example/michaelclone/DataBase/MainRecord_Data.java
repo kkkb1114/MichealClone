@@ -21,5 +21,7 @@ public class MainRecord_Data {
         }
         return Cost;
     }
-   /* 연도, 월별로 나눠서 데이터를 삽입하려하는데 DB에서 몽땅 꺼낸 데이터에서 어떻게 연도만 중복이 되지않게 뺄지가 문제다.*/
+
+
+
 }
