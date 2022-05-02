@@ -71,7 +71,12 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
             holder.tv_mainrecordMonth.setText(MainRecord_Data.MainRecordPageRecordArrayList.get(0).carbookRecordExpendDate);
             holder.tv_mainrecordMonthCost.setText(String.valueOf(mainRecord_data.CostCalculation()));
         }else {
-
+            여기에 데이터 삽입 예정
+            holder.tv_mainrecordDate.setText(String.valueOf(mainRecord_data.CostCalculation()));
+            holder.tv_mainrecordTitle.setText(String.valueOf(mainRecord_data.CostCalculation()));
+            holder.tv_mainrecordDistance.setText(String.valueOf(mainRecord_data.CostCalculation()));
+            holder.tv_mainrecordCost.setText(String.valueOf(mainRecord_data.CostCalculation()));
+            holder.tv_mainrecordMemo.setText(String.valueOf(mainRecord_data.CostCalculation()));
         }
     }
 
@@ -84,11 +89,20 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
 
         Context context;
         int ViewType;
+        // 뷰 타입: 0
         TextView tv_mainrecordYear;
         TextView tv_mainrecordYearCost;
 
+        // 뷰 타입: 1
         TextView tv_mainrecordMonth;
         TextView tv_mainrecordMonthCost;
+
+        // 뷰 타입: 2
+        TextView tv_mainrecordDate;
+        TextView tv_mainrecordTitle;
+        TextView tv_mainrecordDistance;
+        TextView tv_mainrecordCost;
+        TextView tv_mainrecordMemo;
 
         public ViewHolder(@NonNull View itemView, Context context, int ViewType) {
             super(itemView);
@@ -105,7 +119,11 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
                 tv_mainrecordMonth = itemView.findViewById(R.id.tv_mainrecordMonth);
                 tv_mainrecordMonthCost = itemView.findViewById(R.id.tv_mainrecordMonthCost);
             }else {
-
+                tv_mainrecordDate = itemView.findViewById(R.id.tv_mainrecordDate);
+                tv_mainrecordTitle = itemView.findViewById(R.id.tv_mainrecordTitle);
+                tv_mainrecordDistance = itemView.findViewById(R.id.tv_mainrecordDistance);
+                tv_mainrecordCost = itemView.findViewById(R.id.tv_mainrecordCost);
+                tv_mainrecordMemo = itemView.findViewById(R.id.tv_mainrecordMemo);
             }
         }
     }

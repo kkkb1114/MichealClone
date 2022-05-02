@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.michaelclone.DataBase.MainRecord;
+import com.example.michaelclone.DataBase.MainRecordItem_DataBridge;
 import com.example.michaelclone.DataBase.MainRecord_Data;
 import com.example.michaelclone.DataBase.MainRecord_DataBridge;
 import com.example.michaelclone.DataBase.MichaelClone_DBHelper;
@@ -73,10 +74,11 @@ public class MainrecordFragment extends Fragment {
 
     // 기록 페이지에 들어오면 DB에 저장된 MainRecord, MainRecordItem데이터를 전부 불러와서 MainRecord_Data클래스안에 메인 페이지 전용 ArrayList에 전부 넣어준다.
     public void getMainrecordDataList(){
-        MainRecord_DataBridge mainRecordDataBridge = new MainRecord_DataBridge();
-        MainRecord_Data.MainRecordPageRecordArrayList = mainRecordDataBridge.MainRecordSelect();
-        MainRecord_Data.MainRecordPageRecordItemArrayList = mainRecordDataBridge.MainRecordItemSelect();
-        Log.i("최종 빼냄?", String.valueOf(mainRecordDataBridge.MainRecordItemSelect()));
-        Log.i("최종 빼냄?", String.valueOf(MainRecord_Data.MainRecordPageRecordItemArrayList.get(0).carbookRecordItemExpenseCost));
+        if (MainRecord_Data.MainRecordPageRecordArrayList.size() != 0){
+            MainRecord_DataBridge mainRecordDataBridge = new MainRecord_DataBridge();
+            MainRecord_Data.MainRecordPageRecordArrayList = mainRecordDataBridge.MainRecordSelect();
+            MainRecordItem_DataBridge mainRecordItem_dataBridge = new MainRecordItem_DataBridge();
+            MainRecord_Data.MainRecordPageRecordItemArrayList = mainRecordItem_dataBridge.MainRecordItemSelect();
+        }
     }
 }

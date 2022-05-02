@@ -106,11 +106,11 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     for (int i=0; i<MainRecord_Data.mainRecordItemArrayList.size(); i++){
                         MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemCategoryCode = "123";
                         MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemIsHidden = 0;
-                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordId = mainRecordDataBridge.MainRecordItemSelectRecordLastId();
+                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordId = mainRecordDataBridge.MainRecordSelectLastId();
                         MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemRegTime = time_dataBridge.getRealTime();
                         MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemUpdateTime = time_dataBridge.getRealTime();
 
-                        Log.i("!!!", String.valueOf(mainRecordDataBridge.MainRecordItemSelectRecordLastId()));
+                        Log.i("!!!", String.valueOf(mainRecordDataBridge.MainRecordSelectLastId()));
 
                         mainRecordItemDataBridge.MainRecordItemInsert(new MainRecordItem(MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordId,
                                 MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemCategoryCode,

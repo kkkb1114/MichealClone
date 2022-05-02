@@ -53,8 +53,6 @@ public class ApVp_MainRecordPage extends FragmentStateAdapter {
         setting_apRv_mainRecordPage();
         Log.i("임시", "111");
         for (int i=0; i<MainRecord_Data.MainRecordPageRecordItemArrayList.size(); i++){
-            Log.i("임시", "222");
-            Log.i("MainRecord_Data.MainRecordPageRecordArrayList.size()", String.valueOf(MainRecord_Data.MainRecordPageRecordArrayList.size()));
             ViewTypeList.add(2);
         }
         return new ApRv_MainRecordPage(context, ViewTypeList);

@@ -16,14 +16,15 @@ public class MainRecord_DataBridge {
         return mainRecord_db.getMainRecordList();
     }
 
-    public ArrayList<MainRecordItem> MainRecordItemSelect(){
-        MainRecordItem_DB mainRecordItem_db = MainRecordItem_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
-        Log.i("빼내고 있나?", "111");
-        return mainRecordItem_db.getMainRecordItemList();
-    }
 
-    public int MainRecordItemSelectRecordLastId(){
+    // 기록 저장할때 항목 DB의 carbookRecordId에 넣을 id값 추출 메소드
+    public int MainRecordSelectLastId(){
         MainRecord_DB mainRecord_db = MainRecord_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
         return mainRecord_db.getCarbookRecordLastId();
+    }
+
+    public void getMainRecordData(){
+        MainRecord_DB mainRecord_db = MainRecord_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
+        return mainRecord_db.;
     }
 }

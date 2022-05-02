@@ -124,4 +124,19 @@ public class MainRecord_DB {
         cursor.close();
         return mainRecords;
     }
+
+    public void getMainRecordData(){
+        SQLiteDatabase db = MichaelClone_DBHelper.readableDataBase;
+        try {
+            db.beginTransaction();
+            Cursor cursor = db.rawQuery("SELECT carbookRecordId, COUNT(*) as 'count' FROM carbookRecordItem GROUP BY carbookRecordId HAVING COUNT(*)>=1", null);
+            while (cursor.moveToNext()){
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+    }
 }
