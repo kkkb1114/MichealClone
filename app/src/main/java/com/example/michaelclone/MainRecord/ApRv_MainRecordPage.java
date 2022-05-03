@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.michaelclone.DataBase.MainRecord_Data;
 import com.example.michaelclone.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPage.ViewHolder> {
@@ -63,21 +65,62 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.i("리사이클러뷰 ㄱㄱ?", "444");
         if (ViewTypeList.get(position) == 0){
             holder.tv_mainrecordYear.setText(MainRecord_Data.MainRecordPageRecordArrayList.get(0).carbookRecordExpendDate);
-            holder.tv_mainrecordYearCost.setText(String.valueOf(mainRecord_data.CostCalculation()));
+            //holder.tv_mainrecordYearCost.setText(String.valueOf(mainRecord_data.CostCalculation()));
         }else if (ViewTypeList.get(position) == 1){
             holder.tv_mainrecordMonth.setText(MainRecord_Data.MainRecordPageRecordArrayList.get(0).carbookRecordExpendDate);
-            holder.tv_mainrecordMonthCost.setText(String.valueOf(mainRecord_data.CostCalculation()));
+            //holder.tv_mainrecordMonthCost.setText(String.valueOf(mainRecord_data.CostCalculation()));
         }else {
-            여기에 데이터 삽입 예정
-            holder.tv_mainrecordDate.setText(String.valueOf(mainRecord_data.CostCalculation()));
-            holder.tv_mainrecordTitle.setText(String.valueOf(mainRecord_data.CostCalculation()));
-            holder.tv_mainrecordDistance.setText(String.valueOf(mainRecord_data.CostCalculation()));
-            holder.tv_mainrecordCost.setText(String.valueOf(mainRecord_data.CostCalculation()));
-            holder.tv_mainrecordMemo.setText(String.valueOf(mainRecord_data.CostCalculation()));
+
+            if (MainRecord_Data.MainRecordPageArrayList.size() > 0){
+                // 날짜를 정수로 바꿔 0.01을 곱해도 되긴 하는데 그냥 문자열을 잘라 사이에 .을 붙여 만들었다. (이게 나은 방법인가?)
+                String beforeDate = MainRecord_Data.MainRecordPageArrayList.get(position).carbookRecordExpendDate.substring(4,8);
+                String month = beforeDate.substring(0,2);
+                String day = beforeDate.substring(2,4);
+                // 누적 거리 , 처리를 위한 DecimalFormat 선언
+                DecimalFormat decimalFormat = new DecimalFormat("###,###");
+                
+                for (int i=0; i<MainRecord_Data.MainRecordPageArrayList.size(); i++){
+                    // 날짜
+                    String date = month+"."+day;
+                    // 항목 개수
+                    int count = +MainRecord_Data.MainRecordPageArrayList.get(position).count-1;
+                    // 항목 타이틀
+                    String tv_mainrecordTitle;
+                    if (count <= 0){
+                        tv_mainrecordTitle = MainRecord_Data.MainRecordPageArrayList.get(position).carbookRecordItemCategoryName;
+                    }else {
+                        tv_mainrecordTitle = MainRecord_Data.MainRecordPageArrayList.get(position).carbookRecordItemCategoryName+" 외 "+count+"건";
+                    }
+                    // 누적 거리에 ,처리와 뒤에 거리 단위, 공백을 추가한 문자열을 위한 부분
+                    String Distance = " "+decimalFormat.format((int) MainRecord_Data.MainRecordPageArrayList.get(position).carbookRecordTotalDistance)+" "+
+                            context.getResources().getString(R.string.km);
+
+                    // 총 금액에 넣을 문자열
+                    String totalCost = "₩"+decimalFormat.format((int) MainRecord_Data.MainRecordPageArrayList.get(position).totalCost);
+
+                    holder.tv_mainrecordDate.setText(date);
+                    holder.tv_mainrecordTitle.setText(tv_mainrecordTitle);
+                    holder.tv_mainrecordDistance.setText(Distance);
+                    holder.tv_mainrecordCost.setText(totalCost);
+                    holder.tv_mainrecordMemo.setText(String.valueOf(MainRecord_Data.MainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo));
+
+                    // 각 기록에 속한 항목 삽입
+                    setViewHolderRecyclerView(holder);
+                }
+            }
         }
+
+
+    }
+
+    public void setViewHolderRecyclerView(ViewHolder holder){
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+
+        holder.rv_mainrecordItem.setAdapter();
+        holder.rv_mainrecordItem.setLayoutManager(linearLayoutManager);
     }
 
     @Override
@@ -103,6 +146,7 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
         TextView tv_mainrecordDistance;
         TextView tv_mainrecordCost;
         TextView tv_mainrecordMemo;
+        RecyclerView rv_mainrecordItem;
 
         public ViewHolder(@NonNull View itemView, Context context, int ViewType) {
             super(itemView);
@@ -124,6 +168,7 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
                 tv_mainrecordDistance = itemView.findViewById(R.id.tv_mainrecordDistance);
                 tv_mainrecordCost = itemView.findViewById(R.id.tv_mainrecordCost);
                 tv_mainrecordMemo = itemView.findViewById(R.id.tv_mainrecordMemo);
+                rv_mainrecordItem = itemView.findViewById(R.id.rv_mainrecordItem);
             }
         }
     }

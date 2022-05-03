@@ -99,7 +99,7 @@
     <!--기록 페이지-->
     <string name="HistoryPageFullTab">전체</string>
     <string name="HistoryPageMaintenanceOthers">정비/기타</string>
-    <string name="TotalMoney">총₩</string>
+    <string name="TotalMoney">총</string>
     <string name="Accumulate">누적</string>
     <!--기록 페이지-->
 

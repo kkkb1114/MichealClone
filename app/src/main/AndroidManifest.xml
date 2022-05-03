@@ -37,10 +37,10 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MainRecord.MainrecordActivity"
+            android:name=".MaintenanceRecords.SelectMaintenanceItemActivity"
             android:exported="false" />
         <activity
-            android:name=".MaintenanceRecords.SelectMaintenanceItemActivity"
+            android:name=".MainRecord.MainrecordActivity"
             android:exported="true"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>

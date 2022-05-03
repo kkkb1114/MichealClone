@@ -10,11 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -28,6 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:textColor="@color/blackTransparent_30"
+            android:textSize="@dimen/mainhistoryPageYearTextSize"
             android:text="날짜" />
     </LinearLayout>
 
@@ -46,6 +50,8 @@
                 android:id="@+id/tv_mainrecordTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mainhistoryPageYearDataTextSize"
                 android:text="항목 및 개수"
                 android:layout_weight="9"/>
 
@@ -62,6 +68,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:textColor="@color/blackTransparent_70"
+            android:textSize="@dimen/mainhistoryPageYearTextSize"
             android:text="위치"/>
 
         <LinearLayout
@@ -78,12 +86,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:textColor="@color/blackTransparent_50"
+                    android:textSize="@dimen/mainhistoryPageYearTextSize"
                     android:text="@string/Accumulate"/>
 
                 <TextView
                     android:id="@+id/tv_mainrecordDistance"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:textColor="@color/blackTransparent_50"
+                    android:textSize="@dimen/mainhistoryPageYearTextSize"
                     android:text="거리값"/>
             </LinearLayout>
 
@@ -96,13 +108,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/blackTransparent_50"
+                    android:textSize="@dimen/mainhistoryPageYearTextSize"
                     android:text="@string/TotalMoney"/>
 
                 <TextView
                     android:id="@+id/tv_mainrecordCost"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/mainhistoryPageYearDataTextSize"
                     android:text="지출 금액"/>
             </LinearLayout>
 
@@ -115,12 +132,16 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="10dp"
+            android:textColor="@color/blackTransparent_50"
+            android:textSize="@dimen/mainhistoryPageYearTextSize"
             android:text="zzz"
-            android:padding="10dp"/>
+            android:padding="10dp"
+            android:background="@drawable/vp_item_background_round"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="10dp"
             android:background="@color/TransparencyBlack_20" />
 
         <androidx.recyclerview.widget.RecyclerView

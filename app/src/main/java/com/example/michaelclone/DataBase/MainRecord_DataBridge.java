@@ -23,8 +23,9 @@ public class MainRecord_DataBridge {
         return mainRecord_db.getCarbookRecordLastId();
     }
 
-    public void getMainRecordData(){
+    public ArrayList<MainRecordPage> getMainRecordData(){
         MainRecord_DB mainRecord_db = MainRecord_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
-        return mainRecord_db.;
+        Log.i("메인 항목", "222");
+        return mainRecord_db.getMainRecordData();
     }
 }

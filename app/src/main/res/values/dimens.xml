@@ -21,4 +21,6 @@
     <!--메인기록페이지-->
     <dimen name="mainhistoryPageYearTextSize">10sp</dimen>
     <dimen name="mainhistoryPageYearDataTextSize">15sp</dimen>
+    <dimen name="MainRecordItemTitle">20sp</dimen>
+
 </resources>

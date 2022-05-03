@@ -12,6 +12,8 @@ public class MainRecord_Data {
     public static ArrayList<MainRecord> MainRecordPageRecordArrayList = new ArrayList<>();
     public static ArrayList<MainRecordItem> MainRecordPageRecordItemArrayList = new ArrayList<>();
 
+    public static ArrayList<MainRecordPage> MainRecordPageArrayList = new ArrayList<>();
+
     /*// 비용 계산 메소드
     public int CostCalculation(){
         int Cost = 0;

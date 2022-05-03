@@ -1,26 +1,52 @@
 package com.example.michaelclone.DataBase;
 
 public class MainRecordPage {
-    public int MainRecordPage_carbookRecordCount;
-    public String MainRecordPage_carbookRecordFirstName;
-    public int MainRecordPage_carbookRecordTotalDistance;
-    public int MainRecordPage_carbookRecordTotalCost;
+    public int id;
+    public int carbookRecordRepairMode;
+    public String carbookRecordExpendDate;
+    public int carbookRecordIsHidden;
+    public double carbookRecordTotalDistance;
+    public String carbookRecordRegTime;
+    public String carbookRecordUpdateTime;
+    public int count;
+    public double totalCost;
+    public String carbookRecordItemCategoryName;
+    public String carbookRecordItemExpenseMemo;
+    public String year;
+    public String month;
 
-    public MainRecordPage(int mainRecordPage_carbookRecordCount, String mainRecordPage_carbookRecordFirstName, int mainRecordPage_carbookRecordTotalDistance,
-                          int mainRecordPage_carbookRecordTotalCost) {
-        MainRecordPage_carbookRecordCount = mainRecordPage_carbookRecordCount;
-        MainRecordPage_carbookRecordFirstName = mainRecordPage_carbookRecordFirstName;
-        MainRecordPage_carbookRecordTotalDistance = mainRecordPage_carbookRecordTotalDistance;
-        MainRecordPage_carbookRecordTotalCost = mainRecordPage_carbookRecordTotalCost;
+    public MainRecordPage(int id, int carbookRecordRepairMode, String carbookRecordExpendDate, int carbookRecordIsHidden, double carbookRecordTotalDistance, String carbookRecordRegTime, String carbookRecordUpdateTime, int count, double totalCost, String carbookRecordItemCategoryName, String carbookRecordItemExpenseMemo, String year, String month) {
+        this.id = id;
+        this.carbookRecordRepairMode = carbookRecordRepairMode;
+        this.carbookRecordExpendDate = carbookRecordExpendDate;
+        this.carbookRecordIsHidden = carbookRecordIsHidden;
+        this.carbookRecordTotalDistance = carbookRecordTotalDistance;
+        this.carbookRecordRegTime = carbookRecordRegTime;
+        this.carbookRecordUpdateTime = carbookRecordUpdateTime;
+        this.count = count;
+        this.totalCost = totalCost;
+        this.carbookRecordItemCategoryName = carbookRecordItemCategoryName;
+        this.carbookRecordItemExpenseMemo = carbookRecordItemExpenseMemo;
+        this.year = year;
+        this.month = month;
     }
 
     @Override
     public String toString() {
         return "MainRecordPage{" +
-                "MainRecordPage_carbookRecordCount=" + MainRecordPage_carbookRecordCount +
-                ", MainRecordPage_carbookRecordFirstName='" + MainRecordPage_carbookRecordFirstName + '\'' +
-                ", MainRecordPage_carbookRecordTotalDistance=" + MainRecordPage_carbookRecordTotalDistance +
-                ", MainRecordPage_carbookRecordTotalCost=" + MainRecordPage_carbookRecordTotalCost +
+                "id=" + id +
+                ", carbookRecordRepairMode=" + carbookRecordRepairMode +
+                ", carbookRecordExpendDate='" + carbookRecordExpendDate + '\'' +
+                ", carbookRecordIsHidden=" + carbookRecordIsHidden +
+                ", carbookRecordTotalDistance=" + carbookRecordTotalDistance +
+                ", carbookRecordRegTime='" + carbookRecordRegTime + '\'' +
+                ", carbookRecordUpdateTime='" + carbookRecordUpdateTime + '\'' +
+                ", count=" + count +
+                ", totalCost=" + totalCost +
+                ", carbookRecordItemCategoryName='" + carbookRecordItemCategoryName + '\'' +
+                ", carbookRecordItemExpenseMemo='" + carbookRecordItemExpenseMemo + '\'' +
+                ", year='" + year + '\'' +
+                ", month='" + month + '\'' +
                 '}';
     }
 }

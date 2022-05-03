@@ -125,18 +125,34 @@ public class MainRecord_DB {
         return mainRecords;
     }
 
-    public void getMainRecordData(){
+    public ArrayList<MainRecordPage> getMainRecordData(){
         SQLiteDatabase db = MichaelClone_DBHelper.readableDataBase;
+        ArrayList<MainRecordPage> mainRecordPageArrayList = new ArrayList<>();
         try {
             db.beginTransaction();
-            Cursor cursor = db.rawQuery("SELECT carbookRecordId, COUNT(*) as 'count' FROM carbookRecordItem GROUP BY carbookRecordId HAVING COUNT(*)>=1", null);
-            while (cursor.moveToNext()){
+            Cursor cursor = db.rawQuery("SELECT A.*, B.count, B.totalCost, B.carbookRecordItemCategoryName, B.carbookRecordItemExpenseMemo, substr(carbookRecordExpendDate, 0,7) as month," +
+                    "substr(carbookRecordExpendDate, 0,5) as year FROM carbookRecord as A JOIN (SELECT carbookRecordId, carbookRecordItemCategoryName, carbookRecordItemExpenseMemo," +
+                    "COUNT(*) as 'count', SUM(carbookRecordItemExpenseCost) as 'totalCost' FROM carbookRecordItem GROUP BY carbookRecordId) as B ON (A._id = B.carbookRecordId)", null);
 
+            while (cursor.moveToNext()){
+                Log.i("메인 항목 데이터", cursor.getString(0));
+                Log.i("메인 항목 데이터", cursor.getString(7));
+                MainRecordPage mainRecordPage = new MainRecordPage(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getDouble(4),
+                        cursor.getString(5), cursor.getString(6), cursor.getInt(7), cursor.getInt(8), cursor.getString(9), cursor.getString(10),
+                        cursor.getString(11), cursor.getString(12));
+
+                mainRecordPageArrayList.add(mainRecordPage);
+                Log.i("메인 항목", String.valueOf(mainRecordPage));
             }
+            cursor.close();
+            Log.i("mainRecordPageArrayList", String.valueOf(mainRecordPageArrayList));
+            return mainRecordPageArrayList;
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
             db.endTransaction();
         }
+        Log.i("mainRecordPageArrayList", "null");
+        return null;
     }
 }
