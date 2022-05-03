@@ -119,6 +119,8 @@ public class ApRv_MainRecordPage extends RecyclerView.Adapter<ApRv_MainRecordPag
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
+        // SELECT carbookRecordId, carbookRecordItemCategoryName, carbookRecordItemCategoryCode, carbookRecordItemExpenseCost FROM carbookRecordItem를 sql문으로 사용하여
+        // 데이터를 뽑아오고 위에서 뽑은 MainRecordPage에서 기록 자체의 id 값을 가져오니 id와 carbookRecordId의 값이 같을 경우 데이터를 삽입한다. (생각한건 for문안에 for문을 넣는 것)
         holder.rv_mainrecordItem.setAdapter();
         holder.rv_mainrecordItem.setLayoutManager(linearLayoutManager);
     }
