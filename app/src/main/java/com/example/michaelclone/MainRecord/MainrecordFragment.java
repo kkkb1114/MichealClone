@@ -76,13 +76,10 @@ public class MainrecordFragment extends Fragment {
 
     // 기록 페이지에 들어오면 DB에 저장된 MainRecord, MainRecordItem데이터를 전부 불러와서 MainRecord_Data클래스안에 메인 페이지 전용 ArrayList에 전부 넣어준다.
     public void getMainrecordDataList(){
-            MainRecord_DataBridge mainRecordDataBridge = new MainRecord_DataBridge();
-            MainRecord_Data.MainRecordPageRecordArrayList = mainRecordDataBridge.MainRecordSelect();
-            MainRecordItem_DataBridge mainRecordItem_dataBridge = new MainRecordItem_DataBridge();
-            MainRecord_Data.MainRecordPageRecordItemArrayList = mainRecordItem_dataBridge.MainRecordItemSelect();
+        MainRecordItem_DataBridge mainRecordItem_dataBridge = new MainRecordItem_DataBridge();
+        MainRecord_Data.MainRecordPageRecordItemArrayList = mainRecordItem_dataBridge.MainRecordItemSelect();
 
-            Log.i("메인 항목", "111");
-            MainRecord_Data.MainRecordPageArrayList = mainRecordDataBridge.getMainRecordData();
-        Log.i("메인 항목 교체 완료", String.valueOf(MainRecord_Data.MainRecordPageArrayList));
+        MainRecord_DataBridge mainRecordDataBridge = new MainRecord_DataBridge();
+        MainRecord_Data.MainRecordPageArrayList = mainRecordDataBridge.getMainRecordData();
     }
 }

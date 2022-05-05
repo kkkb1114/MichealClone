@@ -37,7 +37,6 @@ public class MainTotalPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_mainrecord_totalpage, container, false);
         setView(view);
         setRecyclerView(rv_mainTotalPage);
-
         return view;
     }
 

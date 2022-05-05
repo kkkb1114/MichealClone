@@ -97,6 +97,20 @@ public class MainRecordItem_DB{
         return null;
     }
 
+    public ArrayList<MainRecordItem> getMainRecordItemItemArrayList(){
+        try{
+            Log.i("빼내고 있나?", "getMainRecordItemItemArrayList");
+            Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordId = 1;", null);
+
+            ArrayList<MainRecordItem> mainRecordItemArrayList = new ArrayList<>();
+            mainRecordItemArrayList = getMainRecordItemCursor(cursor, mainRecordItemArrayList);
+            Log.i("빼내고 있나?11", String.valueOf(mainRecordItemArrayList));
+            return mainRecordItemArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private ArrayList<MainRecordItem> getMainRecordItemCursor(Cursor cursor, ArrayList<MainRecordItem> mainRecordItems){
         Log.i("빼내고 있나?", "333");

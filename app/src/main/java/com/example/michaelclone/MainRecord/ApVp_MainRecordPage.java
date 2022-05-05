@@ -51,12 +51,7 @@ public class ApVp_MainRecordPage extends FragmentStateAdapter {
     // 각 프래그먼트에 넣을 리사이클러뷰 어뎁터 (일단 통합 어뎁터를 먼저 만들었고 다 만든 후에 추가로 정비/기타 어뎁터 만들 예정)
     public ApRv_MainRecordPage create_apRv_MainTotalPage(){
         setting_apRv_mainRecordPage();
-        Log.i("임시", "111");
-        for (int i=0; i<MainRecord_Data.MainRecordPageArrayList.size(); i++){
-            ViewTypeList.add(2);
-            Log.i("몇개?", String.valueOf(i));
-        }
-        return new ApRv_MainRecordPage(context, ViewTypeList);
+        return new ApRv_MainRecordPage(context);
     }
 
     public void setting_apRv_mainRecordPage(){

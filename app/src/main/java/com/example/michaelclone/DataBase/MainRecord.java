@@ -1,6 +1,7 @@
 package com.example.michaelclone.DataBase;
 
 public class MainRecord {
+    public int _id;
     public int carbookRecordRepairMode;
     public String carbookRecordExpendDate;
     public int carbookRecordIsHidden;
@@ -8,7 +9,7 @@ public class MainRecord {
     public String carbookRecordRegTime;
     public String carbookRecordUpdateTime;
 
-    public MainRecord(int carbookRecordRepairMode, String carbookRecordExpendDate, int carbookRecordIsHidden,
+    public MainRecord(int _id, int carbookRecordRepairMode, String carbookRecordExpendDate, int carbookRecordIsHidden,
                       String carbookRecordTotalDistance, String carbookRecordRegTime, String carbookRecordUpdateTime){
         this.carbookRecordRepairMode = carbookRecordRepairMode;
         this.carbookRecordExpendDate = carbookRecordExpendDate;
@@ -21,7 +22,8 @@ public class MainRecord {
     @Override
     public String toString() {
         return "MainRecord{" +
-                "carbookRecordRepairMode=" + carbookRecordRepairMode +
+                "_id=" + _id +
+                ", carbookRecordRepairMode=" + carbookRecordRepairMode +
                 ", carbookRecordExpendDate='" + carbookRecordExpendDate + '\'' +
                 ", carbookRecordIsHidden=" + carbookRecordIsHidden +
                 ", carbookRecordTotalDistance='" + carbookRecordTotalDistance + '\'' +

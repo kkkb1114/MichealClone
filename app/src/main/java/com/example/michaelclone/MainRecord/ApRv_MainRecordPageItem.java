@@ -1,34 +1,70 @@
 package com.example.michaelclone.MainRecord;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.michaelclone.DataBase.MainRecordItem;
+import com.example.michaelclone.DataBase.MainRecordPage;
+import com.example.michaelclone.DataBase.MainRecord_Data;
+import com.example.michaelclone.R;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
 public class ApRv_MainRecordPageItem extends RecyclerView.Adapter<ApRv_MainRecordPageItem.ViewHolder> {
 
+    Context context;
+    ArrayList<String> nameList;
+    ArrayList<String> costList;
 
+    public ApRv_MainRecordPageItem (Context context, ArrayList<String> nameList, ArrayList<String> costList){
+        this.context = context;
+        this.nameList = nameList;
+        this.costList = costList;
+    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.mainrecord_item_item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        DecimalFormat decimalFormat = new DecimalFormat("###,###");
+        // 항목 금액
+        String costResult = "₩"+decimalFormat.format(Integer.parseInt(costList.get(position)));
+
+        holder.tv_mainrecordRvItemTitle.setText(nameList.get(position));
+        holder.tv_mainrecordRvItemCost.setText(costResult);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return nameList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tv_mainrecordRvItemTitle;
+        TextView tv_mainrecordRvItemCost;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            setView();
+        }
+
+        public void setView(){
+            tv_mainrecordRvItemTitle = itemView.findViewById(R.id.tv_mainrecordRvItemTitle);
+            tv_mainrecordRvItemCost = itemView.findViewById(R.id.tv_mainrecordRvItemCost);
         }
     }
 }

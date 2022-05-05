@@ -68,6 +68,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
 
     public void setMainRecord(){
         MainRecord mainRecord = new MainRecord(0,
+                0,
                 null,
                 0,
                 null,

@@ -116,7 +116,7 @@ public class MainRecord_DB {
     private ArrayList<MainRecord> getMainRecordCursor(Cursor cursor, ArrayList<MainRecord> mainRecords){
         while (cursor.moveToNext()){
             //todo 여기서 cursor.getInt(0)으로 id 값을 받을수 있지 않을까 했는데 안받아져서 일단 뺐다.
-            MainRecord mainRecord = new MainRecord(cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4),
+            MainRecord mainRecord = new MainRecord(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4),
                     cursor.getString(5), cursor.getString(6));
 
             mainRecords.add(mainRecord);

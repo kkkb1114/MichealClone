@@ -15,7 +15,7 @@ public class MainRecordPage {
     public String year;
     public String month;
 
-    public MainRecordPage(int id, int carbookRecordRepairMode, String carbookRecordExpendDate, int carbookRecordIsHidden, double carbookRecordTotalDistance, String carbookRecordRegTime, String carbookRecordUpdateTime, int count, double totalCost, String carbookRecordItemCategoryName, String carbookRecordItemExpenseMemo, String year, String month) {
+    public MainRecordPage(int id, int carbookRecordRepairMode, String carbookRecordExpendDate, int carbookRecordIsHidden, double carbookRecordTotalDistance, String carbookRecordRegTime, String carbookRecordUpdateTime, int count, double totalCost, String carbookRecordItemCategoryName, String carbookRecordItemExpenseMemo, String month, String year) {
         this.id = id;
         this.carbookRecordRepairMode = carbookRecordRepairMode;
         this.carbookRecordExpendDate = carbookRecordExpendDate;
@@ -27,8 +27,8 @@ public class MainRecordPage {
         this.totalCost = totalCost;
         this.carbookRecordItemCategoryName = carbookRecordItemCategoryName;
         this.carbookRecordItemExpenseMemo = carbookRecordItemExpenseMemo;
-        this.year = year;
         this.month = month;
+        this.year = year;
     }
 
     @Override

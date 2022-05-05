@@ -94,7 +94,8 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRegTime = new Time_DataBridge().getRealTime();
                     MainRecord_Data.mainRecordArrayList.get(0).carbookRecordUpdateTime = new Time_DataBridge().getRealTime();
 
-                    mainRecordDataBridge.MainRecordInsert(new MainRecord(MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode,
+                    mainRecordDataBridge.MainRecordInsert(new MainRecord(MainRecord_Data.mainRecordArrayList.get(0)._id,
+                            MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode,
                             MainRecord_Data.mainRecordArrayList.get(0).carbookRecordExpendDate,
                             MainRecord_Data.mainRecordArrayList.get(0).carbookRecordIsHidden,
                             MainRecord_Data.mainRecordArrayList.get(0).carbookRecordTotalDistance,
