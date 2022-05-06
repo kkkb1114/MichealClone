@@ -63,8 +63,6 @@ public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_Maintenan
         String ApRv_otherHashMapKey = "ApRv_other"+position;
         Data_MaintenanceRecords.al_carbookRecordItemExpenseMemoList.put(ApRv_otherHashMapKey, holder.et_MtOtItemMemo.getText().toString());
         Data_MaintenanceRecords.al_carbookRecordItemExpenseCostList.put(ApRv_otherHashMapKey, holder.et_MtOt_ItemPrice.getText().toString());
-
-
     }
 
     // 현재시간 구하기

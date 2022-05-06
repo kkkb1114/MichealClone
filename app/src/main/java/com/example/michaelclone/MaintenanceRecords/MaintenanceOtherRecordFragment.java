@@ -189,7 +189,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 이제부터는 ResourcesCompat를 이용해 주어야 한다.*/
 
                 tv_selfMaintenance.setBackground(context.getResources().getDrawable(R.drawable.bt_round_transparent, null));
-                tv_selfMaintenance.setTextColor(context.getResources().getColor(R.color.blackTransparent_20));
+                tv_selfMaintenance.setTextColor(context.getResources().getColor(R.color.blackTransparent_20,null));
 
                 // 이게 엑티비티에서는 ContextCompat 이게 먹히는데 프래그먼트에서 안먹힌다. 이유를 알아보자.
                 Drawable img = getContext().getResources().getDrawable(R.drawable.check);

@@ -32,9 +32,9 @@ public class ApVp_MainRecordPage extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+        apRv_mainRecordPage = create_apRv_MainTotalPage();
         switch (position){
             case 0:
-                apRv_mainRecordPage = create_apRv_MainTotalPage();
                 return new MainrecordMaintenanceItemsPageFragment(apRv_mainRecordPage);
             case 1:
                 return new MainTotalPageFragment(apRv_mainRecordPage);

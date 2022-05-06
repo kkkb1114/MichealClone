@@ -57,6 +57,7 @@ public class MainrecordFragment extends Fragment {
     public void setView(View view){
         tl_mainhistorypage = view.findViewById(R.id.tl_mainhistorypage);
         vp_mainhistory = view.findViewById(R.id.vp_maintenanceOther);
+
     }
 
     public void setTabLayout(){
@@ -81,5 +82,8 @@ public class MainrecordFragment extends Fragment {
 
         MainRecord_DataBridge mainRecordDataBridge = new MainRecord_DataBridge();
         MainRecord_Data.MainRecordPageArrayList = mainRecordDataBridge.getMainRecordData();
+
+        // 가끔 editText에서 에러터져서 null값이 들어가서 테스트환경에서 그런 데이터를 지우기위해 만든 메소드(원래는 delete를 하지않기에 쓰지 않는다.)
+        //mainRecordItem_dataBridge.test_delete(37);
     }
 }

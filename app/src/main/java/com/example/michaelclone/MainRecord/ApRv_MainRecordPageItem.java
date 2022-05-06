@@ -1,6 +1,7 @@
 package com.example.michaelclone.MainRecord;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,9 @@ public class ApRv_MainRecordPageItem extends RecyclerView.Adapter<ApRv_MainRecor
     Context context;
     ArrayList<String> nameList;
     ArrayList<String> costList;
+    DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-    public ApRv_MainRecordPageItem (Context context, ArrayList<String> nameList, ArrayList<String> costList){
+    public ApRv_MainRecordPageItem(Context context, ArrayList<String> nameList, ArrayList<String> costList) {
         this.context = context;
         this.nameList = nameList;
         this.costList = costList;
@@ -40,9 +42,10 @@ public class ApRv_MainRecordPageItem extends RecyclerView.Adapter<ApRv_MainRecor
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        DecimalFormat decimalFormat = new DecimalFormat("###,###");
+        Log.i("onBindViewHolder", String.valueOf(costList));
+        Log.i("onBindViewHolder2", String.valueOf(nameList));
         // 항목 금액
-        String costResult = "₩"+decimalFormat.format(Integer.parseInt(costList.get(position)));
+        String costResult = "₩" + decimalFormat.format(Integer.parseInt(costList.get(position)));
 
         holder.tv_mainrecordRvItemTitle.setText(nameList.get(position));
         holder.tv_mainrecordRvItemCost.setText(costResult);
@@ -62,7 +65,7 @@ public class ApRv_MainRecordPageItem extends RecyclerView.Adapter<ApRv_MainRecor
             setView();
         }
 
-        public void setView(){
+        public void setView() {
             tv_mainrecordRvItemTitle = itemView.findViewById(R.id.tv_mainrecordRvItemTitle);
             tv_mainrecordRvItemCost = itemView.findViewById(R.id.tv_mainrecordRvItemCost);
         }

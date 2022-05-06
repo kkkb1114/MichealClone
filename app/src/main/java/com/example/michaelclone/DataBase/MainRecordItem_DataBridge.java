@@ -25,4 +25,10 @@ public class MainRecordItem_DataBridge {
         Log.i("빼내고 있나?", "getMainRecordItemItemData");
         return mainRecordItem_db.getMainRecordItemItemArrayList();
     }
+
+    // 가끔 editText에서 에러터져서 null값이 들어가서 테스트환경에서 그런 데이터를 지우기위해 만든 메소드(원래는 delete를 하지않기에 쓰지 않는다.)
+    public void test_delete(int _id){
+        MainRecordItem_DB mainRecordItem_db = MainRecordItem_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
+        mainRecordItem_db.test_delete(_id);
+    }
 }

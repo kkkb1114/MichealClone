@@ -118,7 +118,14 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     구분해서 예외처리 한다.*/
     // 0: 항목 선택, 1: 항목 선택 취소
     static public void itemClickChangeCount(Context context, String title, int CheckedItemCount){
-        MainRecordItem mainRecordItem = null;
+        MainRecordItem mainRecordItem = new MainRecordItem(0,
+                null,
+                title,
+                null,
+                null,
+                0,
+                null,
+                null);
         if (CheckedItemCount == 0){
             // 리사이클러뷰 스크롤로 인한 자동 추가가 아니면 실행
             Data_MaintenanceRecords.al_itemTitleList.add(title);
@@ -127,14 +134,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
             SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
 
             // 선택할때마다 바로 집어넣고 취소하면 뺀다.
-            mainRecordItem = new MainRecordItem(0,
-                    null,
-                    title,
-                    null,
-                    null,
-                    0,
-                    null,
-                    null);
+
             MainRecord_Data.mainRecordItemArrayList.add(mainRecordItem);
         }else {
             // 리사이클러뷰 스크롤로 인한 지동 추가가 아니면 실행
@@ -148,7 +148,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
             }
 
             // 선택할때마다 바로 집어넣고 취소하면 뺀다.
-            MainRecord_Data.mainRecordItemArrayList.remove(mainRecordItem);
+            MainRecord_Data.mainRecordItemArrayList.remove(1);
 
         }
     }

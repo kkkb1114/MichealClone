@@ -27,7 +27,7 @@ public class MainRecord_Data {
         return Cost;
     }
 
-    // 월별 비용 계산 메소드
+    // 월별 비용 계산 메소드 (월총액은 월만 있으면 다른연도의 중복 월까지 계산할것 같지만 MainRecordPageArrayList에 담긴 월 데이터는 연도까지 적혀있기에 타 연도와 중복될일이 없다.)
     public int MainRecordPageMonthCostCalculation(String month){
         int Cost = 0;
         // 전체 기록의 비용을 더해서 반환

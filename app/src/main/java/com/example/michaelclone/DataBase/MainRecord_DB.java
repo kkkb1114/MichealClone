@@ -132,7 +132,7 @@ public class MainRecord_DB {
             db.beginTransaction();
             Cursor cursor = db.rawQuery("SELECT A.*, B.count, B.totalCost, B.carbookRecordItemCategoryName, B.carbookRecordItemExpenseMemo, substr(carbookRecordExpendDate, 0,7) as month," +
                     "substr(carbookRecordExpendDate, 0,5) as year FROM carbookRecord as A JOIN (SELECT carbookRecordId, carbookRecordItemCategoryName, carbookRecordItemExpenseMemo," +
-                    "COUNT(*) as 'count', SUM(carbookRecordItemExpenseCost) as 'totalCost' FROM carbookRecordItem GROUP BY carbookRecordId) as B ON (A._id = B.carbookRecordId)", null);
+                    "COUNT(*) as 'count', SUM(carbookRecordItemExpenseCost) as 'totalCost' FROM carbookRecordItem GROUP BY carbookRecordId) as B ON (A._id = B.carbookRecordId) ORDER BY carbookRecordExpendDate DESC", null);
 
             while (cursor.moveToNext()){
                 Log.i("메인 항목 데이터", cursor.getString(0));
