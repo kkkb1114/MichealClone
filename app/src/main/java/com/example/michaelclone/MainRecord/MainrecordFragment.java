@@ -12,18 +12,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.michaelclone.DataBase.MainRecord;
-import com.example.michaelclone.DataBase.MainRecordItem_DataBridge;
-import com.example.michaelclone.DataBase.MainRecord_DB;
-import com.example.michaelclone.DataBase.MainRecord_Data;
-import com.example.michaelclone.DataBase.MainRecord_DataBridge;
-import com.example.michaelclone.DataBase.MichaelClone_DBHelper;
+import com.example.michaelclone.DataBase.CarbookRecordItem_DataBridge;
+import com.example.michaelclone.DataBase.CarbookRecord_Data;
+import com.example.michaelclone.DataBase.CarbookRecord_DataBridge;
 import com.example.michaelclone.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class MainrecordFragment extends Fragment {
 
@@ -33,7 +29,7 @@ public class MainrecordFragment extends Fragment {
 
     // 뷰페이저2
     private ViewPager2 vp_mainhistory;
-    private ApVp_MainRecordPage ad_mainhistory;
+    private MainRecordPageViewPagerAdapter ad_mainhistory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +60,7 @@ public class MainrecordFragment extends Fragment {
         mainhistoryTabNameList.add(getResources().getString(R.string.HistoryPageFullTab));
         mainhistoryTabNameList.add(getResources().getString(R.string.HistoryPageMaintenanceOthers));
 
-        ad_mainhistory = new ApVp_MainRecordPage(requireActivity(), 2, context);
+        ad_mainhistory = new MainRecordPageViewPagerAdapter(requireActivity(), 2, context);
         vp_mainhistory.setAdapter(ad_mainhistory);
 
         new TabLayoutMediator(tl_mainhistorypage, vp_mainhistory, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -77,11 +73,11 @@ public class MainrecordFragment extends Fragment {
 
     // 기록 페이지에 들어오면 DB에 저장된 MainRecord, MainRecordItem데이터를 전부 불러와서 MainRecord_Data클래스안에 메인 페이지 전용 ArrayList에 전부 넣어준다.
     public void getMainrecordDataList(){
-        MainRecordItem_DataBridge mainRecordItem_dataBridge = new MainRecordItem_DataBridge();
-        MainRecord_Data.MainRecordPageRecordItemArrayList = mainRecordItem_dataBridge.MainRecordItemSelect();
+        CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
+        CarbookRecord_Data.MainRecordPageRecordItemArrayList_getDB = carbookRecordItem_dataBridge.MainRecordItemSelect();
 
-        MainRecord_DataBridge mainRecordDataBridge = new MainRecord_DataBridge();
-        MainRecord_Data.MainRecordPageArrayList = mainRecordDataBridge.getMainRecordData();
+        CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
+        CarbookRecord_Data.MainRecordPageArrayList = mainRecordDataBridge.getMainRecordData();
 
         // 가끔 editText에서 에러터져서 null값이 들어가서 테스트환경에서 그런 데이터를 지우기위해 만든 메소드(원래는 delete를 하지않기에 쓰지 않는다.)
         //mainRecordItem_dataBridge.test_delete(37);

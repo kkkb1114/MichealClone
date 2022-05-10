@@ -14,14 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.michaelclone.R;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class OtherFragment extends Fragment {
 
     RecyclerView rv_other;
-    ApRv_other apRv_other;
-    ApRv_maintenance apRv_maintenance;
+    OtherFragmentRecyclerViewAdapter otherFragmentRecyclerViewAdapter;
+    MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
+    SelectMaintenanceItemActivity selectMaintenanceItemActivity;
 
     // 기타 항목
     ArrayList<String> ItemTitleList_other = new ArrayList<>();
@@ -29,8 +29,9 @@ public class OtherFragment extends Fragment {
 
     Context context;
 
-    public OtherFragment(ApRv_maintenance apRv_maintenance) {
-        this.apRv_maintenance = apRv_maintenance;
+    public OtherFragment(MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter, SelectMaintenanceItemActivity selectMaintenanceItemActivity) {
+        this.maintenanceRecyclerViewAdapter = maintenanceRecyclerViewAdapter;
+        this.selectMaintenanceItemActivity = selectMaintenanceItemActivity;
     }
 
     @Override
@@ -61,9 +62,9 @@ public class OtherFragment extends Fragment {
 
         // 기타 항목
         rv_other.setLayoutManager(linearLayoutManager);
-        apRv_other = new ApRv_other(context, ItemTitleList_other, ItemTypeList_other, apRv_maintenance);
-        rv_other.setAdapter(apRv_other);
-        apRv_other.notifyDataSetChanged();
+        otherFragmentRecyclerViewAdapter = new OtherFragmentRecyclerViewAdapter(context, ItemTitleList_other, ItemTypeList_other, maintenanceRecyclerViewAdapter, selectMaintenanceItemActivity);
+        rv_other.setAdapter(otherFragmentRecyclerViewAdapter);
+        otherFragmentRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     public void SettingItemList(){

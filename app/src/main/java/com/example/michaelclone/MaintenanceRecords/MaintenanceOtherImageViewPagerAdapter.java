@@ -23,7 +23,7 @@ import com.example.michaelclone.R;
 
 import java.util.ArrayList;
 
-public class VpAp_maintenanceOther extends RecyclerView.Adapter<VpAp_maintenanceOther.ViewHolder> {
+public class MaintenanceOtherImageViewPagerAdapter extends RecyclerView.Adapter<MaintenanceOtherImageViewPagerAdapter.ViewHolder> {
 
     Context context;
     DialogManager.SelectCameraAlbum_Dialog selectCameraAlbum_dialog;
@@ -31,7 +31,7 @@ public class VpAp_maintenanceOther extends RecyclerView.Adapter<VpAp_maintenance
     ArrayList<String> typeList;
     TextView MtOt_imageCount;
 
-   public VpAp_maintenanceOther(Context context, ArrayList<Bitmap> bitmapArrayList, ArrayList<String> typeList, TextView fueling_imageCount){
+   public MaintenanceOtherImageViewPagerAdapter(Context context, ArrayList<Bitmap> bitmapArrayList, ArrayList<String> typeList, TextView fueling_imageCount){
        this.context = context;
        this.bitmapArrayList = bitmapArrayList;
        this.typeList = typeList;

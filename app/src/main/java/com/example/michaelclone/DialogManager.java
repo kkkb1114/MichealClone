@@ -3,7 +3,6 @@ package com.example.michaelclone;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -23,8 +22,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
-import com.example.michaelclone.DataBase.MainRecord_Data;
-import com.example.michaelclone.FuelingRecord.FuelingRecordActivity;
+import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -127,7 +125,7 @@ public class DialogManager extends AlertDialog.Builder {
                     tv_date.setText(date+getDateDay(date2));
 
                     // 기록 확인 클릭시 선택한 날짜를 디비 저장용 해당 기록 지출 날짜로 지정해놓는다.
-                    MainRecord_Data.mainRecordArrayList.get(0).carbookRecordExpendDate = mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate());
+                    CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordExpendDate = mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate());
                     // 지울것!!
                     Log.i("getSelectedDate", mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate()));
                     dismiss();
@@ -153,7 +151,7 @@ public class DialogManager extends AlertDialog.Builder {
             tv_dl_cal_year.setText(NowYear);
             
             // 날짜 선택할때마다 DB 저장용 ArrayList에 . 없앤 후 저장
-            MainRecord_Data.mainRecordArrayList.get(0).carbookRecordExpendDate = NowDate.replace(".", "");
+            CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordExpendDate = NowDate.replace(".", "");
         }
 
 

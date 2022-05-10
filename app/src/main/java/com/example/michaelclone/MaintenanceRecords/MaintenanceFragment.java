@@ -14,14 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.michaelclone.R;
 
-import java.lang.reflect.Array;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
 public class MaintenanceFragment extends Fragment {
 
     RecyclerView rv_maintenance;
-    ApRv_maintenance apRv_maintenance;
+    MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
 
     Context context;
 
@@ -31,8 +27,8 @@ public class MaintenanceFragment extends Fragment {
     ArrayList<String> ItemLifeSpanList_maintenance = new ArrayList<>();
     ArrayList<Integer> ItemTypeList_maintenance = new ArrayList<>();*/
 
-    public MaintenanceFragment(ApRv_maintenance apRv_maintenance) {
-        this.apRv_maintenance = apRv_maintenance;
+    public MaintenanceFragment(MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter) {
+        this.maintenanceRecyclerViewAdapter = maintenanceRecyclerViewAdapter;
     }
 
     @Override
@@ -63,8 +59,8 @@ public class MaintenanceFragment extends Fragment {
 
         // 정비 항목
         rv_maintenance.setLayoutManager(linearLayoutManager);
-        rv_maintenance.setAdapter(apRv_maintenance);
-        apRv_maintenance.notifyDataSetChanged();
+        rv_maintenance.setAdapter(maintenanceRecyclerViewAdapter);
+        maintenanceRecyclerViewAdapter.notifyDataSetChanged();
     }
 
    /* public void SettingItemList(){

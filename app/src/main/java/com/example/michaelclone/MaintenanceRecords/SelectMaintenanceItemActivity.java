@@ -6,16 +6,15 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.michaelclone.DataBase.MainRecord;
-import com.example.michaelclone.DataBase.MainRecordItem;
-import com.example.michaelclone.DataBase.MainRecordItem_DB;
-import com.example.michaelclone.DataBase.MainRecord_Data;
+import com.example.michaelclone.DataBase.CarbookRecord;
+import com.example.michaelclone.DataBase.CarbookRecordItem_DB;
+import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -33,7 +32,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
 
     // 뷰페이저2
     private ViewPager2 vp_maintenanceOther;
-    private ApVp_MaintenancePage ad_maintenancePage;
+    private MaintenancePageViewPagerAdapter ad_maintenancePage;
 
     static public TextView tv_selectionConfirm;
     static public TextView tv_itemCount;
@@ -56,7 +55,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         setTabLayout();
         setDatatransferNextPage();
 
-        MainRecordItem_DB mainRecordItem_db = MainRecordItem_DB.getInstance(context, "MainRecord.db", null, 1);
+        CarbookRecordItem_DB carbookRecordItem_db = CarbookRecordItem_DB.getInstance(context, "MainRecord.db", null, 1);
     }
 
     public void setView(){
@@ -67,20 +66,29 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     }
 
     public void setMainRecord(){
-        MainRecord mainRecord = new MainRecord(0,
+        CarbookRecord carbookRecord = new CarbookRecord(0,
                 0,
                 null,
                 0,
                 null,
                 null,
                 null);
-        MainRecord_Data.mainRecordArrayList.add(mainRecord);
+        CarbookRecord_Data.carbookRecordArrayList_insertDB.add(carbookRecord);
     }
 
     public void setDatatransferNextPage(){
+        new Handler().postDelayed(() -> {
+
+        }, 1000);
+
+
         tv_selectionConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ad_maintenancePage.getFragment() instanceof MaintenanceFragment){
+                    Log.e("123123123", ((MaintenanceFragment)ad_maintenancePage.getFragment()).maintenanceRecyclerViewAdapter.getCheckList().toString());
+                }
+
                 Intent intent = new Intent(SelectMaintenanceItemActivity.this, MaintenanceOtherRecordActivity.class);
                 startActivity(intent);
                 finish();
@@ -101,7 +109,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         tabNameList.add(getResources().getString(R.string.maintenanceItems));
         tabNameList.add(getResources().getString(R.string.otherItems));
 
-        ad_maintenancePage = new ApVp_MaintenancePage(this, 2, context);
+        ad_maintenancePage = new MaintenancePageViewPagerAdapter(this, 2, context, new SelectMaintenanceItemActivity());
         vp_maintenanceOther.setAdapter(ad_maintenancePage);
 
         new TabLayoutMediator(tl_maintenanceOther, vp_maintenanceOther, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -117,7 +125,10 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     또한 리사이클러뷰는 뷰를 재활용하기에 체크되있는 상태에서 그냥 스크롤하면 그대로 체크 true상태의 뷰가 딸려올수 있어 수동 체크와 리사이클러뷰를 스크롤해서 자동으로 체크된 자동 체크를
     구분해서 예외처리 한다.*/
     // 0: 항목 선택, 1: 항목 선택 취소
-    static public void itemClickChangeCount(Context context, String title, int CheckedItemCount){
+    /**
+     * - 전역 메소드, 변수가 워낙 많아서 로직을 바꾸는 중
+     * **/
+    /*static public void itemClickChangeCount(Context context, String title, int CheckedItemCount){
         MainRecordItem mainRecordItem = new MainRecordItem(0,
                 null,
                 title,
@@ -134,7 +145,6 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
             SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
 
             // 선택할때마다 바로 집어넣고 취소하면 뺀다.
-
             MainRecord_Data.mainRecordItemArrayList.add(mainRecordItem);
         }else {
             // 리사이클러뷰 스크롤로 인한 지동 추가가 아니면 실행
@@ -151,5 +161,5 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
             MainRecord_Data.mainRecordItemArrayList.remove(1);
 
         }
-    }
+    }*/
 }

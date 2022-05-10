@@ -18,12 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.michaelclone.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
-public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
+public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<OtherFragmentRecyclerViewAdapter.ViewHolder> {
 
     ArrayList<String> singleItemTitleList = new ArrayList<>();
     ArrayList<String> ItemTitleList;
@@ -32,15 +30,17 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
     HashMap<Integer, Boolean> checkedHashMap_other = new HashMap<>();
     Context context;
     boolean setChecked = false;
-    ApRv_maintenance apRv_maintenance;
+    MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
+    SelectMaintenanceItemActivity selectMaintenanceItemActivity;
 
     // 시간
-
-    public ApRv_other(Context context, ArrayList<String> ItemTitleList, ArrayList<Integer> ItemTypeList, ApRv_maintenance apRv_maintenance) {
+    public OtherFragmentRecyclerViewAdapter(Context context, ArrayList<String> ItemTitleList, ArrayList<Integer> ItemTypeList, MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter,
+                                            SelectMaintenanceItemActivity selectMaintenanceItemActivity) {
         this.context = context;
         this.ItemTitleList = ItemTitleList;
         this.ItemTypeList = ItemTypeList;
-        this.apRv_maintenance = apRv_maintenance;
+        this.maintenanceRecyclerViewAdapter = maintenanceRecyclerViewAdapter;
+        this.selectMaintenanceItemActivity = selectMaintenanceItemActivity;
     }
 
     @Override
@@ -172,13 +172,22 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
                     case R.id.Ln_other_item:
                         if (!cb_other_itemSelect.isChecked()) {
                             cb_other_itemSelect.setChecked(true);
-                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_other_itemTitle.getText().toString(), 0);
+
+                            Data_MaintenanceRecords.al_itemTitleList.add(tv_other_itemTitle.getText().toString());
+                            selectMaintenanceItemActivity.tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
 
                             // 단일 항목들 체크
                             singleItemCheck(true);
                         } else {
                             cb_other_itemSelect.setChecked(false);
-                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_other_itemTitle.getText().toString(), 1);
+                            Data_MaintenanceRecords.al_itemTitleList.remove(tv_other_itemTitle.getText().toString());
+                            if (Data_MaintenanceRecords.al_itemTitleList.size() <= 0){
+                                selectMaintenanceItemActivity.tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
+                                selectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
+                                selectMaintenanceItemActivity.tv_selectionConfirm.setClickable(false);
+                            }else {
+                                selectMaintenanceItemActivity.tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
+                            }
 
                             // 단일 항목들 체크
                             singleItemCheck(false);
@@ -187,13 +196,11 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
                     case R.id.cb_other_itemSelect:
                         if (cb_other_itemSelect.isChecked()) {
                             cb_other_itemSelect.setChecked(true);
-                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_other_itemTitle.getText().toString(), 0);
 
                             // 단일 항목들 체크
                             singleItemCheck(true);
                         } else {
                             cb_other_itemSelect.setChecked(false);
-                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_other_itemTitle.getText().toString(), 1);
 
                             // 단일 항목들 체크
                             singleItemCheck(false);
@@ -240,7 +247,7 @@ public class ApRv_other extends RecyclerView.Adapter<ApRv_other.ViewHolder> {
                         singleItemTitleList.remove(tv_other_itemTitle.getText().toString());
                     }
                     notifyDataSetChanged();
-                    apRv_maintenance.notifyDataSetChanged();
+                    maintenanceRecyclerViewAdapter.notifyDataSetChanged();
                 }
         }
     }

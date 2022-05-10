@@ -1,6 +1,6 @@
 package com.example.michaelclone.DataBase;
 
-public class MainRecordItem {
+public class CarbookRecordItem {
         public int carbookRecordId;
         public String carbookRecordItemCategoryCode;
         public String carbookRecordItemCategoryName;
@@ -11,8 +11,8 @@ public class MainRecordItem {
         public String carbookRecordItemUpdateTime;
 
 
-    public MainRecordItem(int carbookRecordId, String carbookRecordItemCategoryCode, String carbookRecordItemCategoryName, String carbookRecordItemExpenseMemo,
-                          String carbookRecordItemExpenseCost, int carbookRecordItemIsHidden, String carbookRecordItemRegTime, String carbookRecordItemUpdateTime){
+    public CarbookRecordItem(int carbookRecordId, String carbookRecordItemCategoryCode, String carbookRecordItemCategoryName, String carbookRecordItemExpenseMemo,
+                             String carbookRecordItemExpenseCost, int carbookRecordItemIsHidden, String carbookRecordItemRegTime, String carbookRecordItemUpdateTime){
         this.carbookRecordId = carbookRecordId;
         this.carbookRecordItemCategoryCode = carbookRecordItemCategoryCode;
         this.carbookRecordItemCategoryName = carbookRecordItemCategoryName;

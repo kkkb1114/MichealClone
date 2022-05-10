@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,23 +13,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.michaelclone.DataBase.MainRecord_Data;
+import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.R;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_MaintenanceOtherRecord.ViewHolder> {
+public class MaintenanceOtherRecordAdapter extends RecyclerView.Adapter<MaintenanceOtherRecordAdapter.ViewHolder> {
 
     Context context;
     ArrayList<String> al_itemTitleList;
     String strNow;
     String ItemPriceResult;
 
-    public Ap_MaintenanceOtherRecord(Context context, ArrayList<String> al_itemTitleList){
+    public MaintenanceOtherRecordAdapter(Context context, ArrayList<String> al_itemTitleList){
         this.context = context;
         this.al_itemTitleList = al_itemTitleList;
     }
@@ -127,7 +125,7 @@ public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_Maintenan
                     tv_MtOtItemMemoCount.setText(input_MtOtMemo.length()+"/250");
 
                     // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                    MainRecord_Data.mainRecordItemArrayList.get(position).carbookRecordItemExpenseMemo = et_MtOtItemMemo.getText().toString();
+                    CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(position).carbookRecordItemExpenseMemo = et_MtOtItemMemo.getText().toString();
                 }
 
                 @Override
@@ -160,7 +158,7 @@ public class Ap_MaintenanceOtherRecord extends RecyclerView.Adapter<Ap_Maintenan
                     if (!Mileage.equals(ItemPriceResult)){
                             long cumulativeMileage =  Long.parseLong(Mileage.replace(",", ""));
                             // MainRecord_Data의 MainRecordItem 리스트에 지출금액 삽입
-                            MainRecord_Data.mainRecordItemArrayList.get(position).carbookRecordItemExpenseCost = String.valueOf(cumulativeMileage);
+                            CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(position).carbookRecordItemExpenseCost = String.valueOf(cumulativeMileage);
                             Log.i("cumulativeMileage", String.valueOf(cumulativeMileage));
                             // 가격 글자가 0이하면 Long.parseLong()에서 터지고 어차피 4글자 이상이여야하니 글자 개수로 조건문 걸어준다.
                             DecimalFormat decimalFormat = new DecimalFormat("###,###");

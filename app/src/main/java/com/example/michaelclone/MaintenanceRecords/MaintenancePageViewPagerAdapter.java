@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.michaelclone.R;
@@ -13,7 +12,7 @@ import com.example.michaelclone.R;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class ApVp_MaintenancePage extends FragmentStateAdapter {
+public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
 
     int pageNum;
 
@@ -22,29 +21,36 @@ public class ApVp_MaintenancePage extends FragmentStateAdapter {
     ArrayList<String> ItemDistanceList_maintenance = new ArrayList<>();
     ArrayList<String> ItemLifeSpanList_maintenance = new ArrayList<>();
     ArrayList<Integer> ItemTypeList_maintenance = new ArrayList<>();
-    ApRv_maintenance apRv_maintenance;
+    MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
+    SelectMaintenanceItemActivity selectMaintenanceItemActivity;
     Context context;
 
     /**
      * 1. 생성자로 페이지 개수를 받고 그 개수만큼 페이지를 생성한다.
      * 2. createFragment()에서 position대로 차례로 지정한 프래그먼트 객체를 반환한다.
      * **/
-    public ApVp_MaintenancePage(@NonNull FragmentActivity fragmentActivity, int pageNum, Context context) {
+    public MaintenancePageViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, int pageNum, Context context, SelectMaintenanceItemActivity selectMaintenanceItemActivity) {
         super(fragmentActivity);
         this.pageNum = pageNum;
         this.context = context;
-
+        this.selectMaintenanceItemActivity = selectMaintenanceItemActivity;
     }
 
+    Fragment fragment;
+    Fragment getFragment(){
+        return fragment;
+    }
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         switch (position){
             case 0:
-                apRv_maintenance = create_apRv_maintenance();
-                return new MaintenanceFragment(apRv_maintenance);
+                maintenanceRecyclerViewAdapter = create_apRv_maintenance();
+                fragment = new MaintenanceFragment(maintenanceRecyclerViewAdapter);
+                return fragment;
             case 1:
-                return new OtherFragment(apRv_maintenance);
+                fragment = new OtherFragment(maintenanceRecyclerViewAdapter, selectMaintenanceItemActivity);;
+                return fragment;
             default:
                 return null;
         }
@@ -55,10 +61,10 @@ public class ApVp_MaintenancePage extends FragmentStateAdapter {
         return pageNum;
     }
 
-    public ApRv_maintenance create_apRv_maintenance(){
+    public MaintenanceRecyclerViewAdapter create_apRv_maintenance(){
         setting_apRv_maintenance();
-        return new ApRv_maintenance(context, ItemTitleList_maintenance, ItemDistanceList_maintenance, ItemLifeSpanList_maintenance,
-                ItemTypeList_maintenance);
+        return new MaintenanceRecyclerViewAdapter(context, ItemTitleList_maintenance, ItemDistanceList_maintenance, ItemLifeSpanList_maintenance,
+                ItemTypeList_maintenance, selectMaintenanceItemActivity);
     }
 
     public void setting_apRv_maintenance(){

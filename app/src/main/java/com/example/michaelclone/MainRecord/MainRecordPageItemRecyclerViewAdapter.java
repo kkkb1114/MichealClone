@@ -10,22 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.michaelclone.DataBase.MainRecordItem;
-import com.example.michaelclone.DataBase.MainRecordPage;
-import com.example.michaelclone.DataBase.MainRecord_Data;
 import com.example.michaelclone.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class ApRv_MainRecordPageItem extends RecyclerView.Adapter<ApRv_MainRecordPageItem.ViewHolder> {
+public class MainRecordPageItemRecyclerViewAdapter extends RecyclerView.Adapter<MainRecordPageItemRecyclerViewAdapter.ViewHolder> {
 
     Context context;
     ArrayList<String> nameList;
     ArrayList<String> costList;
     DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-    public ApRv_MainRecordPageItem(Context context, ArrayList<String> nameList, ArrayList<String> costList) {
+    public MainRecordPageItemRecyclerViewAdapter(Context context, ArrayList<String> nameList, ArrayList<String> costList) {
         this.context = context;
         this.nameList = nameList;
         this.costList = costList;

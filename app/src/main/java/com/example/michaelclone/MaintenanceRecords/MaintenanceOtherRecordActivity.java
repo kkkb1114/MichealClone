@@ -9,15 +9,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.michaelclone.DataBase.MainRecord;
-import com.example.michaelclone.DataBase.MainRecordItem;
-import com.example.michaelclone.DataBase.MainRecordItem_DataBridge;
-import com.example.michaelclone.DataBase.MainRecord_Data;
-import com.example.michaelclone.DataBase.MainRecord_DataBridge;
+import com.example.michaelclone.DataBase.CarbookRecord;
+import com.example.michaelclone.DataBase.CarbookRecordItem;
+import com.example.michaelclone.DataBase.CarbookRecordItem_DataBridge;
+import com.example.michaelclone.DataBase.CarbookRecord_Data;
+import com.example.michaelclone.DataBase.CarbookRecord_DataBridge;
 import com.example.michaelclone.DataBase.Time_DataBridge;
 import com.example.michaelclone.DialogManager;
 import com.example.michaelclone.MainRecord.MainrecordActivity;
@@ -85,9 +84,9 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
             case R.id.maintenanceOtherRecordComplete:
                 try {
                     // 정비 기록 데이터 저장
-                    MainRecord_DataBridge mainRecordDataBridge = new MainRecord_DataBridge();
+                    CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
                     Time_DataBridge time_dataBridge = new Time_DataBridge();
-                    MainRecord test = MainRecord_Data.mainRecordArrayList.get(0) ;
+                    CarbookRecord test = CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0) ;
 
 
                     test.carbookRecordIsHidden = 0;
@@ -98,38 +97,37 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
 
 
-                    mainRecordDataBridge.MainRecordInsert(new MainRecord(MainRecord_Data.mainRecordArrayList.get(0)._id,
-                            MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode,
-                            MainRecord_Data.mainRecordArrayList.get(0).carbookRecordExpendDate,
-                            MainRecord_Data.mainRecordArrayList.get(0).carbookRecordIsHidden,
-                            MainRecord_Data.mainRecordArrayList.get(0).carbookRecordTotalDistance,
-                            MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRegTime,
-                            MainRecord_Data.mainRecordArrayList.get(0).carbookRecordUpdateTime));
+                    mainRecordDataBridge.MainRecordInsert(new CarbookRecord(CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0)._id,
+                            CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordRepairMode,
+                            CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordExpendDate,
+                            CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordIsHidden,
+                            CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordTotalDistance,
+                            CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordRegTime,
+                            CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordUpdateTime));
 
                     // 정비 항목 데이터 저장
-                    MainRecordItem_DataBridge mainRecordItemDataBridge = new MainRecordItem_DataBridge();
-                    for (int i=0; i<MainRecord_Data.mainRecordItemArrayList.size(); i++){
-                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemCategoryCode = "123";
-                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemIsHidden = 0;
-                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordId = mainRecordDataBridge.MainRecordSelectLastId();
-                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemRegTime = time_dataBridge.getRealTime();
-                        MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemUpdateTime = time_dataBridge.getRealTime();
+                    CarbookRecordItem_DataBridge mainRecordItemDataBridge = new CarbookRecordItem_DataBridge();
+                    for (int i = 0; i< CarbookRecord_Data.carbookRecordItemArrayList_insertDB.size(); i++){
+                        CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemCategoryCode = "123";
+                        CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemIsHidden = 0;
+                        CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordId = mainRecordDataBridge.MainRecordSelectLastId();
+                        CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemRegTime = time_dataBridge.getRealTime();
+                        CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemUpdateTime = time_dataBridge.getRealTime();
 
                         Log.i("!!!", String.valueOf(mainRecordDataBridge.MainRecordSelectLastId()));
 
-                        mainRecordItemDataBridge.MainRecordItemInsert(new MainRecordItem(MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordId,
-                                MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemCategoryCode,
-                                MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemCategoryName,
-                                MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemExpenseMemo,
-                                MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemExpenseCost,
-                                MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemIsHidden,
-                                MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemRegTime,
-                                MainRecord_Data.mainRecordItemArrayList.get(i).carbookRecordItemUpdateTime));
+                        mainRecordItemDataBridge.MainRecordItemInsert(new CarbookRecordItem(CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordId,
+                                CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemCategoryCode,
+                                CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemCategoryName,
+                                CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemExpenseMemo,
+                                CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemExpenseCost,
+                                CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemIsHidden,
+                                CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemRegTime,
+                                CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemUpdateTime));
                     }
                     // 정비 항목 데이터 저장
-
-                    for (int i=0; i<MainRecord_Data.mainRecordItemArrayList.size(); i++){
-                        Log.i("기록 완료 입력 데이터 체크", String.valueOf(MainRecord_Data.mainRecordItemArrayList.get(i)));
+                    for (int i = 0; i< CarbookRecord_Data.carbookRecordItemArrayList_insertDB.size(); i++){
+                        Log.i("기록 완료 입력 데이터 체크", String.valueOf(CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i)));
                     }
 
                     Intent intent = new Intent(MaintenanceOtherRecordActivity.this, MainrecordActivity.class);
@@ -148,7 +146,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         mDate = new Date(mNow);            // Date 객체에 디바이스 표준 시간 적용
 
         // 사용자가 달력 날짜를 선택한다고 지정할때를 대비해서 처음에 사용자 선택 날짜를 오늘로 지정할때 미리 오늘 날짜로 연월일을 디비 저장용 해당 기록 지출 날짜로 지정해놓는다.
-        MainRecord_Data.mainRecordArrayList.get(0).carbookRecordExpendDate = mFormat_saveOnly.format(mDate);
+        CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordExpendDate = mFormat_saveOnly.format(mDate);
         return mFormat.format(mDate);      // SimpleDateFormat에 적용된 양식으로 시간값 문자열 반환
     }
 

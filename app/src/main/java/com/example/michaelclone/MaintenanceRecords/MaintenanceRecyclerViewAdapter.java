@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.michaelclone.R;
@@ -21,7 +20,7 @@ import com.example.michaelclone.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.ViewHolder> {
+public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<MaintenanceRecyclerViewAdapter.ViewHolder> {
 
     ArrayList<String> ItemTitleList;
     ArrayList<String> ItemDistanceList;
@@ -30,18 +29,20 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
     HashMap<Integer, Boolean> checkedHashMap_maintenance = new HashMap<>();
     Context context;
     boolean setChecked = false; // checkedHashMap_maintenance 처음에 초기화 했는지 확인 변수
+    SelectMaintenanceItemActivity selectMaintenanceItemActivity;
 
     /**
      * 1. ItemTypeList을 기준으로 항목을 추가할지 새 항목 추가 버튼을 추가할지 정해지며 | 0: 항목, 1: 추가버튼 | 이다.
      *
      * **/
-    public ApRv_maintenance(Context context, ArrayList<String> ItemTitleList, ArrayList<String> ItemDistanceList, ArrayList<String> ItemLifeSpanList,
-                            ArrayList<Integer> ItemTypeList){
+    public MaintenanceRecyclerViewAdapter(Context context, ArrayList<String> ItemTitleList, ArrayList<String> ItemDistanceList, ArrayList<String> ItemLifeSpanList,
+                                          ArrayList<Integer> ItemTypeList, SelectMaintenanceItemActivity selectMaintenanceItemActivity){
         this.ItemTitleList = ItemTitleList;
         this.ItemDistanceList = ItemDistanceList;
         this.ItemLifeSpanList = ItemLifeSpanList;
         this.ItemTypeList = ItemTypeList;
         this.context = context;
+        this.selectMaintenanceItemActivity = selectMaintenanceItemActivity;
     }
 
 
@@ -76,7 +77,22 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
             checkCheckBox(holder, position);
             // 지울것!!
             Log.i("정비 항목 새로고침", "onBindViewHolder");
+            holder.itemView.setOnClickListener(getCheckedClickListener(position));
         }
+    }
+
+    ArrayList<Integer> checkList = new ArrayList<>();
+    public ArrayList<Integer> getCheckList(){
+        return checkList;
+    }
+    View.OnClickListener getCheckedClickListener(int position){
+        return v -> {
+            if (checkList.contains(position)){
+                checkList.remove(Integer.valueOf(position));
+            }else{
+                checkList.add(position);
+            }
+        };
     }
 
     @Override
@@ -147,7 +163,7 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
             tv_maintenance_itemMonth.setText(ItemLifeSpanList.get(position));
 
             cb_setChecked(position);
-            Ln_maintenance_item.setOnClickListener(clickListener);
+            Ln_maintenance_item.setOnClickListener(getCheckedClickListener(position));
             cb_maintenance_itemSelect.setOnClickListener(clickListener);
 
             itemBlock();
@@ -188,19 +204,27 @@ public class ApRv_maintenance extends RecyclerView.Adapter<ApRv_maintenance.View
                     case R.id.Ln_maintenance_item:
                         if (!cb_maintenance_itemSelect.isChecked()){
                             cb_maintenance_itemSelect.setChecked(true);
-                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_maintenance_itemTitle.getText().toString(), 0);
+                            Data_MaintenanceRecords.al_itemTitleList.add(tv_maintenance_itemTitle.getText().toString());
+                            selectMaintenanceItemActivity.tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
+                            //SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_maintenance_itemTitle.getText().toString(), 0);
                         }else {
                             cb_maintenance_itemSelect.setChecked(false);
-                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_maintenance_itemTitle.getText().toString(), 1);
+                            Data_MaintenanceRecords.al_itemTitleList.remove(tv_maintenance_itemTitle.getText().toString());
+                            if (Data_MaintenanceRecords.al_itemTitleList.size() <= 0){
+                                selectMaintenanceItemActivity.tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
+                                selectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
+                                selectMaintenanceItemActivity.tv_selectionConfirm.setClickable(false);
+                            }else {
+                                selectMaintenanceItemActivity.tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
+                            }
+                            //SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_maintenance_itemTitle.getText().toString(), 1);
                         }
                         break;
                     case R.id.cb_maintenance_itemSelect:
                         if (cb_maintenance_itemSelect.isChecked()){
                             cb_maintenance_itemSelect.setChecked(true);
-                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_maintenance_itemTitle.getText().toString(), 0);
                         }else {
                             cb_maintenance_itemSelect.setChecked(false);
-                            SelectMaintenanceItemActivity.itemClickChangeCount(context, tv_maintenance_itemTitle.getText().toString(), 1);
                         }
                         break;
                 }

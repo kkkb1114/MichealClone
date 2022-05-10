@@ -1,17 +1,14 @@
 package com.example.michaelclone.DataBase;
 
-import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class MainRecord_Data {
+public class CarbookRecord_Data {
 
-    public static ArrayList<MainRecord> mainRecordArrayList = new ArrayList<>();
-    public static ArrayList<MainRecordItem> mainRecordItemArrayList = new ArrayList<>();
+    public static ArrayList<CarbookRecord> carbookRecordArrayList_insertDB = new ArrayList<>();
+    public static ArrayList<CarbookRecordItem> carbookRecordItemArrayList_insertDB = new ArrayList<>();
 
-    public static ArrayList<MainRecord> MainRecordPageRecordArrayList = new ArrayList<>();
-    public static ArrayList<MainRecordItem> MainRecordPageRecordItemArrayList = new ArrayList<>();
+    public static ArrayList<CarbookRecord> carbookRecordPageRecordArrayList_getDB = new ArrayList<>();
+    public static ArrayList<CarbookRecordItem> MainRecordPageRecordItemArrayList_getDB = new ArrayList<>();
 
     public static ArrayList<MainRecordPage> MainRecordPageArrayList = new ArrayList<>();
 
@@ -41,8 +38,8 @@ public class MainRecord_Data {
 
     // sqlite에서 받아온 데이트 넣어주고 새 데이터를 받을 경우 초기화 한 후 다시 받음.
     public void MainRecordPageListClear(){
-        MainRecordPageRecordArrayList.clear();
-        MainRecordPageRecordItemArrayList.clear();
+        carbookRecordPageRecordArrayList_getDB.clear();
+        MainRecordPageRecordItemArrayList_getDB.clear();
     }
 
 }

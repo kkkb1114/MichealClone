@@ -9,25 +9,25 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class MainRecord_DB {
+public class CarbookRecord_DB {
 
     final String TABLE_NAME = "carbookRecord";
 
-    public static synchronized MainRecord_DB getInstance(@Nullable Context context, String name, SQLiteDatabase.CursorFactory factory,int version){
+    public static synchronized CarbookRecord_DB getInstance(@Nullable Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         if (MichaelClone_DBHelper.michaelCloneDbHelper_Instance == null){
             MichaelClone_DBHelper.michaelCloneDbHelper_Instance = MichaelClone_DBHelper.getInstance(context, name, factory, version);
         }
-        return new MainRecord_DB();
+        return new CarbookRecord_DB();
     }
 
-    public void MainRecordDB_insert(MainRecord mainRecord){
+    public void MainRecordDB_insert(CarbookRecord carbookRecord){
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
             // 트랜젝션 시작 (이렇게 트랜젝션을 이용하여 명시적으로 쿼리문을 실행할 것이라 해줘야 쿼리문이 동작하는 도중에 다른 쿼리문에 끼어들일이 없다.)
             db.beginTransaction();
-            db.execSQL("INSERT INTO carbookRecord VALUES (null, "+mainRecord.carbookRecordRepairMode+" , " +"'"+mainRecord.carbookRecordExpendDate+"'"+" , "
-                    +mainRecord.carbookRecordIsHidden+" , "+"'"+mainRecord.carbookRecordTotalDistance+"'"+","+"'"+mainRecord.carbookRecordRegTime+"'"+","
-                    +"'"+mainRecord.carbookRecordUpdateTime+"'"+");");
+            db.execSQL("INSERT INTO carbookRecord VALUES (null, "+ carbookRecord.carbookRecordRepairMode+" , " +"'"+ carbookRecord.carbookRecordExpendDate+"'"+" , "
+                    + carbookRecord.carbookRecordIsHidden+" , "+"'"+ carbookRecord.carbookRecordTotalDistance+"'"+","+"'"+ carbookRecord.carbookRecordRegTime+"'"+","
+                    +"'"+ carbookRecord.carbookRecordUpdateTime+"'"+");");
             // 위 쿼리문 실행 했다는 것을 알림.
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -40,16 +40,16 @@ public class MainRecord_DB {
         }
     }
 
-    public void MainRecordDB_update(MainRecord mainRecord, int _id){
+    public void MainRecordDB_update(CarbookRecord carbookRecord, int _id){
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
             db.beginTransaction();
-            db.execSQL("UPDATE carbookRecord SET carbookRecordRepairMode = " + mainRecord.carbookRecordRepairMode + ", "
-                    + "carbookRecordExpendDate = " + "'"+ mainRecord.carbookRecordExpendDate +"'" + ","
-                    + "carbookRecordIsHidden = " + mainRecord.carbookRecordIsHidden + ","
-                    + "carbookRecordTotalDistance = " + "'"+ mainRecord.carbookRecordTotalDistance +"'" + ","
-                    + "carbookRecordRegTime = " + "'"+ mainRecord.carbookRecordRegTime +"'" + ","
-                    + "carbookRecordUpdateTime = " + "'"+ mainRecord.carbookRecordUpdateTime +"'" + ","
+            db.execSQL("UPDATE carbookRecord SET carbookRecordRepairMode = " + carbookRecord.carbookRecordRepairMode + ", "
+                    + "carbookRecordExpendDate = " + "'"+ carbookRecord.carbookRecordExpendDate +"'" + ","
+                    + "carbookRecordIsHidden = " + carbookRecord.carbookRecordIsHidden + ","
+                    + "carbookRecordTotalDistance = " + "'"+ carbookRecord.carbookRecordTotalDistance +"'" + ","
+                    + "carbookRecordRegTime = " + "'"+ carbookRecord.carbookRecordRegTime +"'" + ","
+                    + "carbookRecordUpdateTime = " + "'"+ carbookRecord.carbookRecordUpdateTime +"'" + ","
                     + "WHERE _id = " + _id);
             // 위 쿼리문 실행 했다는 것을 알림.
             db.setTransactionSuccessful();
@@ -63,22 +63,22 @@ public class MainRecord_DB {
         }
     }
 
-    public void MainRecordDB_delete(MainRecord mainRecord, int _id){
+    public void MainRecordDB_delete(CarbookRecord carbookRecord, int _id){
         try {
             SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
-            db.execSQL("UPDATE carbookRecord SET carbookRecordIsHidden = "+ mainRecord.carbookRecordIsHidden +","
+            db.execSQL("UPDATE carbookRecord SET carbookRecordIsHidden = "+ carbookRecord.carbookRecordIsHidden +","
                     + "WHERE _id = "+ _id);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<MainRecord> getMainRecordList(){
+    public ArrayList<CarbookRecord> getMainRecordList(){
         try {
             Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecord", null);
-            ArrayList<MainRecord> mainRecords = new ArrayList<>();
-            mainRecords = getMainRecordCursor(cursor, mainRecords);
-            return mainRecords;
+            ArrayList<CarbookRecord> CarbookRecords = new ArrayList<>();
+            CarbookRecords = getMainRecordCursor(cursor, CarbookRecords);
+            return CarbookRecords;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,16 +113,16 @@ public class MainRecord_DB {
         return 0;
     }
 
-    private ArrayList<MainRecord> getMainRecordCursor(Cursor cursor, ArrayList<MainRecord> mainRecords){
+    private ArrayList<CarbookRecord> getMainRecordCursor(Cursor cursor, ArrayList<CarbookRecord> CarbookRecords){
         while (cursor.moveToNext()){
             //todo 여기서 cursor.getInt(0)으로 id 값을 받을수 있지 않을까 했는데 안받아져서 일단 뺐다.
-            MainRecord mainRecord = new MainRecord(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4),
+            CarbookRecord carbookRecord = new CarbookRecord(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4),
                     cursor.getString(5), cursor.getString(6));
 
-            mainRecords.add(mainRecord);
+            CarbookRecords.add(carbookRecord);
         }
         cursor.close();
-        return mainRecords;
+        return CarbookRecords;
     }
 
     public ArrayList<MainRecordPage> getMainRecordData(){

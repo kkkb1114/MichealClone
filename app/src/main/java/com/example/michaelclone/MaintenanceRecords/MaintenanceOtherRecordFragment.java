@@ -7,7 +7,6 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,9 +26,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -43,23 +40,17 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.michaelclone.DataBase.MainRecord;
-import com.example.michaelclone.DataBase.MainRecordItem;
-import com.example.michaelclone.DataBase.MainRecord_Data;
+import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.Data_Record;
 import com.example.michaelclone.R;
 
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 
 public class MaintenanceOtherRecordFragment extends Fragment implements View.OnClickListener {
 
@@ -67,7 +58,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
 
     // 선택 항목 리스트
     RecyclerView rv_MtOtRecorditemList;
-    Ap_MaintenanceOtherRecord ap_maintenanceOtherRecord;
+    MaintenanceOtherRecordAdapter _maintenanceOtherRecordAdapter;
     ArrayList<String> MaintenanceOtherList = new ArrayList<>();
 
     // 카메라, 앨범 선택 핸들러
@@ -75,7 +66,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
 
     // 이미지 첨부 변수
     RecyclerView rv_MtOtImageList;
-    VpAp_maintenanceOther vpAp_maintenanceOther;
+    MaintenanceOtherImageViewPagerAdapter maintenanceOtherImageViewPagerAdapter;
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     ArrayList<String> typeList = new ArrayList<>(); // type이 1이면 이미지 적용된 레이아웃, 0이면 이미지 추가 레이아웃
     ArrayAdapter<String> arrayAdapter;
@@ -108,7 +99,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         maintenanceOtherRecordActivity = new MaintenanceOtherRecordActivity();
 
         // 정비 모드를 클릭하지 않았을 때를 대비해서 미리 정비소 모드로 지정해 놓는다.
-        MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode = 0;
+        CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordRepairMode = 0;
 
         setView(view);
         mStartForResult();
@@ -166,7 +157,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
 
             @Override
             public void afterTextChanged(Editable s) {
-                MainRecord_Data.mainRecordArrayList.get(0).carbookRecordTotalDistance = s.toString();
+                CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordTotalDistance = s.toString();
             }
         };
 
@@ -203,7 +194,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 View_maintenanceLocationLine.setVisibility(View.VISIBLE);
 
                 // 정비 모드 
-                MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode = 0;
+                CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordRepairMode = 0;
                 
                 break;
             case R.id.tv_selfMaintenance:
@@ -223,7 +214,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 View_maintenanceLocationLine.setVisibility(View.GONE);
 
                 // 정비 모드
-                MainRecord_Data.mainRecordArrayList.get(0).carbookRecordRepairMode = 1;
+                CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordRepairMode = 1;
 
                 break;
         }
@@ -233,9 +224,9 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     public void set_RvSelectItem(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         rv_MtOtRecorditemList.setLayoutManager(linearLayoutManager);
-        ap_maintenanceOtherRecord = new Ap_MaintenanceOtherRecord(context, Data_MaintenanceRecords.al_itemTitleList);
-        rv_MtOtRecorditemList.setAdapter(ap_maintenanceOtherRecord);
-        ap_maintenanceOtherRecord.notifyDataSetChanged();
+        _maintenanceOtherRecordAdapter = new MaintenanceOtherRecordAdapter(context, Data_MaintenanceRecords.al_itemTitleList);
+        rv_MtOtRecorditemList.setAdapter(_maintenanceOtherRecordAdapter);
+        _maintenanceOtherRecordAdapter.notifyDataSetChanged();
     }
 
     // 뷰페이저 세팅
@@ -243,8 +234,8 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         typeList.add("0");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         rv_MtOtImageList.setLayoutManager(linearLayoutManager);
-        vpAp_maintenanceOther = new VpAp_maintenanceOther(context, bitmapArrayList, typeList, MtOt_imageCount);
-        rv_MtOtImageList.setAdapter(vpAp_maintenanceOther);
+        maintenanceOtherImageViewPagerAdapter = new MaintenanceOtherImageViewPagerAdapter(context, bitmapArrayList, typeList, MtOt_imageCount);
+        rv_MtOtImageList.setAdapter(maintenanceOtherImageViewPagerAdapter);
     }
 
     void cropImage() {
@@ -410,7 +401,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                         typeList.add("0");
                                     }
                                     // 리사이클러뷰 새로고침
-                                    vpAp_maintenanceOther.notifyDataSetChanged();
+                                    maintenanceOtherImageViewPagerAdapter.notifyDataSetChanged();
                                     imageCrop = false;
                                 }
 
@@ -440,7 +431,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                                     typeList.add("0");
                                                 }
                                                 // 리사이클러뷰 새로고침
-                                                vpAp_maintenanceOther.notifyDataSetChanged();
+                                                maintenanceOtherImageViewPagerAdapter.notifyDataSetChanged();
                                             }
                                         }else if (clipData.getItemCount() <= 5){
                                             if (clipData.getItemCount()+bitmapArrayList.size() > 5){ // 선택한 사진 + 이미 있는 사진 개수가 5개 초과면 제한 안내
@@ -460,8 +451,8 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                                     typeList.add("0");
                                                 }
                                                 // 리사이클러뷰 셋
-                                                rv_MtOtImageList.setAdapter(vpAp_maintenanceOther);
-                                                vpAp_maintenanceOther.notifyDataSetChanged();
+                                                rv_MtOtImageList.setAdapter(maintenanceOtherImageViewPagerAdapter);
+                                                maintenanceOtherImageViewPagerAdapter.notifyDataSetChanged();
                                             }
                                         }
                                         MtOt_imageCount.setText(bitmapArrayList.size()+"/5");
