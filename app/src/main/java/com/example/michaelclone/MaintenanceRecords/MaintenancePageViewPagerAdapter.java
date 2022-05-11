@@ -1,6 +1,7 @@
 package com.example.michaelclone.MaintenanceRecords;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,7 +24,11 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
     ArrayList<Integer> ItemTypeList_maintenance = new ArrayList<>();
     MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
     SelectMaintenanceItemActivity selectMaintenanceItemActivity;
+    OtherFragmentRecyclerViewAdapter otherFragmentRecyclerViewAdapter;
     Context context;
+    // 기타 항목
+    ArrayList<String> ItemTitleList_other = new ArrayList<>();
+    ArrayList<Integer> ItemTypeList_other = new ArrayList<>();
 
     /**
      * 1. 생성자로 페이지 개수를 받고 그 개수만큼 페이지를 생성한다.
@@ -36,21 +41,30 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
         this.selectMaintenanceItemActivity = selectMaintenanceItemActivity;
     }
 
-    Fragment fragment;
-    Fragment getFragment(){
-        return fragment;
+    // maintenanceFragment와 otherFragment에 속한 각 리사이클러뷰가 서로 영향을 줘야해서 생성자 생성 순서를 맞췄다.
+    Fragment maintenanceFragment;
+    Fragment otherFragment;
+    Fragment getFragment(int fragmentType){
+        if (fragmentType == 0){
+            return maintenanceFragment;
+        }else {
+            return otherFragment;
+        }
     }
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+        SettingItemList();
+        여기서 otherFragmentRecyclerViewAdapter생성자에 maintenanceRecyclerViewAdapter를 빈 생성자를 넣어서 제대로 동작이 안된다.
+        otherFragmentRecyclerViewAdapter = new OtherFragmentRecyclerViewAdapter(context, ItemTitleList_other, ItemTypeList_other, maintenanceRecyclerViewAdapter, selectMaintenanceItemActivity);
+        maintenanceRecyclerViewAdapter = create_apRv_maintenance(otherFragmentRecyclerViewAdapter);
+        maintenanceFragment = new MaintenanceFragment(maintenanceRecyclerViewAdapter);
         switch (position){
             case 0:
-                maintenanceRecyclerViewAdapter = create_apRv_maintenance();
-                fragment = new MaintenanceFragment(maintenanceRecyclerViewAdapter);
-                return fragment;
+                return maintenanceFragment;
             case 1:
-                fragment = new OtherFragment(maintenanceRecyclerViewAdapter, selectMaintenanceItemActivity);;
-                return fragment;
+                otherFragment = new OtherFragment(otherFragmentRecyclerViewAdapter);
+                return otherFragment;
             default:
                 return null;
         }
@@ -61,10 +75,10 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
         return pageNum;
     }
 
-    public MaintenanceRecyclerViewAdapter create_apRv_maintenance(){
+    public MaintenanceRecyclerViewAdapter create_apRv_maintenance(OtherFragmentRecyclerViewAdapter otherFragmentRecyclerViewAdapter){
         setting_apRv_maintenance();
         return new MaintenanceRecyclerViewAdapter(context, ItemTitleList_maintenance, ItemDistanceList_maintenance, ItemLifeSpanList_maintenance,
-                ItemTypeList_maintenance, selectMaintenanceItemActivity);
+                ItemTypeList_maintenance, selectMaintenanceItemActivity, otherFragmentRecyclerViewAdapter);
     }
 
     public void setting_apRv_maintenance(){
@@ -101,9 +115,27 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
             ItemTypeList_maintenance.add(0);
         }
         ItemTypeList_maintenance.add(1);
-
     }
 
+
+    // 기타 항목 데이터
+    public void SettingItemList(){
+
+        // 기타 항목
+        String[] OtherItemTitle = {getResourcesString(R.string.highPass), getResourcesString(R.string.tollFee), getResourcesString(R.string.parkingFee),
+                getResourcesString(R.string.carWash), getResourcesString(R.string.fuelAdditive), getResourcesString(R.string.carInspection),
+                getResourcesString(R.string.vehicleSupplies), getResourcesString(R.string.outdoorProducts), getResourcesString(R.string.indoorProducts),
+                getResourcesString(R.string.carInsurance), getResourcesString(R.string.blackBox), getResourcesString(R.string.trafficFine),
+                getResourcesString(R.string.automobileTax), getResourcesString(R.string.tinting), getResourcesString(R.string.sheetMetalPainting),
+                getResourcesString(R.string.navigation), getResourcesString(R.string.rearCamera), getResourcesString(R.string.carAudio)};
+
+        for (int i=0; i<OtherItemTitle.length-1; i++){
+            ItemTitleList_other.add(OtherItemTitle[i]);
+            ItemTypeList_other.add(0);
+        }
+        ItemTypeList_other.add(1);
+    }
+    
     public String getResourcesString(int id){
         return context.getResources().getString(id);
     }

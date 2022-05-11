@@ -34,8 +34,8 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     private ViewPager2 vp_maintenanceOther;
     private MaintenancePageViewPagerAdapter ad_maintenancePage;
 
-    static public TextView tv_selectionConfirm;
-    static public TextView tv_itemCount;
+    public TextView tv_selectionConfirm;
+    public TextView tv_itemCount;
     //static public ArrayList<String> al_itemTitleList = new ArrayList<>();
 
     @Override
@@ -81,17 +81,19 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
 
         }, 1000);
 
-
         tv_selectionConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ad_maintenancePage.getFragment() instanceof MaintenanceFragment){
-                    Log.e("123123123", ((MaintenanceFragment)ad_maintenancePage.getFragment()).maintenanceRecyclerViewAdapter.getCheckList().toString());
-                }
 
-                Intent intent = new Intent(SelectMaintenanceItemActivity.this, MaintenanceOtherRecordActivity.class);
-                startActivity(intent);
-                finish();
+                if (ad_maintenancePage.getFragment(0) instanceof MaintenanceFragment && ad_maintenancePage.getFragment(1) instanceof OtherFragment){
+                    Log.e("12312312366666", ((MaintenanceFragment)ad_maintenancePage.getFragment(0)).maintenanceRecyclerViewAdapter.getCheckList().toString());
+                    Log.e("12312312355555", ((OtherFragment)ad_maintenancePage.getFragment(1)).otherFragmentRecyclerViewAdapter.getCheckList().toString());
+                    Intent intent = new Intent(SelectMaintenanceItemActivity.this, MaintenanceOtherRecordActivity.class);
+                    intent.putExtra("selectMaintenanceItemList", ((MaintenanceFragment) ad_maintenancePage.getFragment(0)).maintenanceRecyclerViewAdapter.getCheckList());
+                    intent.putExtra("selectOtherItemList", ((OtherFragment) ad_maintenancePage.getFragment(1)).otherFragmentRecyclerViewAdapter.getCheckList());
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
         // 클릭 이벤트를 지정한 후에 막아야 막힌다.
@@ -109,7 +111,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         tabNameList.add(getResources().getString(R.string.maintenanceItems));
         tabNameList.add(getResources().getString(R.string.otherItems));
 
-        ad_maintenancePage = new MaintenancePageViewPagerAdapter(this, 2, context, new SelectMaintenanceItemActivity());
+        ad_maintenancePage = new MaintenancePageViewPagerAdapter(this, 2, context, this);
         vp_maintenanceOther.setAdapter(ad_maintenancePage);
 
         new TabLayoutMediator(tl_maintenanceOther, vp_maintenanceOther, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -119,47 +121,4 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
             }
         }).attach();
     }
-
-    /*항목을 클릭할때마다 클릭하여 체크된 항목이 0개일경우 선택완료 버튼을 잠궈버리며 1개 이상이면 선택완료로 다음 페이지에
-    넘어갈수 있게 했다.
-    또한 리사이클러뷰는 뷰를 재활용하기에 체크되있는 상태에서 그냥 스크롤하면 그대로 체크 true상태의 뷰가 딸려올수 있어 수동 체크와 리사이클러뷰를 스크롤해서 자동으로 체크된 자동 체크를
-    구분해서 예외처리 한다.*/
-    // 0: 항목 선택, 1: 항목 선택 취소
-    /**
-     * - 전역 메소드, 변수가 워낙 많아서 로직을 바꾸는 중
-     * **/
-    /*static public void itemClickChangeCount(Context context, String title, int CheckedItemCount){
-        MainRecordItem mainRecordItem = new MainRecordItem(0,
-                null,
-                title,
-                null,
-                null,
-                0,
-                null,
-                null);
-        if (CheckedItemCount == 0){
-            // 리사이클러뷰 스크롤로 인한 자동 추가가 아니면 실행
-            Data_MaintenanceRecords.al_itemTitleList.add(title);
-            tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
-            SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
-            SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
-
-            // 선택할때마다 바로 집어넣고 취소하면 뺀다.
-            MainRecord_Data.mainRecordItemArrayList.add(mainRecordItem);
-        }else {
-            // 리사이클러뷰 스크롤로 인한 지동 추가가 아니면 실행
-                Data_MaintenanceRecords.al_itemTitleList.remove(title);
-                if (Data_MaintenanceRecords.al_itemTitleList.size() <= 0){
-                    tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
-                    SelectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
-                    SelectMaintenanceItemActivity.tv_selectionConfirm.setClickable(false);
-                }else {
-                    tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size()+context.getResources().getString(R.string.selectionCount));
-            }
-
-            // 선택할때마다 바로 집어넣고 취소하면 뺀다.
-            MainRecord_Data.mainRecordItemArrayList.remove(1);
-
-        }
-    }*/
 }

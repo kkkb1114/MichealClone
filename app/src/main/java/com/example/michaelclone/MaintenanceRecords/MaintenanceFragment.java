@@ -18,14 +18,7 @@ public class MaintenanceFragment extends Fragment {
 
     RecyclerView rv_maintenance;
     MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
-
     Context context;
-
-    /*// 정비 항목
-    ArrayList<String> ItemTitleList_maintenance = new ArrayList<>();
-    ArrayList<String> ItemDistanceList_maintenance = new ArrayList<>();
-    ArrayList<String> ItemLifeSpanList_maintenance = new ArrayList<>();
-    ArrayList<Integer> ItemTypeList_maintenance = new ArrayList<>();*/
 
     public MaintenanceFragment(MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter) {
         this.maintenanceRecyclerViewAdapter = maintenanceRecyclerViewAdapter;

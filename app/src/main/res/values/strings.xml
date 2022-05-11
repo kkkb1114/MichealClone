@@ -38,7 +38,6 @@
     <string name="selectionCount"> 개 항목</string>
     <string name="month">개월</string>
     <string name="split">|</string>
-    <string name="MaintenanceItemSelectionRecommend">항목을 선택해 주세요</string>
     <string name="change_item">+ 항목 변경</string>
     <string name="maintenanceMode">정비모드</string>
     <string name="repairShop">정비소</string>

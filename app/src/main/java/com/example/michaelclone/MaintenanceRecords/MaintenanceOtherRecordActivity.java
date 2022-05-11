@@ -23,6 +23,7 @@ import com.example.michaelclone.MainRecord.MainrecordActivity;
 import com.example.michaelclone.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -50,6 +51,8 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maintenance_other_record);
 
+        getIntentDate();
+
         try {
             mContext = this;
             setView();
@@ -60,7 +63,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         }
     }
 
-    public void setView(){
+    public void setView() {
         tv_date = findViewById(R.id.tv_date);
         ln_date = findViewById(R.id.ln_date);
         maintenanceOtherRecordComplete = findViewById(R.id.maintenanceOtherRecordComplete);
@@ -68,14 +71,23 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
     // 상단 날짜 텍스트뷰 동작 세팅
     public void setActionView() {
-        tv_date.setText(getDate()+getDateDay(mDate));
+        tv_date.setText(getDate() + getDateDay(mDate));
         ln_date.setOnClickListener(this);
         maintenanceOtherRecordComplete.setOnClickListener(this);
     }
 
+    // 정비, 기타 항목 선택 화면에서 intent로 받은 2개의 ArrayList를 1개의 ArrayList로 합치기 위한 메소드
+    public void getIntentDate() {
+        Intent intent = getIntent();
+        ArrayList<String> selectMaintenanceItemList = (ArrayList<String>) intent.getSerializableExtra("selectMaintenanceItemList");
+        ArrayList<String> selectOtherItemList = (ArrayList<String>) intent.getSerializableExtra("selectOtherItemList");
+        Log.i("selectMaintenanceItemList", String.valueOf(selectMaintenanceItemList));
+        Log.i("selectOtherItemList", String.valueOf(selectOtherItemList));
+    }
+
     @Override
-    public void onClick(View view){
-        switch (view.getId()){
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.ln_date:
                 //tv_date.setText(getDate()+getDateDay(mDate));
                 DialogManager.calenderDialog calenderDialog = new DialogManager.calenderDialog(mContext, tv_date);
@@ -86,7 +98,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     // 정비 기록 데이터 저장
                     CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
                     Time_DataBridge time_dataBridge = new Time_DataBridge();
-                    CarbookRecord test = CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0) ;
+                    CarbookRecord test = CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0);
 
 
                     test.carbookRecordIsHidden = 0;
@@ -94,7 +106,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     // 하지 않을 것 같아 이렇게 넣는다.
                     test.carbookRecordRegTime = new Time_DataBridge().getRealTime();
                     test.carbookRecordUpdateTime = new Time_DataBridge().getRealTime();
-
 
 
                     mainRecordDataBridge.MainRecordInsert(new CarbookRecord(CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0)._id,
@@ -107,7 +118,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
                     // 정비 항목 데이터 저장
                     CarbookRecordItem_DataBridge mainRecordItemDataBridge = new CarbookRecordItem_DataBridge();
-                    for (int i = 0; i< CarbookRecord_Data.carbookRecordItemArrayList_insertDB.size(); i++){
+                    for (int i = 0; i < CarbookRecord_Data.carbookRecordItemArrayList_insertDB.size(); i++) {
                         CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemCategoryCode = "123";
                         CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemIsHidden = 0;
                         CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordId = mainRecordDataBridge.MainRecordSelectLastId();
@@ -126,7 +137,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                 CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i).carbookRecordItemUpdateTime));
                     }
                     // 정비 항목 데이터 저장
-                    for (int i = 0; i< CarbookRecord_Data.carbookRecordItemArrayList_insertDB.size(); i++){
+                    for (int i = 0; i < CarbookRecord_Data.carbookRecordItemArrayList_insertDB.size(); i++) {
                         Log.i("기록 완료 입력 데이터 체크", String.valueOf(CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(i)));
                     }
 
@@ -141,7 +152,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     }
 
     // 현재 시간 구하기
-    public String getDate(){
+    public String getDate() {
         mNow = System.currentTimeMillis(); // 디바이스 기준 표준 시간 적용
         mDate = new Date(mNow);            // Date 객체에 디바이스 표준 시간 적용
 
@@ -150,12 +161,12 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         return mFormat.format(mDate);      // SimpleDateFormat에 적용된 양식으로 시간값 문자열 반환
     }
 
-    public String getDateDay(Date mDate){
+    public String getDateDay(Date mDate) {
         String DAY_OF_WEEK = "";
         Calendar cal = Calendar.getInstance();
         cal.setTime(mDate);
         int dayNum = cal.get(Calendar.DAY_OF_WEEK);
-        switch (dayNum){
+        switch (dayNum) {
             case 1:
                 DAY_OF_WEEK = " (일)";
                 break;
@@ -182,12 +193,12 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         return DAY_OF_WEEK;
     }
 
-    public void setFragment(int fragment){
+    public void setFragment(int fragment) {
         fragmentManager = getSupportFragmentManager();
         maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment();
         locationSearchFragment = new locationSearchFragment();
         fragmentTransaction = fragmentManager.beginTransaction();
-        switch (fragment){
+        switch (fragment) {
             case 1:
                 //fragmentTransaction.replace(R.id.fl_RecordPage, maintenanceOtherRecordFragment).commitAllowingStateLoss();
                 fragmentTransaction.replace(R.id.fl_RecordPage, maintenanceOtherRecordFragment);

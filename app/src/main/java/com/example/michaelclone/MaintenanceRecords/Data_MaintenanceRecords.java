@@ -14,8 +14,8 @@ public class Data_MaintenanceRecords {
     static public ArrayList<String> al_itemTitleList = new ArrayList<>();
 
     //static public HashMap
-    static public String MaintenanceSingleItemTitle = "null";
-    static public boolean MaintenanceSingleItemboolean = false;
+    static public String maintenanceSingleItemTitle = "null";
+    static public boolean maintenanceSingleItemboolean = false;
 
 
     // DB 저장할 기록 데이터 모음

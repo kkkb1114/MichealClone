@@ -20,18 +20,11 @@ public class OtherFragment extends Fragment {
 
     RecyclerView rv_other;
     OtherFragmentRecyclerViewAdapter otherFragmentRecyclerViewAdapter;
-    MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
-    SelectMaintenanceItemActivity selectMaintenanceItemActivity;
-
-    // 기타 항목
-    ArrayList<String> ItemTitleList_other = new ArrayList<>();
-    ArrayList<Integer> ItemTypeList_other = new ArrayList<>();
 
     Context context;
 
-    public OtherFragment(MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter, SelectMaintenanceItemActivity selectMaintenanceItemActivity) {
-        this.maintenanceRecyclerViewAdapter = maintenanceRecyclerViewAdapter;
-        this.selectMaintenanceItemActivity = selectMaintenanceItemActivity;
+    public OtherFragment(OtherFragmentRecyclerViewAdapter otherFragmentRecyclerViewAdapter) {
+        this.otherFragmentRecyclerViewAdapter = otherFragmentRecyclerViewAdapter;
     }
 
     @Override
@@ -56,33 +49,15 @@ public class OtherFragment extends Fragment {
     }
 
     public void setRecyclerView(RecyclerView rv_other){
-        SettingItemList();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
         // 기타 항목
         rv_other.setLayoutManager(linearLayoutManager);
-        otherFragmentRecyclerViewAdapter = new OtherFragmentRecyclerViewAdapter(context, ItemTitleList_other, ItemTypeList_other, maintenanceRecyclerViewAdapter, selectMaintenanceItemActivity);
         rv_other.setAdapter(otherFragmentRecyclerViewAdapter);
         otherFragmentRecyclerViewAdapter.notifyDataSetChanged();
     }
 
-    public void SettingItemList(){
-
-        // 기타 항목
-        String[] OtherItemTitle = {getResourcesString(R.string.highPass), getResourcesString(R.string.tollFee), getResourcesString(R.string.parkingFee),
-                getResourcesString(R.string.carWash), getResourcesString(R.string.fuelAdditive), getResourcesString(R.string.carInspection),
-                getResourcesString(R.string.vehicleSupplies), getResourcesString(R.string.outdoorProducts), getResourcesString(R.string.indoorProducts),
-                getResourcesString(R.string.carInsurance), getResourcesString(R.string.blackBox), getResourcesString(R.string.trafficFine),
-                getResourcesString(R.string.automobileTax), getResourcesString(R.string.tinting), getResourcesString(R.string.sheetMetalPainting),
-                getResourcesString(R.string.navigation), getResourcesString(R.string.rearCamera), getResourcesString(R.string.carAudio)};
-
-        for (int i=0; i<OtherItemTitle.length-1; i++){
-            ItemTitleList_other.add(OtherItemTitle[i]);
-            ItemTypeList_other.add(0);
-        }
-        ItemTypeList_other.add(1);
-    }
 
     public String getResourcesString(int id){
         return getResources().getString(id);
