@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import com.example.michaelclone.DataBase.CarbookRecord_Data;
+import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordActivity;
 import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -61,11 +62,12 @@ public class DialogManager extends AlertDialog.Builder {
         Button bt_cancel;
         String NowDate;
         String NowYear;
-        String[] array;
+        MaintenanceOtherRecordActivity maintenanceOtherRecordActivity;
 
-        public calenderDialog(@NonNull Context context, TextView tv_date) {
+        public calenderDialog(@NonNull Context context, TextView tv_date, MaintenanceOtherRecordActivity maintenanceOtherRecordActivity) {
             super(context, R.layout.dl_calendar);
             this.tv_date = tv_date;
+            this.maintenanceOtherRecordActivity = maintenanceOtherRecordActivity;
         }
 
         public void onCreate(Bundle savedInstanceState){
@@ -125,7 +127,7 @@ public class DialogManager extends AlertDialog.Builder {
                     tv_date.setText(date+getDateDay(date2));
 
                     // 기록 확인 클릭시 선택한 날짜를 디비 저장용 해당 기록 지출 날짜로 지정해놓는다.
-                    CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordExpendDate = mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate());
+                    maintenanceOtherRecordActivity.setSelectDate(mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate()));
                     // 지울것!!
                     Log.i("getSelectedDate", mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate()));
                     dismiss();
@@ -149,9 +151,6 @@ public class DialogManager extends AlertDialog.Builder {
 
             tv_dl_cal_date.setText(NowDate+getDateDay(date.getDate()));
             tv_dl_cal_year.setText(NowYear);
-            
-            // 날짜 선택할때마다 DB 저장용 ArrayList에 . 없앤 후 저장
-            CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordExpendDate = NowDate.replace(".", "");
         }
 
 

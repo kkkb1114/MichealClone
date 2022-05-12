@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class CarbookRecord_Data {
 
     public static ArrayList<CarbookRecord> carbookRecordArrayList_insertDB = new ArrayList<>();
-    public static ArrayList<CarbookRecordItem> carbookRecordItemArrayList_insertDB = new ArrayList<>();
 
     public static ArrayList<CarbookRecord> carbookRecordPageRecordArrayList_getDB = new ArrayList<>();
     public static ArrayList<CarbookRecordItem> MainRecordPageRecordItemArrayList_getDB = new ArrayList<>();

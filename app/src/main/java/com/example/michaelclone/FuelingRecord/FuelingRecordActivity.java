@@ -80,6 +80,7 @@ public class FuelingRecordActivity extends AppCompatActivity {
     long mNow;
     Date mDate;
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd");
+    String date;
 
     // 주유 금액, 주유량 자동 계산 변수
 
@@ -119,14 +120,14 @@ public class FuelingRecordActivity extends AppCompatActivity {
 
     // 상단 날짜 텍스트뷰 동작 세팅
     public void setTextView() {
-        tv_date.setText(getDate()+getDateDay(mDate));
-        DialogManager.calenderDialog calenderDialog = new DialogManager.calenderDialog(mContext, tv_date);
+       /* tv_date.setText(getDate()+getDateDay(mDate));
+        DialogManager.calenderDialog calenderDialog = new DialogManager.calenderDialog(mContext, tv_date, this);
         ln_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calenderDialog.show();
             }
-        });
+        });*/
     }
 
     // 현재 시간 구하기

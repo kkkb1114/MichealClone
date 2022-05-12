@@ -23,7 +23,6 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
     ArrayList<String> ItemLifeSpanList_maintenance = new ArrayList<>();
     ArrayList<Integer> ItemTypeList_maintenance = new ArrayList<>();
     MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
-    SelectMaintenanceItemActivity selectMaintenanceItemActivity;
     OtherFragmentRecyclerViewAdapter otherFragmentRecyclerViewAdapter;
     Context context;
     // 기타 항목
@@ -34,11 +33,10 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
      * 1. 생성자로 페이지 개수를 받고 그 개수만큼 페이지를 생성한다.
      * 2. createFragment()에서 position대로 차례로 지정한 프래그먼트 객체를 반환한다.
      * **/
-    public MaintenancePageViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, int pageNum, Context context, SelectMaintenanceItemActivity selectMaintenanceItemActivity) {
+    public MaintenancePageViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, int pageNum, Context context) {
         super(fragmentActivity);
         this.pageNum = pageNum;
         this.context = context;
-        this.selectMaintenanceItemActivity = selectMaintenanceItemActivity;
     }
 
     // maintenanceFragment와 otherFragment에 속한 각 리사이클러뷰가 서로 영향을 줘야해서 생성자 생성 순서를 맞췄다.
@@ -54,15 +52,15 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        SettingItemList();
-        여기서 otherFragmentRecyclerViewAdapter생성자에 maintenanceRecyclerViewAdapter를 빈 생성자를 넣어서 제대로 동작이 안된다.
-        otherFragmentRecyclerViewAdapter = new OtherFragmentRecyclerViewAdapter(context, ItemTitleList_other, ItemTypeList_other, maintenanceRecyclerViewAdapter, selectMaintenanceItemActivity);
-        maintenanceRecyclerViewAdapter = create_apRv_maintenance(otherFragmentRecyclerViewAdapter);
-        maintenanceFragment = new MaintenanceFragment(maintenanceRecyclerViewAdapter);
         switch (position){
             case 0:
+                // 첫번째 프래그먼트를 생성할때 각 프래그먼트에 들어갈 데이터 리스트를 생성한다.
+                SettingItemList();
+                maintenanceRecyclerViewAdapter = create_apRv_maintenance();
+                maintenanceFragment = new MaintenanceFragment(maintenanceRecyclerViewAdapter);
                 return maintenanceFragment;
             case 1:
+                otherFragmentRecyclerViewAdapter = new OtherFragmentRecyclerViewAdapter(context, ItemTitleList_other, ItemTypeList_other, maintenanceRecyclerViewAdapter);
                 otherFragment = new OtherFragment(otherFragmentRecyclerViewAdapter);
                 return otherFragment;
             default:
@@ -75,10 +73,10 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
         return pageNum;
     }
 
-    public MaintenanceRecyclerViewAdapter create_apRv_maintenance(OtherFragmentRecyclerViewAdapter otherFragmentRecyclerViewAdapter){
+    public MaintenanceRecyclerViewAdapter create_apRv_maintenance(){
         setting_apRv_maintenance();
         return new MaintenanceRecyclerViewAdapter(context, ItemTitleList_maintenance, ItemDistanceList_maintenance, ItemLifeSpanList_maintenance,
-                ItemTypeList_maintenance, selectMaintenanceItemActivity, otherFragmentRecyclerViewAdapter);
+                ItemTypeList_maintenance);
     }
 
     public void setting_apRv_maintenance(){
@@ -120,7 +118,6 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
 
     // 기타 항목 데이터
     public void SettingItemList(){
-
         // 기타 항목
         String[] OtherItemTitle = {getResourcesString(R.string.highPass), getResourcesString(R.string.tollFee), getResourcesString(R.string.parkingFee),
                 getResourcesString(R.string.carWash), getResourcesString(R.string.fuelAdditive), getResourcesString(R.string.carInspection),
@@ -134,6 +131,8 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
             ItemTypeList_other.add(0);
         }
         ItemTypeList_other.add(1);
+        Log.i("ItemTitleList_othe111r", String.valueOf(ItemTitleList_other.size()));
+        Log.i("ItemTypeList_other", String.valueOf(ItemTypeList_other.size()));
     }
     
     public String getResourcesString(int id){

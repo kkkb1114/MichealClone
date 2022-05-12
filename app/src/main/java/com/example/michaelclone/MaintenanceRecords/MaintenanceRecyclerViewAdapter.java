@@ -3,6 +3,7 @@ package com.example.michaelclone.MaintenanceRecords;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,23 +30,18 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
     HashMap<Integer, Boolean> checkedHashMap_maintenance = new HashMap<>();
     Context context;
     boolean setChecked = false; // checkedHashMap_maintenance 처음에 초기화 했는지 확인 변수
-    SelectMaintenanceItemActivity selectMaintenanceItemActivity;
     boolean maintenanceSingleItemboolean = false;
-    OtherFragmentRecyclerViewAdapter otherFragmentRecyclerViewAdapter;
 
     /**
      * 1. ItemTypeList을 기준으로 항목을 추가할지 새 항목 추가 버튼을 추가할지 정해지며 | 0: 항목, 1: 추가버튼이다.
      **/
     public MaintenanceRecyclerViewAdapter(Context context, ArrayList<String> ItemTitleList, ArrayList<String> ItemDistanceList, ArrayList<String> ItemLifeSpanList,
-                                          ArrayList<Integer> ItemTypeList, SelectMaintenanceItemActivity selectMaintenanceItemActivity,
-                                          OtherFragmentRecyclerViewAdapter otherFragmentRecyclerViewAdapter) {
+                                          ArrayList<Integer> ItemTypeList) {
         this.itemTitleList = ItemTitleList;
         this.itemDistanceList = ItemDistanceList;
         this.itemLifeSpanList = ItemLifeSpanList;
         this.itemTypeList = ItemTypeList;
         this.context = context;
-        this.selectMaintenanceItemActivity = selectMaintenanceItemActivity;
-        this.otherFragmentRecyclerViewAdapter = otherFragmentRecyclerViewAdapter;
     }
 
     @Override
@@ -68,7 +64,7 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
         } else {
             view = layoutInflater.inflate(R.layout.add_item, parent, false);
         }
-        return new ViewHolder(view, context);
+        return new ViewHolder(view, context, viewType);
     }
 
     @Override
@@ -79,12 +75,8 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             checkCheckBox(position, holder);
             holder.itemView.setOnClickListener(checkCheckBoxOnClickListener(holder));
 
-
-            // 기타 목록에서 단일 항목 클릭 여부 확인
-            if (otherFragmentRecyclerViewAdapter.getIsItemBlock()) {
-                itemBlock(holder);
-            }
-            Log.i("getIsItemBlock", String.valueOf(otherFragmentRecyclerViewAdapter.getIsItemBlock()));
+            itemBlock(holder);
+            Log.i("maintenanceSingleItemboolean", String.valueOf(maintenanceSingleItemboolean));
         }
     }
 
@@ -113,27 +105,21 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
     View.OnClickListener checkCheckBoxOnClickListener(ViewHolder holder) {
         return v -> {
 
+            // 아이템 한개를 선택할때 선택 아이템 개수가 0개일수는 없으니 추가 했을떄의 예외처리만 있다.
             // 아이템 뷰를 클릭시 체크박스가 false면 true, true면 false로 변경 후
             if (!holder.cb_maintenance_itemSelect.isChecked()) {
                 holder.cb_maintenance_itemSelect.setChecked(true);
-                Data_MaintenanceRecords.al_itemTitleList.add(holder.tv_maintenance_itemTitle.getText().toString());
-                selectMaintenanceItemActivity.tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size() + context.getResources().getString(R.string.selectionCount));
-
-                if (Data_MaintenanceRecords.al_itemTitleList.size() > 0) {
-                    selectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
-                    selectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
+                SelectMaintenanceItemActivity.selectItemTitleList.add(holder.tv_maintenance_itemTitle.getText().toString());
+                if (SelectMaintenanceItemActivity.viewHandler != null) {
+                    SelectMaintenanceItemActivity.viewHandler.obtainMessage(1, holder.tv_maintenance_itemTitle.getText().toString()).sendToTarget();
                 }
+
+                // 아이템 한개를 선택 취소할때 선택한 아이템 개수가 0개면 if문 첫번쨰를 타고 선택한 아이템 개수가 1개 이상이면 else문을 탄다.
             } else {
                 holder.cb_maintenance_itemSelect.setChecked(false);
-                Data_MaintenanceRecords.al_itemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
-                if (Data_MaintenanceRecords.al_itemTitleList.size() <= 0) {
-                    selectMaintenanceItemActivity.tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
-                    selectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
-                    selectMaintenanceItemActivity.tv_selectionConfirm.setClickable(false);
-                } else {
-                    selectMaintenanceItemActivity.tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size() + context.getResources().getString(R.string.selectionCount));
-                    selectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
-                    selectMaintenanceItemActivity.tv_selectionConfirm.setClickable(true);
+                SelectMaintenanceItemActivity.selectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
+                if (SelectMaintenanceItemActivity.viewHandler != null) {
+                    SelectMaintenanceItemActivity.viewHandler.obtainMessage(2, holder.tv_maintenance_itemTitle.getText().toString()).sendToTarget();
                 }
             }
 
@@ -202,6 +188,11 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             holder.Ln_maintenance_item.setClickable(false);
             // 체크 박스는 block처리되면 이제까지 체크했던 기록은 전부 없앤다. (어차피 block처리되면 리사이클러뷰가 초기화되기에 checkList에 저장된 데이터도 초기화되서 신경 쓸 필요 없다.)
             holder.cb_maintenance_itemSelect.setChecked(false);
+            // block하면서 체크했던 기록 전부 없앤다.
+            if (SelectMaintenanceItemActivity.selectItemTitleList.contains(holder.tv_maintenance_itemTitle.getText().toString())) {
+                SelectMaintenanceItemActivity.selectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
+            }
+
         } else {
             holder.tv_maintenance_itemTitle.setTextColor(Color.parseColor("#000000"));
             holder.tv_maintenance_itemDistance.setTextColor(Color.parseColor("#80000000"));
@@ -222,6 +213,14 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
         return itemTypeList.size();
     }
 
+
+    여기서 핸들러를 만들어 기타 항목에서 단일 항목 선택시 원격으로 블록처리 할 예정이다.
+    public static Handler viewHandler = null;
+    private void blockHandler(){
+
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_maintenance_itemTitle;
@@ -234,25 +233,30 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
         View view_maintenance_itemDividingLine02;
         LinearLayout Ln_maintenance_item;
         Context context;
+        int viewType;
 
-        public ViewHolder(@NonNull View itemView, Context context) {
+        public ViewHolder(@NonNull View itemView, Context context, int viewType) {
             super(itemView);
             this.context = context;
+            this.viewType = viewType;
             setView();
         }
 
         public void setView() {
-            tv_maintenance_itemTitle = itemView.findViewById(R.id.tv_maintenance_itemTitle);
-            tv_maintenance_itemDistance = itemView.findViewById(R.id.tv_maintenance_itemDistance);
-            tv_maintenance_itemMonth = itemView.findViewById(R.id.tv_maintenance_itemMonth);
-            tv_maintenance_itemSubText01 = itemView.findViewById(R.id.tv_maintenance_itemSubText01);
-            tv_maintenance_itemSubText02 = itemView.findViewById(R.id.tv_maintenance_itemSubText02);
-            view_maintenance_itemDividingLine = itemView.findViewById(R.id.View_maintenance_itemDividingLine);
-            view_maintenance_itemDividingLine02 = itemView.findViewById(R.id.View_maintenance_itemDividingLine02);
-            Ln_maintenance_item = itemView.findViewById(R.id.Ln_maintenance_item);
-            cb_maintenance_itemSelect = itemView.findViewById(R.id.cb_maintenance_itemSelect);
-            // 아이템 뷰를 클릭시 체크박스 컨트롤을 위해 아예 체크박스 단일 클릭을 막아버렸다. (체크 박스 단일 클릭시 로직이 꼬여서 막음)
-            cb_maintenance_itemSelect.setClickable(false);
+            // 0: 항목 레이아웃, 1: 항목 추가 버튼
+            if (viewType == 0) {
+                tv_maintenance_itemTitle = itemView.findViewById(R.id.tv_maintenance_itemTitle);
+                tv_maintenance_itemDistance = itemView.findViewById(R.id.tv_maintenance_itemDistance);
+                tv_maintenance_itemMonth = itemView.findViewById(R.id.tv_maintenance_itemMonth);
+                tv_maintenance_itemSubText01 = itemView.findViewById(R.id.tv_maintenance_itemSubText01);
+                tv_maintenance_itemSubText02 = itemView.findViewById(R.id.tv_maintenance_itemSubText02);
+                view_maintenance_itemDividingLine = itemView.findViewById(R.id.View_maintenance_itemDividingLine);
+                view_maintenance_itemDividingLine02 = itemView.findViewById(R.id.View_maintenance_itemDividingLine02);
+                Ln_maintenance_item = itemView.findViewById(R.id.Ln_maintenance_item);
+                cb_maintenance_itemSelect = itemView.findViewById(R.id.cb_maintenance_itemSelect);
+                // 아이템 뷰를 클릭시 체크박스 컨트롤을 위해 아예 체크박스 단일 클릭을 막아버렸다. (체크 박스 단일 클릭시 로직이 꼬여서 막음)
+                cb_maintenance_itemSelect.setClickable(false);
+            }
         }
     }
 }

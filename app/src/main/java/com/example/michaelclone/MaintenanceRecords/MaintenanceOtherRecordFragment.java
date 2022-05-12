@@ -80,11 +80,23 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     TableRow tr_moRcord_location;
     View View_maintenanceLocationLine;
     Spinner sp_changeLocation;
+    ArrayList<String> selectItemTitleList;
+
+    String selectDate;
 
     MaintenanceOtherRecordActivity maintenanceOtherRecordActivity;
 
     // 카메라 찍을때 처음 일반 촬영하고 크롭으로 넘어가게끔 만들기 위한 변수
     boolean imageCrop = false;
+
+    public MaintenanceOtherRecordFragment(ArrayList<String> selectItemTitleList, MaintenanceOtherRecordActivity maintenanceOtherRecordActivity){
+        this.selectItemTitleList = selectItemTitleList;
+        this.maintenanceOtherRecordActivity = maintenanceOtherRecordActivity;
+    }
+
+    public String getTotalDistance(){
+        return et_cumulativeMileage.getText().toString();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,10 +108,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_maintenance_other_record, container, false);
-        maintenanceOtherRecordActivity = new MaintenanceOtherRecordActivity();
-
-        // 정비 모드를 클릭하지 않았을 때를 대비해서 미리 정비소 모드로 지정해 놓는다.
-        CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordRepairMode = 0;
 
         setView(view);
         mStartForResult();
@@ -152,12 +160,12 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordTotalDistance = s.toString();
+
             }
         };
 
@@ -192,9 +200,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 // 정비소 정비이면 위치 뷰를 보이게 꺼낸다.
                 tr_moRcord_location.setVisibility(View.VISIBLE);
                 View_maintenanceLocationLine.setVisibility(View.VISIBLE);
-
-                // 정비 모드 
-                CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordRepairMode = 0;
                 
                 break;
             case R.id.tv_selfMaintenance:
@@ -213,9 +218,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 tr_moRcord_location.setVisibility(View.GONE);
                 View_maintenanceLocationLine.setVisibility(View.GONE);
 
-                // 정비 모드
-                CarbookRecord_Data.carbookRecordArrayList_insertDB.get(0).carbookRecordRepairMode = 1;
-
                 break;
         }
     }
@@ -224,7 +226,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     public void set_RvSelectItem(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         rv_MtOtRecorditemList.setLayoutManager(linearLayoutManager);
-        _maintenanceOtherRecordAdapter = new MaintenanceOtherRecordAdapter(context, Data_MaintenanceRecords.al_itemTitleList);
+        _maintenanceOtherRecordAdapter = new MaintenanceOtherRecordAdapter(context, selectItemTitleList, maintenanceOtherRecordActivity);
         rv_MtOtRecorditemList.setAdapter(_maintenanceOtherRecordAdapter);
         _maintenanceOtherRecordAdapter.notifyDataSetChanged();
     }

@@ -31,17 +31,16 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
     Context context;
     boolean setChecked = false;
     MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
-    SelectMaintenanceItemActivity selectMaintenanceItemActivity;
     boolean otherSingleItemboolean = false;
+    // 단일 항목 클릭시 해당 단일 항목만 block 처리를 안하기 위한 예외처리용 변수
+    String SingleItemTitle = "null";
 
     // 시간
-    public OtherFragmentRecyclerViewAdapter(Context context, ArrayList<String> ItemTitleList, ArrayList<Integer> ItemTypeList, MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter,
-                                            SelectMaintenanceItemActivity selectMaintenanceItemActivity) {
+    public OtherFragmentRecyclerViewAdapter(Context context, ArrayList<String> ItemTitleList, ArrayList<Integer> ItemTypeList, MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter) {
         this.context = context;
         this.itemTitleList = ItemTitleList;
         this.itemTypeList = ItemTypeList;
         this.maintenanceRecyclerViewAdapter = maintenanceRecyclerViewAdapter;
-        this.selectMaintenanceItemActivity = selectMaintenanceItemActivity;
     }
 
     // 단일 항목 클릭시 MaintenanceRecyclerViewAdapter를 새로고침 하기에 새로고침할때 OtherFragmentRecyclerViewAdapter의 단일 항목을 클릭했는지 확인해주는 otherSingleItemboolean를 getIsItemBlock로 통해 확인 후 true면 전부 block, false면 정상 뷰
@@ -70,7 +69,7 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
         } else {
             view = layoutInflater.inflate(R.layout.add_item, parent, false);
         }
-        ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view, viewType);
         return viewHolder;
     }
 
@@ -121,6 +120,8 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
     }
 
     public void bindView(int position, ViewHolder holder) {
+        Log.i("itemTitleList", String.valueOf(position));
+        Log.i("itemTitleList", itemTitleList.get(position));
         holder.tv_other_itemTitle.setText(itemTitleList.get(position));
 
         cb_setChecked(position, holder);
@@ -130,27 +131,31 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
     public void itemBlock(ViewHolder holder) {
         String other_itemTitle = holder.tv_other_itemTitle.getText().toString();
         if (otherSingleItemboolean) {
-            if (!other_itemTitle.equals(context.getResources().getString(R.string.carInsurance)) && !other_itemTitle.equals(Data_MaintenanceRecords.maintenanceSingleItemTitle) ||
-                    !other_itemTitle.equals(context.getResources().getString(R.string.trafficFine)) && !other_itemTitle.equals(Data_MaintenanceRecords.maintenanceSingleItemTitle) ||
-                    !other_itemTitle.equals(context.getResources().getString(R.string.automobileTax)) && !other_itemTitle.equals(Data_MaintenanceRecords.maintenanceSingleItemTitle)) {
+            if (!other_itemTitle.equals(context.getResources().getString(R.string.carInsurance)) && !other_itemTitle.equals(SingleItemTitle) ||
+                    !other_itemTitle.equals(context.getResources().getString(R.string.trafficFine)) && !other_itemTitle.equals(SingleItemTitle) ||
+                    !other_itemTitle.equals(context.getResources().getString(R.string.automobileTax)) && !other_itemTitle.equals(SingleItemTitle)) {
 
                 holder.tv_other_itemTitle.setTextColor(Color.parseColor("#D3D3D3"));
                 holder.cb_other_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#D3D3D3")));
                 holder.View_other_itemDividingLine.setBackgroundColor(Color.parseColor("#D3D3D3"));
                 holder.Ln_other_item.setClickable(false);
+                // 체크 박스는 block처리되면 이제까지 체크했던 기록은 전부 없앤다. (어차피 block처리되면 리사이클러뷰가 초기화되기에 checkList에 저장된 데이터도 초기화되서 신경 쓸 필요 없다.)
+                holder.cb_other_itemSelect.setChecked(false);
             } else {
                 Toast.makeText(context, other_itemTitle + " " + context.getResources().getString(R.string.selectSingleItemToast), Toast.LENGTH_SHORT).show();
             }
 
         } else {
-            if (!other_itemTitle.equals(context.getResources().getString(R.string.carInsurance)) && !other_itemTitle.equals(Data_MaintenanceRecords.maintenanceSingleItemTitle) ||
-                    !other_itemTitle.equals(context.getResources().getString(R.string.trafficFine)) && !other_itemTitle.equals(Data_MaintenanceRecords.maintenanceSingleItemTitle) ||
-                    !other_itemTitle.equals(context.getResources().getString(R.string.automobileTax)) && !other_itemTitle.equals(Data_MaintenanceRecords.maintenanceSingleItemTitle)) {
+            if (!other_itemTitle.equals(context.getResources().getString(R.string.carInsurance)) && !other_itemTitle.equals(SingleItemTitle) ||
+                    !other_itemTitle.equals(context.getResources().getString(R.string.trafficFine)) && !other_itemTitle.equals(SingleItemTitle) ||
+                    !other_itemTitle.equals(context.getResources().getString(R.string.automobileTax)) && !other_itemTitle.equals(SingleItemTitle)) {
 
                 holder.tv_other_itemTitle.setTextColor(Color.parseColor("#000000"));
                 holder.cb_other_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
                 holder.View_other_itemDividingLine.setBackgroundColor(Color.parseColor("#33000000"));
                 holder.Ln_other_item.setClickable(true);
+                // 체크 박스는 block처리되면 이제까지 체크했던 기록은 전부 없앤다. (어차피 block처리되면 리사이클러뷰가 초기화되기에 checkList에 저장된 데이터도 초기화되서 신경 쓸 필요 없다.)
+                holder.cb_other_itemSelect.setChecked(false);
             }
         }
     }
@@ -174,23 +179,22 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
 
     View.OnClickListener checkCheckBoxOnClickListener(ViewHolder holder) {
         return v -> {
+            // 아이템 한개를 선택할때 선택 아이템 개수가 0개일수는 없으니 추가 했을떄의 예외처리만 있다.
             if (!holder.cb_other_itemSelect.isChecked()) {
                 holder.cb_other_itemSelect.setChecked(true);
-
-                Data_MaintenanceRecords.al_itemTitleList.add(holder.tv_other_itemTitle.getText().toString());
-                selectMaintenanceItemActivity.tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size() + context.getResources().getString(R.string.selectionCount));
-
+                SelectMaintenanceItemActivity.selectItemTitleList.add(holder.tv_other_itemTitle.getText().toString());
+                if (SelectMaintenanceItemActivity.viewHandler != null) {
+                    SelectMaintenanceItemActivity.viewHandler.obtainMessage(1, holder.tv_other_itemTitle.getText().toString()).sendToTarget();
+                }
                 // 단일 항목들 체크
                 singleItemCheck(true, holder);
+
+                // 아이템 한개를 선택 취소할때 선택한 아이템 개수가 0개면 if문 첫번쨰를 타고 선택한 아이템 개수가 1개 이상이면 else문을 탄다.
             } else {
                 holder.cb_other_itemSelect.setChecked(false);
-                Data_MaintenanceRecords.al_itemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
-                if (Data_MaintenanceRecords.al_itemTitleList.size() <= 0) {
-                    selectMaintenanceItemActivity.tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
-                    selectMaintenanceItemActivity.tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
-                    selectMaintenanceItemActivity.tv_selectionConfirm.setClickable(false);
-                } else {
-                    selectMaintenanceItemActivity.tv_itemCount.setText(Data_MaintenanceRecords.al_itemTitleList.size() + context.getResources().getString(R.string.selectionCount));
+                SelectMaintenanceItemActivity.selectItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
+                if (SelectMaintenanceItemActivity.viewHandler != null) {
+                    SelectMaintenanceItemActivity.viewHandler.obtainMessage(2, holder.tv_other_itemTitle.getText().toString()).sendToTarget();
                 }
 
                 // 단일 항목들 체크
@@ -208,13 +212,24 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
 
             if (Checked) {
                 otherSingleItemboolean = true;
-                Data_MaintenanceRecords.maintenanceSingleItemTitle = holder.tv_other_itemTitle.getText().toString();
+                SingleItemTitle = holder.tv_other_itemTitle.getText().toString();
                 singleItemTitleList.add(holder.tv_other_itemTitle.getText().toString());
+                SelectMaintenanceItemActivity.selectItemTitleList.clear();
+
+                // 새로운
+                SelectMaintenanceItemActivity.selectItemTitleList.add(holder.tv_other_itemTitle.getText().toString());
+                // 단일 항목 선택으로 인한 정비 항목 block
+                maintenanceRecyclerViewAdapter.maintenanceSingleItemboolean = true;
 
             } else {
                 otherSingleItemboolean = false;
-                Data_MaintenanceRecords.maintenanceSingleItemTitle = "null";
+                SingleItemTitle = "null";
                 singleItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
+
+                // 새로운
+                SelectMaintenanceItemActivity.selectItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
+                // 단일 항목 선택해제로 인한 정비 항목 block 품
+                maintenanceRecyclerViewAdapter.maintenanceSingleItemboolean = false;
             }
             notifyDataSetChanged();
             maintenanceRecyclerViewAdapter.notifyDataSetChanged();
@@ -232,19 +247,24 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
         CheckBox cb_other_itemSelect;
         View View_other_itemDividingLine;
         LinearLayout Ln_other_item;
+        int viewType;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, int viewType) {
             super(itemView);
+            this.viewType = viewType;
             setView();
         }
 
         public void setView() {
-            tv_other_itemTitle = itemView.findViewById(R.id.tv_other_itemTitle);
-            cb_other_itemSelect = itemView.findViewById(R.id.cb_other_itemSelect);
-            View_other_itemDividingLine = itemView.findViewById(R.id.View_other_itemDividingLine);
-            Ln_other_item = itemView.findViewById(R.id.Ln_other_item);
-            // 아이템 뷰를 클릭시 체크박스 컨트롤을 위해 아예 체크박스 단일 클릭을 막아버렸다. (체크 박스 단일 클릭시 로직이 꼬여서 막음)
-            cb_other_itemSelect.setClickable(false);
+            // 0: 항목 레이아웃, 1: 항목 추가 버튼
+            if (viewType == 0) {
+                tv_other_itemTitle = itemView.findViewById(R.id.tv_other_itemTitle);
+                cb_other_itemSelect = itemView.findViewById(R.id.cb_other_itemSelect);
+                View_other_itemDividingLine = itemView.findViewById(R.id.View_other_itemDividingLine);
+                Ln_other_item = itemView.findViewById(R.id.Ln_other_item);
+                // 아이템 뷰를 클릭시 체크박스 컨트롤을 위해 아예 체크박스 단일 클릭을 막아버렸다. (체크 박스 단일 클릭시 로직이 꼬여서 막음)
+                cb_other_itemSelect.setClickable(false);
+            }
         }
     }
 }
