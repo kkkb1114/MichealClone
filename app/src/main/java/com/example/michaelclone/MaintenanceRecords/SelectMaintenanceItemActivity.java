@@ -63,40 +63,41 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
 
 
     public static Handler viewHandler = null;
-    private void initHandler(){
-        try{
+
+    private void initHandler() {
+        try {
             viewHandler = new Handler(new Handler.Callback() {
                 @Override
                 public boolean handleMessage(@NonNull Message msg) {
-                    try{
-                        switch (msg.what){
-                            case 1 :
+                    try {
+                        switch (msg.what) {
+                            case 1:
                                 tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
                                 if (selectItemTitleList.size() > 0) {
                                     tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
                                     tv_selectionConfirm.setClickable(true);
                                 }
                                 break;
-                            case 2 :
+                            case 2:
                                 tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
                                 if (selectItemTitleList.size() <= 0) {
                                     tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
                                     tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
                                     tv_selectionConfirm.setClickable(false);
-                                }else {
+                                } else {
                                     tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
                                     tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
                                     tv_selectionConfirm.setClickable(true);
                                 }
                                 break;
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     return false;
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -122,7 +123,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 Intent intent = new Intent(SelectMaintenanceItemActivity.this, MaintenanceOtherRecordActivity.class);
                 intent.putExtra("selectItemTitleList", selectItemTitleList);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
         // 클릭 이벤트를 지정한 후에 막아야 막힌다.

@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.michaelclone.R;
 
-public class locationSearchFragment extends Fragment {
+public class LocationSearchFragment extends Fragment {
 
     Context context;
 

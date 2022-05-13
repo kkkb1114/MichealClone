@@ -38,9 +38,6 @@ public class MainRecordPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-        Log.i("onBindViewHolder", String.valueOf(costList));
-        Log.i("onBindViewHolder2", String.valueOf(nameList));
         // 항목 금액
         String costResult = "₩" + decimalFormat.format(Integer.parseInt(costList.get(position)));
 

@@ -21,8 +21,6 @@ public class CarbookRecordItem_DB {
 
     // 데이터베이스 추가하기 insert
     public void MainRecordItemDB_insert(CarbookRecordItem carbookRecordItem) {
-
-        Log.e("tewst", "mainRecordItem : " + carbookRecordItem);
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
             db.beginTransaction();
@@ -87,14 +85,12 @@ public class CarbookRecordItem_DB {
 
     public ArrayList<CarbookRecordItem> getMainRecordItemArrayList() {
         try {
-            Log.i("빼내고 있나?", "222");
             //Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM MainRecordItem WHERE carbookRecordId = "+ 0, null);
             Cursor cursor = null;
             cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem", null);
 
             ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
             carbookRecordItemArrayList = getMainRecordItemCursor(cursor, carbookRecordItemArrayList);
-            Log.i("빼내고 있나?11", String.valueOf(carbookRecordItemArrayList));
             return carbookRecordItemArrayList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,12 +100,10 @@ public class CarbookRecordItem_DB {
 
     public ArrayList<CarbookRecordItem> getMainRecordItemItemArrayList() {
         try {
-            Log.i("빼내고 있나?", "getMainRecordItemItemArrayList");
             Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordId = 1;", null);
 
             ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
             carbookRecordItemArrayList = getMainRecordItemCursor(cursor, carbookRecordItemArrayList);
-            Log.i("빼내고 있나?11", String.valueOf(carbookRecordItemArrayList));
             return carbookRecordItemArrayList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,7 +112,6 @@ public class CarbookRecordItem_DB {
     }
 
     private ArrayList<CarbookRecordItem> getMainRecordItemCursor(Cursor cursor, ArrayList<CarbookRecordItem> carbookRecordItems) {
-        Log.i("빼내고 있나?", "333");
         while (cursor.moveToNext()) {
             //todo 여기서 cursor.getInt(0)으로 id 값을 받을수 있지 않을까 했는데 안받아져서 일단 뺐다.
             CarbookRecordItem carbookRecordItem = new CarbookRecordItem(cursor.getInt(1), cursor.getString(2), cursor.getString(3),
@@ -126,7 +119,6 @@ public class CarbookRecordItem_DB {
                     cursor.getString(8));
 
             carbookRecordItems.add(carbookRecordItem);
-            Log.i("빼내고 있나?22", String.valueOf(carbookRecordItem));
         }
         cursor.close();
         return carbookRecordItems;

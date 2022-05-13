@@ -3,6 +3,8 @@ package com.example.michaelclone.MaintenanceRecords;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,8 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
     boolean otherSingleItemboolean = false;
     // 단일 항목 클릭시 해당 단일 항목만 block 처리를 안하기 위한 예외처리용 변수
     String SingleItemTitle = "null";
+    // itemBlock()메소드는 기타항목에서 단일 항목을 클릭했을때만 돌아야하기에 해당 boolean값으로 조건을 건다.
+    boolean isExecutionViewHandler = false;
 
     // 시간
     public OtherFragmentRecyclerViewAdapter(Context context, ArrayList<String> ItemTitleList, ArrayList<Integer> ItemTypeList, MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter) {
@@ -44,13 +48,12 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
     }
 
     // 단일 항목 클릭시 MaintenanceRecyclerViewAdapter를 새로고침 하기에 새로고침할때 OtherFragmentRecyclerViewAdapter의 단일 항목을 클릭했는지 확인해주는 otherSingleItemboolean를 getIsItemBlock로 통해 확인 후 true면 전부 block, false면 정상 뷰
-    public boolean getIsItemBlock(){
+    public boolean getIsItemBlock() {
         return otherSingleItemboolean;
     }
 
     @Override
     public int getItemViewType(int position) {
-        Log.i("아이템 선택 리사이클러뷰 ㄱㄱ?", "222");
         // 0: 항목 레이아웃, 1: 항목 추가 버튼
         if (itemTypeList.get(position) == 0) {
             return 0;
@@ -80,8 +83,11 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
             bindView(position, holder);
             checkCheckBox(position, holder);
             holder.itemView.setOnClickListener(checkCheckBoxOnClickListener(holder));
-
-            itemBlock(holder);
+            if (isExecutionViewHandler){
+                itemBlock(holder);
+                // 돌고나면 다시 bind때 계속 돌지 않도록 막아둔다.
+                isExecutionViewHandler = false;
+            }
         }
     }
 
@@ -120,8 +126,6 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
     }
 
     public void bindView(int position, ViewHolder holder) {
-        Log.i("itemTitleList", String.valueOf(position));
-        Log.i("itemTitleList", itemTitleList.get(position));
         holder.tv_other_itemTitle.setText(itemTitleList.get(position));
 
         cb_setChecked(position, holder);
@@ -209,7 +213,9 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
         if (itemTitle.equals(context.getResources().getString(R.string.carInsurance)) ||
                 itemTitle.equals(context.getResources().getString(R.string.trafficFine)) ||
                 itemTitle.equals(context.getResources().getString(R.string.automobileTax))) {
-
+            // MaintenanceRecyclerViewAdapter의 핸들러에 보낼 Message객체 생성
+            Message message = Message.obtain();
+            Bundle bundle = new Bundle();
             if (Checked) {
                 otherSingleItemboolean = true;
                 SingleItemTitle = holder.tv_other_itemTitle.getText().toString();
@@ -219,7 +225,7 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
                 // 새로운
                 SelectMaintenanceItemActivity.selectItemTitleList.add(holder.tv_other_itemTitle.getText().toString());
                 // 단일 항목 선택으로 인한 정비 항목 block
-                maintenanceRecyclerViewAdapter.maintenanceSingleItemboolean = true;
+                bundle.putBoolean("singleItemCheck", true);
 
             } else {
                 otherSingleItemboolean = false;
@@ -229,10 +235,18 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
                 // 새로운
                 SelectMaintenanceItemActivity.selectItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
                 // 단일 항목 선택해제로 인한 정비 항목 block 품
-                maintenanceRecyclerViewAdapter.maintenanceSingleItemboolean = false;
+                bundle.putBoolean("singleItemCheck", false);
             }
+
+            // itemBlock()를 실행 시킬지 여부 (이 조건 안걸면 리사이클러뷰 bind때마다 계속 돈다.)
+            isExecutionViewHandler = true;
+            // 자기 자신 새로 고침
             notifyDataSetChanged();
-            maintenanceRecyclerViewAdapter.notifyDataSetChanged();
+            // MaintenanceRecyclerViewAdapter 새로 고침을 위한 핸들러 원격 동작
+            if (MaintenanceRecyclerViewAdapter.viewHandler != null) {
+                message.setData(bundle);
+                MaintenanceRecyclerViewAdapter.viewHandler.sendMessage(message);
+            }
         }
     }
 

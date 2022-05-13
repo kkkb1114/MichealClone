@@ -99,10 +99,8 @@ public class CarbookRecord_DB {
             db.setTransactionSuccessful();
             while (cursor.moveToNext()){
                 lastIdList.add(cursor.getInt(0));
-                Log.i("lastIdList", "22");
             }
             //int lastId = cursor.getInt(0);
-            Log.i("lastIdList", String.valueOf(lastIdList.get(0)));
             return lastIdList.get(0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,24 +133,19 @@ public class CarbookRecord_DB {
                     "COUNT(*) as 'count', SUM(carbookRecordItemExpenseCost) as 'totalCost' FROM carbookRecordItem GROUP BY carbookRecordId) as B ON (A._id = B.carbookRecordId) ORDER BY carbookRecordExpendDate DESC", null);
 
             while (cursor.moveToNext()){
-                Log.i("메인 항목 데이터", cursor.getString(0));
-                Log.i("메인 항목 데이터", cursor.getString(7));
                 MainRecordPage mainRecordPage = new MainRecordPage(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getDouble(4),
                         cursor.getString(5), cursor.getString(6), cursor.getInt(7), cursor.getInt(8), cursor.getString(9), cursor.getString(10),
                         cursor.getString(11), cursor.getString(12));
 
                 mainRecordPageArrayList.add(mainRecordPage);
-                Log.i("메인 항목", String.valueOf(mainRecordPage));
             }
             cursor.close();
-            Log.i("mainRecordPageArrayList", String.valueOf(mainRecordPageArrayList));
             return mainRecordPageArrayList;
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
             db.endTransaction();
         }
-        Log.i("mainRecordPageArrayList", "null");
         return null;
     }
 }

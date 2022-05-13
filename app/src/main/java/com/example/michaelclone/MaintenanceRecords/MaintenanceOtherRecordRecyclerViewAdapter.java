@@ -2,8 +2,8 @@ package com.example.michaelclone.MaintenanceRecords;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,25 +13,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.R;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-public class MaintenanceOtherRecordAdapter extends RecyclerView.Adapter<MaintenanceOtherRecordAdapter.ViewHolder> {
+public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adapter<MaintenanceOtherRecordRecyclerViewAdapter.ViewHolder> {
 
     Context context;
     ArrayList<String> al_itemTitleList;
-    String ItemPriceResult;
-    MaintenanceOtherRecordActivity maintenanceOtherRecordActivity;
 
-    public MaintenanceOtherRecordAdapter(Context context, ArrayList<String> al_itemTitleList, MaintenanceOtherRecordActivity maintenanceOtherRecordActivity) {
+    public MaintenanceOtherRecordRecyclerViewAdapter(Context context, ArrayList<String> al_itemTitleList) {
         this.context = context;
         this.al_itemTitleList = al_itemTitleList;
-        this.maintenanceOtherRecordActivity = maintenanceOtherRecordActivity;
     }
 
     @NonNull
@@ -43,7 +37,7 @@ public class MaintenanceOtherRecordAdapter extends RecyclerView.Adapter<Maintena
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tv_MtOt_ItemTitle.setText(al_itemTitleList.get(position));
+        holder.tv_maintenanceOtherItemTitle.setText(al_itemTitleList.get(position));
         holder.GoneMaintenanceItemLine(position);
 
         // editText 글자 가져오기
@@ -55,13 +49,24 @@ public class MaintenanceOtherRecordAdapter extends RecyclerView.Adapter<Maintena
         return al_itemTitleList.size();
     }
 
+    // 천단위 콤마 메소드
+    protected String makeStringComma(String data) {
+        if (data.length() == 0) {
+            return "";
+        } else {
+            long value = Long.parseLong(data);
+            DecimalFormat format = new DecimalFormat("###,###");
+            return format.format(value);
+        }
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_MtOt_ItemTitle;
-        TextView tv_MtOtItemMemoCount;
-        EditText et_MtOt_ItemPrice;
-        EditText et_MtOtItemMemo;
-        View View_maintenanceItemLine;
+        TextView tv_maintenanceOtherItemTitle;
+        TextView tv_maintenanceOtherItemMemoCount;
+        EditText et_maintenanceOtherItemPrice;
+        EditText et_maintenanceOtherItemMemo;
+        View View_maintenanceOtherItemLine;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,17 +75,17 @@ public class MaintenanceOtherRecordAdapter extends RecyclerView.Adapter<Maintena
         }
 
         public void setView() {
-            tv_MtOt_ItemTitle = itemView.findViewById(R.id.tv_MtOt_ItemTitle);
-            tv_MtOtItemMemoCount = itemView.findViewById(R.id.tv_MtOtItemMemoCount);
-            et_MtOt_ItemPrice = itemView.findViewById(R.id.et_MtOt_ItemPrice);
-            et_MtOtItemMemo = itemView.findViewById(R.id.et_MtOtItemMemo);
-            View_maintenanceItemLine = itemView.findViewById(R.id.View_maintenanceItemLine);
+            tv_maintenanceOtherItemTitle = itemView.findViewById(R.id.tv_MtOt_ItemTitle);
+            tv_maintenanceOtherItemMemoCount = itemView.findViewById(R.id.tv_MtOtItemMemoCount);
+            et_maintenanceOtherItemPrice = itemView.findViewById(R.id.et_MtOt_ItemPrice);
+            et_maintenanceOtherItemMemo = itemView.findViewById(R.id.et_MtOtItemMemo);
+            View_maintenanceOtherItemLine = itemView.findViewById(R.id.View_maintenanceItemLine);
         }
 
         // 아이템 마지막은 구분선이 계속 생기면 아래 구분선이 2개가 되기때문에 없애준다.
         public void GoneMaintenanceItemLine(int position) {
             if (al_itemTitleList.size() == 1 || position == al_itemTitleList.size() - 1) {
-                View_maintenanceItemLine.setVisibility(View.GONE);
+                View_maintenanceOtherItemLine.setVisibility(View.GONE);
             }
         }
 
@@ -96,11 +101,11 @@ public class MaintenanceOtherRecordAdapter extends RecyclerView.Adapter<Maintena
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String input_MtOtMemo = et_MtOtItemMemo.getText().toString();
-                    tv_MtOtItemMemoCount.setText(input_MtOtMemo.length() + "/250");
+                    String input_MtOtMemo = et_maintenanceOtherItemMemo.getText().toString();
+                    tv_maintenanceOtherItemMemoCount.setText(input_MtOtMemo.length() + "/250");
 
                     // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                    maintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList.set(position, et_MtOtItemMemo.getText().toString());
+                    MaintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList.set(position, et_maintenanceOtherItemMemo.getText().toString());
                     //CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(position).carbookRecordItemExpenseMemo = et_MtOtItemMemo.getText().toString();
                 }
 
@@ -113,6 +118,8 @@ public class MaintenanceOtherRecordAdapter extends RecyclerView.Adapter<Maintena
             // 누적 지출금액 천단위 콤마 적용
             // 누적 지출 금액 입력할때마다 동작
             TextWatcher textWatcherCost = new TextWatcher() {
+                String ItemPrice = "";
+
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -120,32 +127,27 @@ public class MaintenanceOtherRecordAdapter extends RecyclerView.Adapter<Maintena
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (et_MtOt_ItemPrice.getText().toString().matches("0")) {
-                        // 맨 처음 앞자리가 0이면 더이상 입력 못하게 지운다
-                        et_MtOt_ItemPrice.setText("");
+                    if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(ItemPrice)) {
+                        if (et_maintenanceOtherItemPrice.getText().toString().matches("0")) {
+                            // 맨 처음 앞자리가 0이면 더이상 입력 못하게 지운다
+                            et_maintenanceOtherItemPrice.setText("");
+                        }
+                        ItemPrice = makeStringComma(s.toString().replace(",", ""));
+                        et_maintenanceOtherItemPrice.setText(ItemPrice);
+                        et_maintenanceOtherItemPrice.setSelection(et_maintenanceOtherItemPrice.length());
+                        // 아래 방법은 CumulativeMileage 문자열 길이를 뽑아서 해당 길이가 4면 커서를 4만큼만 이동시키겠다 인데 Editable이걸 왜 만드는지 모르겠다.
+                        // 위처럼 setSelection()로 다이렉트로 커서 위치 시키면 바로 되는 것을 아래처럼 하는 이유를 조사해서 알기전까진 위 방법으로 할 생각이다.
+                    /*Editable editable = et_cumulativeMileage.getText();
+                    Selection.setSelection(editable, CumulativeMileage.length());*/
                     }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    // 텍스트가 변하고 글자 길이가 3 이상이면 천단위 콤마 로직을 태우고 한번 타면 바로 false로 막는다.
-                    String Mileage = s.toString();
-                    // 가격 글자가 0이하면 Long.parseLong()에서 터지고 어차피 4글자 이상이여야하니 글자 개수로 조건문 걸어준다.
-                    if (!Mileage.equals(ItemPriceResult)) {
-                        long cumulativeMileage = Long.parseLong(Mileage.replace(",", ""));
-                        // MainRecord_Data의 MainRecordItem 리스트에 지출금액 삽입
-                        maintenanceOtherRecordActivity.carbookRecordItemExpenseCostList.set(position, String.valueOf(cumulativeMileage));
-                        // 가격 글자가 0이하면 Long.parseLong()에서 터지고 어차피 4글자 이상이여야하니 글자 개수로 조건문 걸어준다.
-                        DecimalFormat decimalFormat = new DecimalFormat("###,###");
-                        String calculatedCumulativeMileage = decimalFormat.format(cumulativeMileage);
-                        ItemPriceResult = calculatedCumulativeMileage;
-                        if (calculatedCumulativeMileage.length() > Mileage.length()) {
-                        }
-                    }
                 }
             };
-            et_MtOtItemMemo.addTextChangedListener(textWatcherMemo);
-            et_MtOt_ItemPrice.addTextChangedListener(textWatcherCost);
+            et_maintenanceOtherItemMemo.addTextChangedListener(textWatcherMemo);
+            et_maintenanceOtherItemPrice.addTextChangedListener(textWatcherCost);
         }
     }
 }

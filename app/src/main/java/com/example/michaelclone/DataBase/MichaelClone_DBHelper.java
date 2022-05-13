@@ -43,7 +43,6 @@ public class MichaelClone_DBHelper extends SQLiteOpenHelper {
     public MichaelClone_DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         try {
-            Log.i("테이블 생성", "테이블 생성");
             SQLiteDatabase db = getWritableDatabase();
             db.execSQL("CREATE TABLE IF NOT EXISTS carbookRecord (_id INTEGER PRIMARY KEY AUTOINCREMENT, carbookRecordRepairMode INTEGER, carbookRecordExpendDate TEXT," +
                     "carbookRecordIsHidden INTEGER, carbookRecordTotalDistance REAL, carbookRecordRegTime TEXT, carbookRecordUpdateTime TEXT)");

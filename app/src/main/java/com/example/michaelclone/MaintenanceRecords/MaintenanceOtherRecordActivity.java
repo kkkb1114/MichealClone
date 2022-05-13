@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.michaelclone.DataBase.CarbookRecord;
 import com.example.michaelclone.DataBase.CarbookRecordItem;
 import com.example.michaelclone.DataBase.CarbookRecordItem_DataBridge;
-import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.DataBase.CarbookRecord_DataBridge;
 import com.example.michaelclone.DataBase.Time_DataBridge;
 import com.example.michaelclone.DialogManager;
@@ -32,7 +31,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private MaintenanceOtherRecordFragment maintenanceOtherRecordFragment;
-    private locationSearchFragment locationSearchFragment;
+    private LocationSearchFragment locationSearchFragment;
 
     TextView maintenanceOtherRecordComplete;
 
@@ -48,8 +47,9 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     SimpleDateFormat mFormat_saveOnly = new SimpleDateFormat("yyyyMMdd");
     String selectDate;
 
-    ArrayList<String> carbookRecordItemExpenseMemoList = new ArrayList<>();
-    ArrayList<String> carbookRecordItemExpenseCostList = new ArrayList<>();
+    // editText의 텍스트가 바뀔때마다 실시간으로 변경이 되어야 하기에 해당 동작을 핸들러로 하기에는 위험 부담이 커보였다.
+    public static ArrayList<String> carbookRecordItemExpenseMemoList = new ArrayList<>();
+    public static ArrayList<String> carbookRecordItemExpenseCostList = new ArrayList<>();
 
 
     // 달력 다이얼로그에서 날짜를 정하고 확인 누를때 해당 MaintenanceOtherRecordActivity의 selectDate변수 값을 선택한 날짜로 지정해준다.
@@ -99,7 +99,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     public ArrayList<String> getIntentDate() {
         Intent intent = getIntent();
         selectItemTitleList = (ArrayList<String>) intent.getSerializableExtra("selectItemTitleList");
-        Log.i("getIntentDate_selectItemTitleList", String.valueOf(selectItemTitleList));
         return selectItemTitleList;
     }
 
@@ -189,8 +188,8 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
     public void setFragment(int fragment, ArrayList<String> selectItemTitleList) {
         fragmentManager = getSupportFragmentManager();
-        maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment(selectItemTitleList, this);
-        locationSearchFragment = new locationSearchFragment();
+        maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment(selectItemTitleList);
+        locationSearchFragment = new LocationSearchFragment();
         fragmentTransaction = fragmentManager.beginTransaction();
         switch (fragment) {
             case 1:

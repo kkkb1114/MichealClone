@@ -31,19 +31,12 @@ public class MainrecordFragment extends Fragment {
     private ViewPager2 vp_mainhistory;
     private MainRecordPageViewPagerAdapter ad_mainhistory;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_mainrecordpage, container, false);
         setView(view);
-        Log.i("메인 항목", "000");
         getMainrecordDataList();
         setTabLayout();
 

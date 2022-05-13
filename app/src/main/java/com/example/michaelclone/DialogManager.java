@@ -128,8 +128,6 @@ public class DialogManager extends AlertDialog.Builder {
 
                     // 기록 확인 클릭시 선택한 날짜를 디비 저장용 해당 기록 지출 날짜로 지정해놓는다.
                     maintenanceOtherRecordActivity.setSelectDate(mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate()));
-                    // 지울것!!
-                    Log.i("getSelectedDate", mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate()));
                     dismiss();
                 }
             });

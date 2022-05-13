@@ -25,7 +25,6 @@ public class CarbookRecord_DataBridge {
 
     public ArrayList<MainRecordPage> getMainRecordData(){
         CarbookRecord_DB carbookRecord_db = CarbookRecord_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
-        Log.i("메인 항목", "222");
         return carbookRecord_db.getMainRecordData();
     }
 }

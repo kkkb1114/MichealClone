@@ -74,8 +74,6 @@ public class MaintenanceOtherImageViewPagerAdapter extends RecyclerView.Adapter<
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
             holder.bindItem(position, holder);
-            // 지울것!!
-            Log.i("typeList", String.valueOf(typeList.size()));
     }
 
     @Override
@@ -159,9 +157,6 @@ public class MaintenanceOtherImageViewPagerAdapter extends RecyclerView.Adapter<
                     }
                     notifyDataSetChanged(); // 리사이클러뷰 어뎁터에서 새로고침
                     MtOt_imageCount.setText(bitmapArrayList.size()+"/5");
-
-                    Log.i("typeList.size()", String.valueOf(typeList.size()));
-                    Log.i("bitmapArrayList.size()", String.valueOf(bitmapArrayList.size()));
                 }
             });
         }

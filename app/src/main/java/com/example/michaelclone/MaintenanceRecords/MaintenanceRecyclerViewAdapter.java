@@ -3,7 +3,9 @@ package com.example.michaelclone.MaintenanceRecords;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,8 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
     Context context;
     boolean setChecked = false; // checkedHashMap_maintenance 처음에 초기화 했는지 확인 변수
     boolean maintenanceSingleItemboolean = false;
+    // itemBlock()메소드는 기타항목에서 단일 항목을 클릭했을때만 돌아야하기에 해당 boolean값으로 조건을 건다.
+    boolean isExecutionViewHandler = false;
 
     /**
      * 1. ItemTypeList을 기준으로 항목을 추가할지 새 항목 추가 버튼을 추가할지 정해지며 | 0: 항목, 1: 추가버튼이다.
@@ -42,6 +46,7 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
         this.itemLifeSpanList = ItemLifeSpanList;
         this.itemTypeList = ItemTypeList;
         this.context = context;
+        itemBlockHandler();
     }
 
     @Override
@@ -74,19 +79,15 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             bindView(position, holder);
             checkCheckBox(position, holder);
             holder.itemView.setOnClickListener(checkCheckBoxOnClickListener(holder));
-
-            itemBlock(holder);
-            Log.i("maintenanceSingleItemboolean", String.valueOf(maintenanceSingleItemboolean));
+            if (isExecutionViewHandler){
+                itemBlock(holder);
+                // 돌고나면 다시 bind때 계속 돌지 않도록 막아둔다.
+                isExecutionViewHandler = false;
+            }
         }
     }
 
-    //ArrayList<Integer> checkList = new ArrayList<>();
     ArrayList<String> checkList = new ArrayList<>();
-
-    // SelectMaintenanceItemActivity에서 확인 버튼 누를때 체크한 항목 리스트를 넘기기 위한 메소드
-    public ArrayList<String> getCheckList() {
-        return checkList;
-    }
 
     // itemView를 클릭시 checkList에 해당 position값이 있는지 체크하고 있다면 제거하고 없다면 집어넣는다.
     public void checkItemClick(String itemTitle) {
@@ -159,11 +160,13 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
 
         // 리사이클러뷰 특성상 뷰를 재활용 할 때 체크박스가 그대로 체크되어있는 것을 방지하기위해 position마다
         // 체크박스 isboolean여부가 들어있는 checkedHashMap_maintenance를 참고하여 체크박스 상태를 세팅한다.
+        Log.i("checkedHashMap_maintenance111", String.valueOf(checkedHashMap_maintenance.get(position)));
         if (checkedHashMap_maintenance.get(position)) {
             holder.cb_maintenance_itemSelect.setChecked(true);
         } else {
             holder.cb_maintenance_itemSelect.setChecked(false);
         }
+        Log.i("checkedHashMap_maintenance222", String.valueOf(checkedHashMap_maintenance.get(position)));
     }
 
     public void bindView(int position, ViewHolder holder) {
@@ -187,7 +190,7 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             holder.view_maintenance_itemDividingLine02.setBackgroundColor(Color.parseColor("#1A000000"));
             holder.Ln_maintenance_item.setClickable(false);
             // 체크 박스는 block처리되면 이제까지 체크했던 기록은 전부 없앤다. (어차피 block처리되면 리사이클러뷰가 초기화되기에 checkList에 저장된 데이터도 초기화되서 신경 쓸 필요 없다.)
-            holder.cb_maintenance_itemSelect.setChecked(false);
+            //holder.cb_maintenance_itemSelect.setChecked(true);
             // block하면서 체크했던 기록 전부 없앤다.
             if (SelectMaintenanceItemActivity.selectItemTitleList.contains(holder.tv_maintenance_itemTitle.getText().toString())) {
                 SelectMaintenanceItemActivity.selectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
@@ -204,7 +207,7 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             holder.view_maintenance_itemDividingLine02.setBackgroundColor(Color.parseColor("#33000000"));
             holder.Ln_maintenance_item.setClickable(true);
             // 체크 박스는 block처리되면 이제까지 체크했던 기록은 전부 없앤다. (어차피 block처리되면 리사이클러뷰가 초기화되기에 checkList에 저장된 데이터도 초기화되서 신경 쓸 필요 없다.)
-            holder.cb_maintenance_itemSelect.setChecked(false);
+            //holder.cb_maintenance_itemSelect.setChecked(false);
         }
     }
 
@@ -214,12 +217,35 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
     }
 
 
-    여기서 핸들러를 만들어 기타 항목에서 단일 항목 선택시 원격으로 블록처리 할 예정이다.
+    //todo 여기서 핸들러를 만들어 기타 항목에서 단일 항목 선택시 원격으로 블록처리 할 예정이다.
     public static Handler viewHandler = null;
-    private void blockHandler(){
 
+    private void itemBlockHandler() {
+        try {
+            viewHandler = new Handler(new Handler.Callback() {
+                @Override
+                public boolean handleMessage(@NonNull Message msg) {
+                    try {
+                        Bundle bundle = msg.getData();
+                        boolean singleItemCheck = bundle.getBoolean("singleItemCheck");
+                        if (singleItemCheck) {
+                            maintenanceSingleItemboolean = true;
+                        } else {
+                            maintenanceSingleItemboolean = false;
+                        }
+                        // itemBlock()를 실행 시킬지 여부 (이 조건 안걸면 리사이클러뷰 bind때마다 계속 돈다.)
+                        isExecutionViewHandler = true;
+                        notifyDataSetChanged();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

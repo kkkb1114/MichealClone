@@ -36,7 +36,6 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.i("리사이클러뷰 ㄱㄱ?", "333");
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view;
         ViewHolder viewHolder;
@@ -53,11 +52,9 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
          * 2. 연, 월 뷰는 해당 position의 연, 월값을 키값으로 YearMonthBundleCheckHashMap에 들어있는 position값과 같으면 VISIBLE이며 다르면 GONE 처리한다.
          *
          **/
-        Log.e("position111111","position : " + position);
         if (CarbookRecord_Data.MainRecordPageArrayList.size() > 0) {
 
             MainRecordPage page = CarbookRecord_Data.MainRecordPageArrayList.get(position);
-            Log.e("test","page : " + page);
             // 날짜를 정수로 바꿔 0.01을 곱해도 되긴 하는데 그냥 문자열을 잘라 사이에 .을 붙여 만들었다. (이게 나은 방법인가?)
             String beforeDate = CarbookRecord_Data.MainRecordPageArrayList.get(position).carbookRecordExpendDate.substring(4, 8);
             String submonth = beforeDate.substring(0, 2);
@@ -90,38 +87,26 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
 
                 if (!YearMonthBundleCheckHashMap.containsKey(CarbookRecord_Data.MainRecordPageArrayList.get(position).year)){
                     YearMonthBundleCheckHashMap.put(CarbookRecord_Data.MainRecordPageArrayList.get(position).year, position);
-                    Log.i("YearMonthBundleCheckHashMap_year: ", String.valueOf(YearMonthBundleCheckHashMap));
-                    Log.i("YearMonthBundleCheckHashMap_year_position: ", String.valueOf(position));
                 }
 
                 if (!YearMonthBundleCheckHashMap.containsKey(CarbookRecord_Data.MainRecordPageArrayList.get(position).month)){
                     YearMonthBundleCheckHashMap.put(CarbookRecord_Data.MainRecordPageArrayList.get(position).month, position);
-                    Log.i("YearMonthBundleCheckHashMap_month: ", String.valueOf(YearMonthBundleCheckHashMap));
-                    Log.i("YearMonthBundleCheckHashMap_month_position: ", String.valueOf(position));
                 }
 
                 if (YearMonthBundleCheckHashMap.get(CarbookRecord_Data.MainRecordPageArrayList.get(position).year) == position){
                     holder.Ln_year.setVisibility(View.VISIBLE);
                     holder.tv_mainrecordYearCost.setText(yearCost);
                     holder.tv_mainrecordYear.setText(CarbookRecord_Data.MainRecordPageArrayList.get(position).year);
-                    Log.i("YearMonthBundleCheckHashMap_year11: ", String.valueOf(YearMonthBundleCheckHashMap));
-                    Log.i("YearMonthBundleCheckHashMap_year_position11: ", String.valueOf(position));
                 }else {
                     holder.Ln_year.setVisibility(View.GONE);
-                    Log.i("YearMonthBundleCheckHashMap_year22: ", String.valueOf(YearMonthBundleCheckHashMap));
-                    Log.i("YearMonthBundleCheckHashMap_year_position22: ", String.valueOf(position));
                 }
 
                 if (YearMonthBundleCheckHashMap.get(CarbookRecord_Data.MainRecordPageArrayList.get(position).month) == position){
                     holder.Ln_month.setVisibility(View.VISIBLE);
                     holder.tv_mainrecordMonthCost.setText(monthCost);
                     holder.tv_mainrecordMonth.setText(submonth);
-                    Log.i("YearMonthBundleCheckHashMap_month11: ", String.valueOf(YearMonthBundleCheckHashMap));
-                    Log.i("YearMonthBundleCheckHashMap_month_position11: ", String.valueOf(position));
                 }else {
                     holder.Ln_month.setVisibility(View.GONE);
-                    Log.i("YearMonthBundleCheckHashMap_month22: ", String.valueOf(YearMonthBundleCheckHashMap));
-                    Log.i("YearMonthBundleCheckHashMap_month_position22: ", String.valueOf(position));
                 }
 
             holder.tv_mainrecordDate.setText(date);
@@ -148,8 +133,6 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
 
             // 각 기록에 속한 항목 삽입
             setViewHolderRecyclerView(holder, nameList, costList);
-            Log.i("costList.get(position)", String.valueOf(costList));
-            Log.i("nameList.get(position)", String.valueOf(nameList));
         }
     }
 

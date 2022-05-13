@@ -183,17 +183,10 @@ public class FuelingRecordActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String get_putOilPrice = et_putOilPrice.getText().toString();
                 if (get_putOilPrice.contains(",")){
-                    // 지울것!!
-                    Log.i("get_putOilPrice", get_putOilPrice);
                     get_putOilPrice = get_putOilPrice.replaceAll(",", "");
-                    // 지울것!!
-                    Log.i("get_putOilPrice", get_putOilPrice);
                 }
                 putOilPrice = Integer.parseInt(get_putOilPrice);
                 double result = (double) putOilPrice / (double) oilPrice;
-                Log.i("putOilPrice", String.valueOf(putOilPrice));
-                Log.i("oilPrice", String.valueOf(oilPrice));
-                Log.i("result", String.valueOf(result));
                 et_fuelVolume.setText(String.format("%.3f", result));
 
                 String putOilPrice_result = NumberFormat.getInstance(Locale.getDefault()).format(putOilPrice);

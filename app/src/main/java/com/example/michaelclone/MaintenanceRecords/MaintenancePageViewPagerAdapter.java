@@ -131,8 +131,6 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
             ItemTypeList_other.add(0);
         }
         ItemTypeList_other.add(1);
-        Log.i("ItemTitleList_othe111r", String.valueOf(ItemTitleList_other.size()));
-        Log.i("ItemTypeList_other", String.valueOf(ItemTypeList_other.size()));
     }
     
     public String getResourcesString(int id){
