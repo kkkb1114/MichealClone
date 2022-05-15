@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -67,6 +68,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
         EditText et_maintenanceOtherItemPrice;
         EditText et_maintenanceOtherItemMemo;
         View View_maintenanceOtherItemLine;
+        LinearLayout Ln_maintenanceOtherItemRemove;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +82,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
             et_maintenanceOtherItemPrice = itemView.findViewById(R.id.et_MtOt_ItemPrice);
             et_maintenanceOtherItemMemo = itemView.findViewById(R.id.et_MtOtItemMemo);
             View_maintenanceOtherItemLine = itemView.findViewById(R.id.View_maintenanceItemLine);
+            Ln_maintenanceOtherItemRemove = itemView.findViewById(R.id.Ln_maintenanceOtherItemRemove);
         }
 
         // 아이템 마지막은 구분선이 계속 생기면 아래 구분선이 2개가 되기때문에 없애준다.
@@ -128,6 +131,8 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(ItemPrice)) {
+                        // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
+                        MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList.set(position, et_maintenanceOtherItemPrice.getText().toString());
                         if (et_maintenanceOtherItemPrice.getText().toString().matches("0")) {
                             // 맨 처음 앞자리가 0이면 더이상 입력 못하게 지운다
                             et_maintenanceOtherItemPrice.setText("");

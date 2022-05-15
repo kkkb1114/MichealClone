@@ -98,9 +98,9 @@ public class CarbookRecordItem_DB {
         return null;
     }
 
-    public ArrayList<CarbookRecordItem> getMainRecordItemItemArrayList() {
+    public ArrayList<CarbookRecordItem> getMainRecordItemItemArrayList(int mainRecordItemCarbookRecordId) {
         try {
-            Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordId = 1;", null);
+            Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordId = " + mainRecordItemCarbookRecordId, null);
 
             ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
             carbookRecordItemArrayList = getMainRecordItemCursor(cursor, carbookRecordItemArrayList);

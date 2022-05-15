@@ -1,10 +1,12 @@
 package com.example.michaelclone.MainRecord;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.michaelclone.DataBase.MainRecordPage;
 import com.example.michaelclone.DataBase.CarbookRecord_Data;
+import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordActivity;
 import com.example.michaelclone.R;
 
 import java.text.DecimalFormat;
@@ -134,6 +137,8 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
             // 각 기록에 속한 항목 삽입
             setViewHolderRecyclerView(holder, nameList, costList);
         }
+        // 기록 클릭시 수정페이지 이동 메소드
+        moveRecordItemModifyPage(holder, position);
     }
 
     public void setViewHolderRecyclerView(ViewHolder holder, ArrayList<String> nameList, ArrayList<String> costList) {
@@ -145,6 +150,16 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
         // 데이터를 뽑아오고 위에서 뽑은 MainRecordPage에서 기록 자체의 id 값을 가져오니 id와 carbookRecordId의 값이 같을 경우 데이터를 삽입한다. (생각한건 for문안에 for문을 넣는 것)
         holder.rv_mainrecordItem.setAdapter(_mainRecordPageItemRecyclerViewAdapter);
         holder.rv_mainrecordItem.setLayoutManager(linearLayoutManager);
+    }
+
+    public void moveRecordItemModifyPage(ViewHolder holder, int position){
+        holder.Ln_mainRecordItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MaintenanceOtherRecordActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -167,6 +182,8 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
         RecyclerView rv_mainrecordItem;
         LinearLayout Ln_year;
         LinearLayout Ln_month;
+        ImageView iv_mainrecordMenuButton;
+        LinearLayout Ln_mainRecordItem;
 
         public ViewHolder(@NonNull View itemView, Context context, int ViewType) {
             super(itemView);
@@ -188,6 +205,8 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
             rv_mainrecordItem = itemView.findViewById(R.id.rv_mainrecordItem);
             Ln_year = itemView.findViewById(R.id.Ln_year);
             Ln_month = itemView.findViewById(R.id.Ln_month);
+            iv_mainrecordMenuButton = itemView.findViewById(R.id.iv_mainrecordMenuButton);
+            Ln_mainRecordItem = itemView.findViewById(R.id.Ln_mainRecordItem);
         }
     }
 }

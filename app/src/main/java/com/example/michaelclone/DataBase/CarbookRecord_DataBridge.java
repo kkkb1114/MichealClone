@@ -16,6 +16,10 @@ public class CarbookRecord_DataBridge {
         return carbookRecord_db.getMainRecordList();
     }
 
+    public CarbookRecord getSelectCarbookRecord(int _id){
+        CarbookRecord_DB carbookRecord_db = CarbookRecord_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
+        return carbookRecord_db.selectCarbookRecord(_id);
+    }
 
     // 기록 저장할때 항목 DB의 carbookRecordId에 넣을 id값 추출 메소드
     public int MainRecordSelectLastId(){

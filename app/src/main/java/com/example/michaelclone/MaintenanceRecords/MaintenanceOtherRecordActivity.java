@@ -3,11 +3,14 @@ package com.example.michaelclone.MaintenanceRecords;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.michaelclone.DataBase.CarbookRecord;
 import com.example.michaelclone.DataBase.CarbookRecordItem;
 import com.example.michaelclone.DataBase.CarbookRecordItem_DataBridge;
+import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.DataBase.CarbookRecord_DataBridge;
 import com.example.michaelclone.DataBase.Time_DataBridge;
 import com.example.michaelclone.DialogManager;
@@ -39,6 +43,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     TextView tv_date;
     Context mContext;
     ArrayList<String> selectItemTitleList;
+    int carbookRecordId = 0;
 
     // 날짜 구하기 변수
     long mNow;
@@ -73,6 +78,10 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
         try {
             mContext = this;
+            Intent intent = getIntent();
+            if (intent != null) {
+                carbookRecordId = getIntentData(intent);
+            }
             setView();
             setFragment(1, getIntentDate());
             setItemDummyData();
@@ -95,11 +104,20 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         maintenanceOtherRecordComplete.setOnClickListener(this);
     }
 
-    // 정비, 기타 항목 선택 화면에서 intent로 받은 2개의 ArrayList를 1개의 ArrayList로 합치기 위한 메소드
+    /***
+     * 1. 항목 선택에서 항목을 선택하고 넘어온게 아닌 수정모드로 들어온것이라면 null을 반환
+     * 2. 해당 구분은 먼저 mainRecordItemCarbookRecordId키값으로 int값을 받아보고 만약 초기값인 0보다 작으면 항목선택에서 넘어온것으로 보고 ArrayList<String>를 반환한다.
+     * 3. 그게 아니라면 null을 반환한다.
+     */
     public ArrayList<String> getIntentDate() {
         Intent intent = getIntent();
-        selectItemTitleList = (ArrayList<String>) intent.getSerializableExtra("selectItemTitleList");
-        return selectItemTitleList;
+        carbookRecordId = intent.getIntExtra("mainRecordItemCarbookRecordId", 0);
+        if(carbookRecordId <= 0){
+            selectItemTitleList = (ArrayList<String>) intent.getSerializableExtra("selectItemTitleList");
+            return selectItemTitleList;
+        }else {
+            return null;
+        }
     }
 
     @Override
@@ -188,7 +206,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
     public void setFragment(int fragment, ArrayList<String> selectItemTitleList) {
         fragmentManager = getSupportFragmentManager();
-        maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment(selectItemTitleList);
+        maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment(selectItemTitleList, carbookRecordId);
         locationSearchFragment = new LocationSearchFragment();
         fragmentTransaction = fragmentManager.beginTransaction();
         switch (fragment) {
@@ -203,4 +221,9 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                 break;
         }
     }
+
+    public int getIntentData(Intent intent) {
+        return intent.getIntExtra("mainRecordItemCarbookRecordId", 0);
+    }
+
 }

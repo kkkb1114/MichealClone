@@ -22,7 +22,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +42,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.michaelclone.DataBase.CarbookRecord;
+import com.example.michaelclone.DataBase.CarbookRecordItem;
+import com.example.michaelclone.DataBase.CarbookRecordItem_DataBridge;
+import com.example.michaelclone.DataBase.CarbookRecord_Data;
+import com.example.michaelclone.DataBase.CarbookRecord_DataBridge;
 import com.example.michaelclone.Data_Record;
 import com.example.michaelclone.R;
 
@@ -56,7 +60,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
 
     // 선택 항목 리스트
     RecyclerView rv_MtOtRecorditemList;
-    MaintenanceOtherRecordRecyclerViewAdapter _maintenanceOtherRecordRecyclerViewAdapter;
+    MaintenanceOtherRecordRecyclerViewAdapter maintenanceOtherRecordRecyclerViewAdapter;
 
     // 카메라, 앨범 선택 핸들러
     public static ActivityResultLauncher<Intent> mStartForResult;
@@ -77,16 +81,21 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     View View_maintenanceLocationLine;
     Spinner sp_changeLocation;
     ArrayList<String> selectItemTitleList;
+    int carbookRecordId;
+    CarbookRecord carbookRecords = null;
+    ArrayList<CarbookRecordItem> carbookRecordItems = null;
 
     // 카메라 찍을때 처음 일반 촬영하고 크롭으로 넘어가게끔 만들기 위한 변수
     boolean imageCrop = false;
 
-    public MaintenanceOtherRecordFragment(ArrayList<String> selectItemTitleList) {
+    public MaintenanceOtherRecordFragment(ArrayList<String> selectItemTitleList, int carbookRecordId) {
         this.selectItemTitleList = selectItemTitleList;
+        this.carbookRecordId = carbookRecordId;
     }
 
     public String getTotalDistance() {
-        return et_cumulativeMileage.getText().toString();
+        String toTalDistance = et_cumulativeMileage.getText().toString().replace(",", "");
+        return toTalDistance;
     }
 
     @Override
@@ -101,6 +110,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         View view = inflater.inflate(R.layout.fragment_maintenance_other_record, container, false);
 
         setView(view);
+        getSelectItemDataList();
         mStartForResult();
         set_ViewPager(); // type이 1이면 이미지 적용된 레이아웃, 0이면 이미지 추가 레이아웃
         set_RvSelectItem();
@@ -109,6 +119,22 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         RequestPermission();
 
         return view;
+    }
+
+    public void getSelectItemDataList(){
+        if (carbookRecordId > 0){
+            CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
+            carbookRecords = mainRecordDataBridge.getSelectCarbookRecord(carbookRecordId);
+
+            CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
+            carbookRecordItems = carbookRecordItem_dataBridge.getMainRecordItemItemData(carbookRecordId);
+
+            getSelectItemDataSetView();
+        }
+    }
+
+    public void getSelectItemDataSetView(){
+        et_cumulativeMileage.setText(carbookRecords.carbookRecordTotalDistance);
     }
 
     public void setView(View view) {
@@ -128,20 +154,20 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     // 뷰들 예외처리 모음
     public void setViewAction() {
         // 누적 주행거리 천단위 콤마 적용
-        et_cumulativeMileage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        /*et_cumulativeMileage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String Mileage = v.getText().toString();
-                /**
+                *//**
                  * 텍스트 두번 가져오면 ,가 포함되서 Long.parseLong가 안되는거다. 그래서 두번째 계산에서 터짐
-                 * **/
+                 * **//*
                 long cumulativeMileage = Long.parseLong(Mileage.replace(",", ""));
                 DecimalFormat decimalFormat = new DecimalFormat("###,###");
                 String calculatedCumulativeMileage = decimalFormat.format(cumulativeMileage);
                 et_cumulativeMileage.setText(calculatedCumulativeMileage);
                 return false;
             }
-        });
+        });*/
 
         et_cumulativeMileage.addTextChangedListener(textWatcherCumulativeMileage);
     }
@@ -240,9 +266,19 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     public void set_RvSelectItem() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         rv_MtOtRecorditemList.setLayoutManager(linearLayoutManager);
-        _maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList);
-        rv_MtOtRecorditemList.setAdapter(_maintenanceOtherRecordRecyclerViewAdapter);
-        _maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
+        if (carbookRecordId > 0){
+            if(selectItemTitleList == null){
+                selectItemTitleList = new ArrayList<>();
+            }
+            for (int i = 0; i < carbookRecordItems.size(); i++){
+                selectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+            }
+            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList);
+        }else {
+            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList);
+        }
+        rv_MtOtRecorditemList.setAdapter(maintenanceOtherRecordRecyclerViewAdapter);
+        maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     // 뷰페이저 세팅

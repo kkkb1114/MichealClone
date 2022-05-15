@@ -85,6 +85,18 @@ public class CarbookRecord_DB {
         return null;
     }
 
+    public CarbookRecord selectCarbookRecord(int _id){
+        try {
+            Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecord WHERE _id = "+ _id, null);
+            CarbookRecord carbookRecords;
+            carbookRecords = getMainRecordCursorSingle(cursor);
+            return carbookRecords;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * - 기록 저장시 항목 데이터 저장할때 넣어줄 기록 id값 추출 쿼리 메소드
      * - 이 메소드는 무조건 carbookRecord를 저장 후에 실행할 예정이기에 carbookRecord중 id값이 가장 마지막인 데이터를 id값만 가지고 나온다.
@@ -121,6 +133,17 @@ public class CarbookRecord_DB {
         }
         cursor.close();
         return CarbookRecords;
+    }
+
+    private CarbookRecord getMainRecordCursorSingle(Cursor cursor){
+        CarbookRecord carbookRecord = null;
+        while (cursor.moveToNext()){
+            //todo 여기서 cursor.getInt(0)으로 id 값을 받을수 있지 않을까 했는데 안받아져서 일단 뺐다.
+            carbookRecord = new CarbookRecord(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4),
+                    cursor.getString(5), cursor.getString(6));
+        }
+        cursor.close();
+        return carbookRecord;
     }
 
     public ArrayList<MainRecordPage> getMainRecordData(){
