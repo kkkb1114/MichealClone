@@ -138,38 +138,6 @@ public class FuelingRecordActivity extends AppCompatActivity {
         return mFormat.format(mDate);      // SimpleDateFormat에 적용된 양식으로 시간값 문자열 반환
     }
 
-    public String getDateDay(Date mDate){
-        String DAY_OF_WEEK = "";
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(mDate);
-        int dayNum = cal.get(Calendar.DAY_OF_WEEK);
-        switch (dayNum){
-            case 1:
-                DAY_OF_WEEK = " (일)";
-                break;
-            case 2:
-                DAY_OF_WEEK = " (월)";
-                break;
-            case 3:
-                DAY_OF_WEEK = " (화)";
-                break;
-            case 4:
-                DAY_OF_WEEK = " (수)";
-                break;
-            case 5:
-                DAY_OF_WEEK = " (목)";
-                break;
-            case 6:
-                DAY_OF_WEEK = " (금)";
-                break;
-            case 7:
-                DAY_OF_WEEK = " (토)";
-                break;
-        }
-
-        return DAY_OF_WEEK;
-    }
-
     // 주유금액 자동 계산
     public void Automatic_calculation_fueling(){
         // 입력된 숫자 값을 디바이스 기준 지역 통화 표현??으로 바꾸었다

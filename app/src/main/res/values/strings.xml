@@ -100,6 +100,7 @@
     <string name="HistoryPageMaintenanceOthers">정비/기타</string>
     <string name="TotalMoney">총</string>
     <string name="Accumulate">누적</string>
+    <string name="ItemMemoCharacterLimit">/250</string>
     <!--기록 페이지-->
 
     <!--단일 항목 선택 알림-->

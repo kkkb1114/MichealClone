@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Point;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +28,13 @@ public class MaintenanceOtherImageViewPagerAdapter extends RecyclerView.Adapter<
     DialogManager.SelectCameraAlbum_Dialog selectCameraAlbum_dialog;
     ArrayList<Bitmap> bitmapArrayList;
     ArrayList<String> typeList;
-    TextView MtOt_imageCount;
+    TextView mtOt_imageCount;
 
    public MaintenanceOtherImageViewPagerAdapter(Context context, ArrayList<Bitmap> bitmapArrayList, ArrayList<String> typeList, TextView fueling_imageCount){
        this.context = context;
        this.bitmapArrayList = bitmapArrayList;
        this.typeList = typeList;
-       this.MtOt_imageCount = fueling_imageCount;
+       this.mtOt_imageCount = fueling_imageCount;
    }
 
    // onCreateViewHolder에서 viewType로 뷰를 구분하기 위해 getItemViewType를 오버라이드함.
@@ -156,7 +155,7 @@ public class MaintenanceOtherImageViewPagerAdapter extends RecyclerView.Adapter<
                         typeList.add("0");
                     }
                     notifyDataSetChanged(); // 리사이클러뷰 어뎁터에서 새로고침
-                    MtOt_imageCount.setText(bitmapArrayList.size()+"/5");
+                    mtOt_imageCount.setText(bitmapArrayList.size()+"/5");
                 }
             });
         }

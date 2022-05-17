@@ -2,7 +2,6 @@ package com.example.michaelclone.MainRecord;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,10 +66,10 @@ public class MainrecordFragment extends Fragment {
     // 기록 페이지에 들어오면 DB에 저장된 MainRecord, MainRecordItem데이터를 전부 불러와서 MainRecord_Data클래스안에 메인 페이지 전용 ArrayList에 전부 넣어준다.
     public void getMainrecordDataList(){
         CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
-        CarbookRecord_Data.MainRecordPageRecordItemArrayList_getDB = carbookRecordItem_dataBridge.MainRecordItemSelect();
+        CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB = carbookRecordItem_dataBridge.MainRecordItemSelect();
 
         CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
-        CarbookRecord_Data.MainRecordPageArrayList = mainRecordDataBridge.getMainRecordData();
+        CarbookRecord_Data.mainRecordPageArrayList = mainRecordDataBridge.getMainRecordData();
 
         // 가끔 editText에서 에러터져서 null값이 들어가서 테스트환경에서 그런 데이터를 지우기위해 만든 메소드(원래는 delete를 하지않기에 쓰지 않는다.)
         //mainRecordItem_dataBridge.test_delete(37);

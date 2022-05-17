@@ -9,11 +9,11 @@ import androidx.annotation.Nullable;
 
 public class MichaelClone_DBHelper extends SQLiteOpenHelper {
 
-    static String DATABASE_NAME = "MichaelClone.db";
     public static MichaelClone_DBHelper michaelCloneDbHelper_Instance;
     public static SQLiteDatabase writeableDataBase;
     public static SQLiteDatabase readableDataBase;
 
+    // name으로 DB이름을 지정하면 되긴 하는데 어차피 DB는 하나니까 그냥 이렇게 다이렉트로 넣었다.
     public static synchronized MichaelClone_DBHelper getInstance(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         if (michaelCloneDbHelper_Instance == null){
             michaelCloneDbHelper_Instance = new MichaelClone_DBHelper(context.getApplicationContext(), "MichaelClone.db", factory, version);

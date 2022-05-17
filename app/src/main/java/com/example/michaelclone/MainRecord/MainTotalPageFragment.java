@@ -16,12 +16,12 @@ import com.example.michaelclone.R;
 
 public class MainTotalPageFragment extends Fragment {
 
-    MainRecordPageRecyclerViewAdapter _mainRecordPageRecyclerViewAdapter;
+    MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter;
     RecyclerView rv_mainTotalPage;
     Context context;
 
-    public MainTotalPageFragment(MainRecordPageRecyclerViewAdapter _mainRecordPageRecyclerViewAdapter){
-        this._mainRecordPageRecyclerViewAdapter = _mainRecordPageRecyclerViewAdapter;
+    public MainTotalPageFragment(MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter){
+        this.mainRecordPageRecyclerViewAdapter = mainRecordPageRecyclerViewAdapter;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class MainTotalPageFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
         rv_mainTotalPage.setLayoutManager(linearLayoutManager);
-        rv_mainTotalPage.setAdapter(_mainRecordPageRecyclerViewAdapter);
-        _mainRecordPageRecyclerViewAdapter.notifyDataSetChanged();
+        rv_mainTotalPage.setAdapter(mainRecordPageRecyclerViewAdapter);
+        mainRecordPageRecyclerViewAdapter.notifyDataSetChanged();
     }
 }

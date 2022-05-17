@@ -16,12 +16,12 @@ import com.example.michaelclone.R;
 
 public class MainrecordMaintenanceItemsPageFragment extends Fragment {
 
-    MainRecordPageRecyclerViewAdapter _mainRecordPageRecyclerViewAdapter;
+    MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter;
     RecyclerView rv_mainrecordMaintenanceItemspage;
     Context context;
 
-    public MainrecordMaintenanceItemsPageFragment(MainRecordPageRecyclerViewAdapter _mainRecordPageRecyclerViewAdapter){
-        this._mainRecordPageRecyclerViewAdapter = _mainRecordPageRecyclerViewAdapter;
+    public MainrecordMaintenanceItemsPageFragment(MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter){
+        this.mainRecordPageRecyclerViewAdapter = mainRecordPageRecyclerViewAdapter;
     }
 
     @Override
@@ -50,8 +50,8 @@ public class MainrecordMaintenanceItemsPageFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
         rv_mainTotalPage.setLayoutManager(linearLayoutManager);
-        rv_mainTotalPage.setAdapter(_mainRecordPageRecyclerViewAdapter);
-        _mainRecordPageRecyclerViewAdapter.notifyDataSetChanged();
+        rv_mainTotalPage.setAdapter(mainRecordPageRecyclerViewAdapter);
+        mainRecordPageRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 }

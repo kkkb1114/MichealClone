@@ -14,7 +14,7 @@ public class MainRecordPageViewPagerAdapter extends FragmentStateAdapter {
     int pageNum;
     ArrayList<Integer> ViewTypeList = new ArrayList<>();
 
-    MainRecordPageRecyclerViewAdapter _mainRecordPageRecyclerViewAdapter;
+    MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter;
     Context context;
 
     public MainRecordPageViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, int pageNum, Context context) {
@@ -26,12 +26,12 @@ public class MainRecordPageViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        _mainRecordPageRecyclerViewAdapter = create_apRv_MainTotalPage();
+        mainRecordPageRecyclerViewAdapter = create_apRv_MainTotalPage();
         switch (position){
             case 0:
-                return new MainrecordMaintenanceItemsPageFragment(_mainRecordPageRecyclerViewAdapter);
+                return new MainrecordMaintenanceItemsPageFragment(mainRecordPageRecyclerViewAdapter);
             case 1:
-                return new MainTotalPageFragment(_mainRecordPageRecyclerViewAdapter);
+                return new MainTotalPageFragment(mainRecordPageRecyclerViewAdapter);
             default:
                 return null;
         }

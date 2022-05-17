@@ -38,8 +38,14 @@ public class MainRecordPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String cost;
+        if (costList.get(position).contains(",")){
+            cost = costList.get(position).replace(",", "");
+        }else {
+            cost = costList.get(position);
+        }
         // 항목 금액
-        String costResult = "₩" + decimalFormat.format(Integer.parseInt(costList.get(position)));
+        String costResult = "₩" + decimalFormat.format(Integer.parseInt(cost));
 
         holder.tv_mainrecordRvItemTitle.setText(nameList.get(position));
         holder.tv_mainrecordRvItemCost.setText(costResult);

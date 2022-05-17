@@ -20,5 +20,4 @@ public class Time_DataBridge {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         return simpleDateFormat.format(date);
     }
-
 }

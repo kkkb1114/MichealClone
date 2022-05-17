@@ -148,7 +148,8 @@
         android:id="@+id/Ln_mainRecordItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:clickable="false">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -206,7 +207,8 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_diag_close"
                 android:gravity="right"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:clickable="false"/>
 
         </LinearLayout>
 

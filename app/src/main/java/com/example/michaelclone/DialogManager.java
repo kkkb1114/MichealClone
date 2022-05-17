@@ -22,9 +22,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
-import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordActivity;
 import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordFragment;
+import com.example.michaelclone.Tools.CalendarData;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -49,10 +49,7 @@ public class DialogManager extends AlertDialog.Builder {
         // 날짜 구하기 변수
         long mNow;
         Date mDate;
-        SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd");
-        SimpleDateFormat mFormat_mmdd = new SimpleDateFormat("MM월 dd일");
-        SimpleDateFormat mFormat_yyyy = new SimpleDateFormat("yyyy");
-        SimpleDateFormat mFormat_saveOnly = new SimpleDateFormat("yyyyMMdd");
+        CalendarData calendarData = new CalendarData();
 
         MaterialCalendarView materialCalendarView;
         TextView tv_dl_cal_date;
@@ -60,8 +57,8 @@ public class DialogManager extends AlertDialog.Builder {
         TextView tv_date;
         Button bt_confirm;
         Button bt_cancel;
-        String NowDate;
-        String NowYear;
+        String nowDate;
+        String nowYear;
         MaintenanceOtherRecordActivity maintenanceOtherRecordActivity;
 
         public calenderDialog(@NonNull Context context, TextView tv_date, MaintenanceOtherRecordActivity maintenanceOtherRecordActivity) {
@@ -73,11 +70,11 @@ public class DialogManager extends AlertDialog.Builder {
         public void onCreate(Bundle savedInstanceState){
             super.onCreate(savedInstanceState);
 
-            getDate();
+            initDate();
             initView();
             setMaterialCalendarView();
-            tv_dl_cal_date.setText(NowDate+getDateDay(mDate));
-            tv_dl_cal_year.setText(NowYear);
+            tv_dl_cal_date.setText(nowDate + calendarData.getDateDay(mDate));
+            tv_dl_cal_year.setText(nowYear);
 
         }
 
@@ -122,12 +119,12 @@ public class DialogManager extends AlertDialog.Builder {
             bt_confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String date = mFormat.format(materialCalendarView.getSelectedDate().getDate());
+                    String date = calendarData.getDateFormat(materialCalendarView.getSelectedDate().getDate(), "yyyy.MM.dd");
                     Date date2 = materialCalendarView.getSelectedDate().getDate();
-                    tv_date.setText(date+getDateDay(date2));
+                    tv_date.setText(date + calendarData.getDateDay(date2));
 
                     // 기록 확인 클릭시 선택한 날짜를 디비 저장용 해당 기록 지출 날짜로 지정해놓는다.
-                    maintenanceOtherRecordActivity.setSelectDate(mFormat_saveOnly.format(materialCalendarView.getSelectedDate().getDate()));
+                    maintenanceOtherRecordActivity.setSelectDate(nowYear = calendarData.getDateFormat(materialCalendarView.getSelectedDate().getDate(), "yyyyMMdd"));
                     dismiss();
                 }
             });
@@ -144,53 +141,20 @@ public class DialogManager extends AlertDialog.Builder {
         public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
             // 날짜를 클릭할때마다 받아오는 CalendarDay객체를 이용하여 getDate()후 해당 Date객체로 년, 월, 요일 값을 다시 받아서 상단 텍스트뷰에 다시 set한다.
-            NowDate = mFormat_mmdd.format(date.getDate());
-            NowYear = mFormat_yyyy.format(date.getDate());
+            nowDate = calendarData.getDateFormat(date.getDate(), "MM월 dd일");
+            nowYear = calendarData.getDateFormat(date.getDate(), "yyyy");
 
-            tv_dl_cal_date.setText(NowDate+getDateDay(date.getDate()));
-            tv_dl_cal_year.setText(NowYear);
+            tv_dl_cal_date.setText(nowDate + calendarData.getDateDay(date.getDate()));
+            tv_dl_cal_year.setText(nowYear);
         }
 
-
         // 현재 시간 구하기
-        public void getDate(){
+        public void initDate(){
             mNow = System.currentTimeMillis(); // 디바이스 기준 표준 시간 적용
             mDate = new Date(mNow);            // Date 객체에 디바이스 표준 시간 적용
 
-            NowDate = mFormat_mmdd.format(mDate);// SimpleDateFormat에 적용된 양식으로 시간값 문자열 반환
-            NowYear = mFormat_yyyy.format(mDate);
-        }
-
-        public String getDateDay(Date mDate){
-            String DAY_OF_WEEK = "";
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(mDate);
-            int dayNum = cal.get(Calendar.DAY_OF_WEEK);
-            switch (dayNum){
-                case 1:
-                    DAY_OF_WEEK = " (일)";
-                    break;
-                case 2:
-                    DAY_OF_WEEK = " (월)";
-                    break;
-                case 3:
-                    DAY_OF_WEEK = " (화)";
-                    break;
-                case 4:
-                    DAY_OF_WEEK = " (수)";
-                    break;
-                case 5:
-                    DAY_OF_WEEK = " (목)";
-                    break;
-                case 6:
-                    DAY_OF_WEEK = " (금)";
-                    break;
-                case 7:
-                    DAY_OF_WEEK = " (토)";
-                    break;
-            }
-
-            return DAY_OF_WEEK;
+            nowDate = calendarData.getDateFormat(mDate, "MM월 dd일");
+            nowYear = calendarData.getDateFormat(mDate, "yyyy");
         }
 
         public class TodayDecorator implements DayViewDecorator {
@@ -274,8 +238,7 @@ public class DialogManager extends AlertDialog.Builder {
         // 날짜 구하기 변수
         long mNow;
         Date mDate;
-        SimpleDateFormat mFormat = new SimpleDateFormat("yyyyMMddss");
-
+        CalendarData calendarData = new CalendarData();
 
         public SelectCameraAlbum_Dialog(Context context) {
             super(context, R.layout.select_camer_aalbum_dialog);
@@ -300,7 +263,7 @@ public class DialogManager extends AlertDialog.Builder {
                     //여기까지 함 카메라 앨범 작업 중 intentCamera
                     Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     rootPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/MichaelClone/"; // 주차 위치 카메라 촬영시 기기 내부 이미지 저장 위치
-                    String fileName = getDate()+".jpg";
+                    String fileName = initDate()+".jpg";
                     // 지울것!!
                     Log.i("fileName", fileName);
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/MichaelClone",
@@ -342,13 +305,11 @@ public class DialogManager extends AlertDialog.Builder {
             data_Record.setType(type);
         }
 
-
         // 현재 시간 구하기
-        public String getDate(){
+        public String initDate(){
             mNow = System.currentTimeMillis(); // 디바이스 기준 표준 시간 적용
             mDate = new Date(mNow);            // Date 객체에 디바이스 표준 시간 적용
-
-            return mFormat.format(mDate);      // SimpleDateFormat에 적용된 양식으로 시간값 문자열 반환
+            return calendarData.getDateFormat(mDate, "yyyyMMddss");      // SimpleDateFormat에 적용된 양식으로 시간값 문자열 반환
         }
 
     }

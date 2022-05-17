@@ -11,8 +11,6 @@ import java.util.ArrayList;
 
 public class CarbookRecord_DB {
 
-    final String TABLE_NAME = "carbookRecord";
-
     public static synchronized CarbookRecord_DB getInstance(@Nullable Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         if (MichaelClone_DBHelper.michaelCloneDbHelper_Instance == null){
             MichaelClone_DBHelper.michaelCloneDbHelper_Instance = MichaelClone_DBHelper.getInstance(context, name, factory, version);
@@ -125,7 +123,6 @@ public class CarbookRecord_DB {
 
     private ArrayList<CarbookRecord> getMainRecordCursor(Cursor cursor, ArrayList<CarbookRecord> CarbookRecords){
         while (cursor.moveToNext()){
-            //todo 여기서 cursor.getInt(0)으로 id 값을 받을수 있지 않을까 했는데 안받아져서 일단 뺐다.
             CarbookRecord carbookRecord = new CarbookRecord(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4),
                     cursor.getString(5), cursor.getString(6));
 

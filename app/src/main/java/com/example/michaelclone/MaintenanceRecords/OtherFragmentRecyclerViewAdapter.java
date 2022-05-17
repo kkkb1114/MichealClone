@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.michaelclone.R;
@@ -35,7 +33,7 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
     MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
     boolean otherSingleItemboolean = false;
     // 단일 항목 클릭시 해당 단일 항목만 block 처리를 안하기 위한 예외처리용 변수
-    String SingleItemTitle = "null";
+    String singleItemTitle = "null";
     // itemBlock()메소드는 기타항목에서 단일 항목을 클릭했을때만 돌아야하기에 해당 boolean값으로 조건을 건다.
     boolean isExecutionViewHandler = false;
 
@@ -135,9 +133,9 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
     public void itemBlock(ViewHolder holder) {
         String other_itemTitle = holder.tv_other_itemTitle.getText().toString();
         if (otherSingleItemboolean) {
-            if (!other_itemTitle.equals(context.getResources().getString(R.string.carInsurance)) && !other_itemTitle.equals(SingleItemTitle) ||
-                    !other_itemTitle.equals(context.getResources().getString(R.string.trafficFine)) && !other_itemTitle.equals(SingleItemTitle) ||
-                    !other_itemTitle.equals(context.getResources().getString(R.string.automobileTax)) && !other_itemTitle.equals(SingleItemTitle)) {
+            if (!other_itemTitle.equals(context.getResources().getString(R.string.carInsurance)) && !other_itemTitle.equals(singleItemTitle) ||
+                    !other_itemTitle.equals(context.getResources().getString(R.string.trafficFine)) && !other_itemTitle.equals(singleItemTitle) ||
+                    !other_itemTitle.equals(context.getResources().getString(R.string.automobileTax)) && !other_itemTitle.equals(singleItemTitle)) {
 
                 holder.tv_other_itemTitle.setTextColor(Color.parseColor("#D3D3D3"));
                 holder.cb_other_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#D3D3D3")));
@@ -150,9 +148,9 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
             }
 
         } else {
-            if (!other_itemTitle.equals(context.getResources().getString(R.string.carInsurance)) && !other_itemTitle.equals(SingleItemTitle) ||
-                    !other_itemTitle.equals(context.getResources().getString(R.string.trafficFine)) && !other_itemTitle.equals(SingleItemTitle) ||
-                    !other_itemTitle.equals(context.getResources().getString(R.string.automobileTax)) && !other_itemTitle.equals(SingleItemTitle)) {
+            if (!other_itemTitle.equals(context.getResources().getString(R.string.carInsurance)) && !other_itemTitle.equals(singleItemTitle) ||
+                    !other_itemTitle.equals(context.getResources().getString(R.string.trafficFine)) && !other_itemTitle.equals(singleItemTitle) ||
+                    !other_itemTitle.equals(context.getResources().getString(R.string.automobileTax)) && !other_itemTitle.equals(singleItemTitle)) {
 
                 holder.tv_other_itemTitle.setTextColor(Color.parseColor("#000000"));
                 holder.cb_other_itemSelect.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#33000000")));
@@ -218,7 +216,7 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
             Bundle bundle = new Bundle();
             if (Checked) {
                 otherSingleItemboolean = true;
-                SingleItemTitle = holder.tv_other_itemTitle.getText().toString();
+                singleItemTitle = holder.tv_other_itemTitle.getText().toString();
                 singleItemTitleList.add(holder.tv_other_itemTitle.getText().toString());
                 SelectMaintenanceItemActivity.selectItemTitleList.clear();
 
@@ -229,7 +227,7 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
 
             } else {
                 otherSingleItemboolean = false;
-                SingleItemTitle = "null";
+                singleItemTitle = "null";
                 singleItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
 
                 // 새로운

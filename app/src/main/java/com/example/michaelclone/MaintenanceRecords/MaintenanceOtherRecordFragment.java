@@ -21,6 +21,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,10 +46,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.michaelclone.DataBase.CarbookRecord;
 import com.example.michaelclone.DataBase.CarbookRecordItem;
 import com.example.michaelclone.DataBase.CarbookRecordItem_DataBridge;
-import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.DataBase.CarbookRecord_DataBridge;
 import com.example.michaelclone.Data_Record;
 import com.example.michaelclone.R;
+import com.example.michaelclone.Tools.StringFormat;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -57,6 +58,9 @@ import java.util.ArrayList;
 public class MaintenanceOtherRecordFragment extends Fragment implements View.OnClickListener {
 
     Context context;
+
+    // 툴 클래스
+    StringFormat stringFormat = new StringFormat();
 
     // 선택 항목 리스트
     RecyclerView rv_MtOtRecorditemList;
@@ -81,16 +85,20 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     View View_maintenanceLocationLine;
     Spinner sp_changeLocation;
     ArrayList<String> selectItemTitleList;
+
+    // 수정모드로 들어왔을때 동작 변수
     int carbookRecordId;
+    boolean isModifyMode;
     CarbookRecord carbookRecords = null;
     ArrayList<CarbookRecordItem> carbookRecordItems = null;
 
     // 카메라 찍을때 처음 일반 촬영하고 크롭으로 넘어가게끔 만들기 위한 변수
     boolean imageCrop = false;
 
-    public MaintenanceOtherRecordFragment(ArrayList<String> selectItemTitleList, int carbookRecordId) {
+    public MaintenanceOtherRecordFragment(ArrayList<String> selectItemTitleList, int carbookRecordId, boolean isModifyMode) {
         this.selectItemTitleList = selectItemTitleList;
         this.carbookRecordId = carbookRecordId;
+        this.isModifyMode = isModifyMode;
     }
 
     public String getTotalDistance() {
@@ -110,31 +118,52 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         View view = inflater.inflate(R.layout.fragment_maintenance_other_record, container, false);
 
         setView(view);
+
+        // 수정모드로 들어왔을때 동작 메소드
         getSelectItemDataList();
+        setRepairMode();
+
         mStartForResult();
         set_ViewPager(); // type이 1이면 이미지 적용된 레이아웃, 0이면 이미지 추가 레이아웃
         set_RvSelectItem();
         setViewAction();
         setOnClick();
-        RequestPermission();
+        requestPermission();
 
         return view;
     }
 
-    public void getSelectItemDataList(){
-        if (carbookRecordId > 0){
+    public void getSelectItemDataList() {
+        // carbookRecordId > 0 조건은 carbookRecordId가 0보다 크면 수정모드이기에 붙인 조건 => isModifyMode
+        if (isModifyMode) {
             CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
-            carbookRecords = mainRecordDataBridge.getSelectCarbookRecord(carbookRecordId);
+            MaintenanceOtherRecordActivity.carbookRecords = mainRecordDataBridge.getSelectCarbookRecord(carbookRecordId);
+            carbookRecords = MaintenanceOtherRecordActivity.carbookRecords;
 
             CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
-            carbookRecordItems = carbookRecordItem_dataBridge.getMainRecordItemItemData(carbookRecordId);
+            MaintenanceOtherRecordActivity.carbookRecordItems = carbookRecordItem_dataBridge.getMainRecordItemItemData(carbookRecordId);
+            carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
+            Log.i("getSelectItemDataList", String.valueOf(carbookRecordItems));
 
-            getSelectItemDataSetView();
+            getSelectItemDataSetView(stringFormat.makeStringComma(carbookRecords.carbookRecordTotalDistance));
         }
     }
 
-    public void getSelectItemDataSetView(){
-        et_cumulativeMileage.setText(carbookRecords.carbookRecordTotalDistance);
+    public void setRepairMode() {
+        // 수정모드면 정비소, 자가정비모드 둘 중 해당 기록에 맞게 변경한다.
+        // 0: 정비소, 1: 자가정비
+        // carbookRecordId > 0 조건은 carbookRecordId가 0보다 크면 수정모드이기에 붙인 조건 => isModifyMode
+        if (isModifyMode) {
+            if (carbookRecords.carbookRecordRepairMode == 0) {
+                setRepairState(0);
+            } else {
+                setRepairState(1);
+            }
+        }
+    }
+
+    public void getSelectItemDataSetView(String carbookRecordTotalDistance) {
+        et_cumulativeMileage.setText(carbookRecordTotalDistance);
     }
 
     public void setView(View view) {
@@ -159,8 +188,8 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String Mileage = v.getText().toString();
                 *//**
-                 * 텍스트 두번 가져오면 ,가 포함되서 Long.parseLong가 안되는거다. 그래서 두번째 계산에서 터짐
-                 * **//*
+         * 텍스트 두번 가져오면 ,가 포함되서 Long.parseLong가 안되는거다. 그래서 두번째 계산에서 터짐
+         * **//*
                 long cumulativeMileage = Long.parseLong(Mileage.replace(",", ""));
                 DecimalFormat decimalFormat = new DecimalFormat("###,###");
                 String calculatedCumulativeMileage = decimalFormat.format(cumulativeMileage);
@@ -222,39 +251,14 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             // 정비 모드 클릭할때마다 MainRecord_Data.mainRecordArrayList에 carbookRecordRepairMode를 지정해준다.
             // 0: 정비소, 1: 자가정비
             case R.id.tv_repairShop:
-                /*context.getResources().getDrawable(R.drawable.check) 처럼 안드로이드에서
-                drawable과 color를 위해 사용하였던 함수 getDrawable과 getColor를 더 이상 사용할 수 없게 되었다.
-                이제부터는 ResourcesCompat를 이용해 주어야 한다.*/
 
-                tv_selfMaintenance.setBackground(context.getResources().getDrawable(R.drawable.bt_round_transparent, null));
-                tv_selfMaintenance.setTextColor(context.getResources().getColor(R.color.blackTransparent_20, null));
-
-                // 이게 엑티비티에서는 ContextCompat 이게 먹히는데 프래그먼트에서 안먹힌다. 이유를 알아보자.
-                Drawable img = getContext().getResources().getDrawable(R.drawable.check);
-                img.setBounds(0, 0, 60, 60);
-                tv_repairShop.setCompoundDrawables(img, null, null, null);
-                tv_selfMaintenance.setCompoundDrawables(null, null, null, null);
-                tv_repairShop.setBackground(context.getResources().getDrawable(R.drawable.bt_round_black, null));
-                tv_repairShop.setTextColor(context.getResources().getColor(R.color.white));
-                // 정비소 정비이면 위치 뷰를 보이게 꺼낸다.
-                tr_moRcord_location.setVisibility(View.VISIBLE);
-                View_maintenanceLocationLine.setVisibility(View.VISIBLE);
+                setRepairState(0);
                 break;
             case R.id.tv_selfMaintenance:
              /*   tv_selfMaintenance.setCompoundDrawables();
                 tv_selfMaintenance.setBackground();*/
 
-                tv_repairShop.setBackground(context.getResources().getDrawable(R.drawable.bt_round_transparent, null));
-                tv_repairShop.setTextColor(context.getResources().getColor(R.color.blackTransparent_20));
-                Drawable img2 = getContext().getResources().getDrawable(R.drawable.check);
-                img2.setBounds(0, 0, 60, 60);
-                tv_selfMaintenance.setCompoundDrawables(img2, null, null, null);
-                tv_repairShop.setCompoundDrawables(null, null, null, null);
-                tv_selfMaintenance.setBackground(context.getResources().getDrawable(R.drawable.bt_round_black, null));
-                tv_selfMaintenance.setTextColor(context.getResources().getColor(R.color.white));
-                // 자가 정비이면 위치 뷰를 보이지 않게 숨긴다.
-                tr_moRcord_location.setVisibility(View.GONE);
-                View_maintenanceLocationLine.setVisibility(View.GONE);
+                setRepairState(1);
                 break;
             case R.id.tv_addRecordItem:
                 requireActivity().finish();
@@ -262,20 +266,61 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         }
     }
 
+    // State = 0: 정비소, State = 1: 자가 정비
+    public void setRepairState(int State) {
+
+        /*context.getResources().getDrawable(R.drawable.check) 처럼 안드로이드에서
+          drawable과 color를 위해 사용하였던 함수 getDrawable과 getColor를 더 이상 사용할 수 없게 되었다.
+          이제부터는 ResourcesCompat를 이용해 주어야 한다.*/
+        if (State == 0) {
+            tv_selfMaintenance.setBackground(context.getResources().getDrawable(R.drawable.bt_round_transparent, null));
+            tv_selfMaintenance.setTextColor(context.getResources().getColor(R.color.blackTransparent_20, null));
+
+            // 이게 엑티비티에서는 ContextCompat 이게 먹히는데 프래그먼트에서 안먹힌다. 이유를 알아보자.
+            Drawable img = getContext().getResources().getDrawable(R.drawable.check);
+            img.setBounds(0, 0, 60, 60);
+            tv_repairShop.setCompoundDrawables(img, null, null, null);
+            tv_selfMaintenance.setCompoundDrawables(null, null, null, null);
+            tv_repairShop.setBackground(context.getResources().getDrawable(R.drawable.bt_round_black, null));
+            tv_repairShop.setTextColor(context.getResources().getColor(R.color.white));
+            // 정비소 정비이면 위치 뷰를 보이게 꺼낸다.
+            tr_moRcord_location.setVisibility(View.VISIBLE);
+            View_maintenanceLocationLine.setVisibility(View.VISIBLE);
+
+            // DB 저장용 MaintenanceOtherRecordActivity의 carbookRecordRepairMode를 0으로 설정
+            MaintenanceOtherRecordActivity.carbookRecordRepairMode = 0;
+        } else {
+            tv_repairShop.setBackground(context.getResources().getDrawable(R.drawable.bt_round_transparent, null));
+            tv_repairShop.setTextColor(context.getResources().getColor(R.color.blackTransparent_20));
+            Drawable img2 = getContext().getResources().getDrawable(R.drawable.check);
+            img2.setBounds(0, 0, 60, 60);
+            tv_selfMaintenance.setCompoundDrawables(img2, null, null, null);
+            tv_repairShop.setCompoundDrawables(null, null, null, null);
+            tv_selfMaintenance.setBackground(context.getResources().getDrawable(R.drawable.bt_round_black, null));
+            tv_selfMaintenance.setTextColor(context.getResources().getColor(R.color.white));
+            // 자가 정비이면 위치 뷰를 보이지 않게 숨긴다.
+            tr_moRcord_location.setVisibility(View.GONE);
+            View_maintenanceLocationLine.setVisibility(View.GONE);
+
+            // DB 저장용 MaintenanceOtherRecordActivity의 carbookRecordRepairMode를 1로 설정
+            MaintenanceOtherRecordActivity.carbookRecordRepairMode = 1;
+        }
+    }
+
     // 선택 항목 리사이클러뷰 세팅
     public void set_RvSelectItem() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         rv_MtOtRecorditemList.setLayoutManager(linearLayoutManager);
-        if (carbookRecordId > 0){
-            if(selectItemTitleList == null){
+        if (isModifyMode) {
+            if (selectItemTitleList == null) {
                 selectItemTitleList = new ArrayList<>();
             }
-            for (int i = 0; i < carbookRecordItems.size(); i++){
+            for (int i = 0; i < carbookRecordItems.size(); i++) {
                 selectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
             }
-            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList);
-        }else {
-            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList);
+            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList, carbookRecordId);
+        } else {
+            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList, carbookRecordId);
         }
         rv_MtOtRecorditemList.setAdapter(maintenanceOtherRecordRecyclerViewAdapter);
         maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
@@ -331,7 +376,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
 
     }*/
 
-    // 앨범 .....
+    // 앨범 .....s
     public String getRealPathFromURI2(Uri uri) {
         int column_index = 0;
         String[] proj = {MediaStore.Images.Media.DATA};
@@ -378,7 +423,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         return fullPath;
     }
 
-    public void RequestPermission() {
+    public void requestPermission() {
 
         // storage permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -395,7 +440,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         }
     }
 
-    public Bitmap EditImageSize(Bitmap image) {
+    public Bitmap editImageSize(Bitmap image) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
 
@@ -491,7 +536,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                                     String imagePath = getRealPathFromURI(clipData.getItemAt(i).getUri());
                                                     File file = new File(imagePath);
                                                     Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                                                    bitmapArrayList.add(EditImageSize(bitmap)); // 여기에 비트맵을 넣고 크기를 편집하고 다시 비트맵을 반환한다.
+                                                    bitmapArrayList.add(editImageSize(bitmap)); // 여기에 비트맵을 넣고 크기를 편집하고 다시 비트맵을 반환한다.
                                                 }
                                                 typeList.clear(); // 이미지 추가 아이템을 맨 뒤로 보내야 하기에 초기화 시켜주고 다시 넣는다.
                                                 for (int i = 0; i < bitmapArrayList.size(); i++) {

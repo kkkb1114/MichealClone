@@ -39,7 +39,7 @@ public class CarbookRecordItem_DB {
         }
     }
 
-    public void MainRecordDB_update(CarbookRecordItem carbookRecordItem, int _id, int carbookRecordId) {
+    public void MainRecordItemDB_update(CarbookRecordItem carbookRecordItem, int _id, int carbookRecordId) {
         try {
             SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
             db.execSQL("UPDATE carbookRecordItem SET carbookRecordItemCategoryCode = " + carbookRecordItem.carbookRecordItemCategoryCode + ", "
@@ -101,7 +101,6 @@ public class CarbookRecordItem_DB {
     public ArrayList<CarbookRecordItem> getMainRecordItemItemArrayList(int mainRecordItemCarbookRecordId) {
         try {
             Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordId = " + mainRecordItemCarbookRecordId, null);
-
             ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
             carbookRecordItemArrayList = getMainRecordItemCursor(cursor, carbookRecordItemArrayList);
             return carbookRecordItemArrayList;
@@ -114,7 +113,7 @@ public class CarbookRecordItem_DB {
     private ArrayList<CarbookRecordItem> getMainRecordItemCursor(Cursor cursor, ArrayList<CarbookRecordItem> carbookRecordItems) {
         while (cursor.moveToNext()) {
             //todo 여기서 cursor.getInt(0)으로 id 값을 받을수 있지 않을까 했는데 안받아져서 일단 뺐다.
-            CarbookRecordItem carbookRecordItem = new CarbookRecordItem(cursor.getInt(1), cursor.getString(2), cursor.getString(3),
+            CarbookRecordItem carbookRecordItem = new CarbookRecordItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getString(3),
                     cursor.getString(4), cursor.getString(5), cursor.getInt(6), cursor.getString(7),
                     cursor.getString(8));
 

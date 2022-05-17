@@ -3,14 +3,10 @@ package com.example.michaelclone.MaintenanceRecords;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,17 +14,18 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.michaelclone.DataBase.CarbookRecord;
 import com.example.michaelclone.DataBase.CarbookRecordItem;
 import com.example.michaelclone.DataBase.CarbookRecordItem_DataBridge;
-import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.DataBase.CarbookRecord_DataBridge;
 import com.example.michaelclone.DataBase.Time_DataBridge;
 import com.example.michaelclone.DialogManager;
 import com.example.michaelclone.MainRecord.MainrecordActivity;
 import com.example.michaelclone.R;
+import com.example.michaelclone.Tools.CalendarData;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 public class MaintenanceOtherRecordActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,38 +34,36 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     private MaintenanceOtherRecordFragment maintenanceOtherRecordFragment;
     private LocationSearchFragment locationSearchFragment;
 
+    // 수정 모드
+    CarbookRecord carbookRecord = null;
+    int carbookRecordId = 0;
+    boolean isModifyMode = false;
+
     TextView maintenanceOtherRecordComplete;
 
     LinearLayout ln_date;
     TextView tv_date;
     Context mContext;
     ArrayList<String> selectItemTitleList;
-    int carbookRecordId = 0;
 
-    // 날짜 구하기 변수
+    // 날짜 구하기
+    CalendarData calendarData = new CalendarData();
     long mNow;
     Date mDate;
-    SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd");
-    SimpleDateFormat mFormat_saveOnly = new SimpleDateFormat("yyyyMMdd");
     String selectDate;
 
-    // editText의 텍스트가 바뀔때마다 실시간으로 변경이 되어야 하기에 해당 동작을 핸들러로 하기에는 위험 부담이 커보였다.
-    public static ArrayList<String> carbookRecordItemExpenseMemoList = new ArrayList<>();
-    public static ArrayList<String> carbookRecordItemExpenseCostList = new ArrayList<>();
+    // editText의 텍스트가 바뀔때마다 실시간으로 변경이 되어야 하기에 해당 동작마다 다른 클래스의 핸들러를 타서 add 방식이 괜찮을까 싶어 static으로 했다.
+    public static HashMap<Integer, String> carbookRecordItemExpenseMemoList = new HashMap<>();
+    public static HashMap<Integer, String> carbookRecordItemExpenseCostList = new HashMap<>();
+    public static int carbookRecordRepairMode = 0;
+    // 일단 static으로 만들어 놓고 실제 차계부 만들때는 로직을 바꾸는게 좋을 것 같다.
+    public static CarbookRecord carbookRecords = null;
+    public static ArrayList<CarbookRecordItem> carbookRecordItems = null;
 
 
     // 달력 다이얼로그에서 날짜를 정하고 확인 누를때 해당 MaintenanceOtherRecordActivity의 selectDate변수 값을 선택한 날짜로 지정해준다.
     public void setSelectDate(String selectDate) {
         this.selectDate = selectDate;
-    }
-
-    // 먼저 더미데이터를 넣은 ArrayList를 만든 후 항목을 담당하는 리사이클러뷰 어뎁터로 자기 자신을 던져서 각 아이템마다 editText 값이 변경될때마다 더미데이터 대신 진짜 텍스트 데이터를 지정해준다.
-    // 순서는 어차피 해당 리사이클러뷰 아이템 생성할때 selectItemTitleList와 똑같기에 순서가 틀어질 일은 없다.
-    public void setItemDummyData() {
-        for (int i = 0; i < selectItemTitleList.size(); i++) {
-            carbookRecordItemExpenseMemoList.add("0");
-            carbookRecordItemExpenseCostList.add("0");
-        }
     }
 
     @Override
@@ -79,12 +74,21 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         try {
             mContext = this;
             Intent intent = getIntent();
-            if (intent != null) {
-                carbookRecordId = getIntentData(intent);
+            // 해당 인텐트 데이터가 있다면 무조건 0보다 크기 때문에 해당 조건으로 지정하였고 0보다 크면 수정모드로 인식한다.
+            if (getModifyIntentData(intent) > 0) {
+                isModifyMode = true;
+            } else {
+                isModifyMode = false;
+            }
+
+            // 해당 페이지에서 수정모드와 작성모드를 하나의 조건문으로 구분 지어야하기에 보기 쉽게 boolean값 isModifyMode으로 기준 잡았다.
+            if (isModifyMode) {
+                carbookRecordId = getModifyIntentData(intent);
+                CarbookRecord_DataBridge carbookRecord_dataBridge = new CarbookRecord_DataBridge();
+                carbookRecord = carbookRecord_dataBridge.getSelectCarbookRecord(carbookRecordId);
             }
             setView();
-            setFragment(1, getIntentDate());
-            setItemDummyData();
+            setFragment(1, getItemSelectIntentDate());
             setActionView();
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,9 +103,28 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
     // 상단 날짜 텍스트뷰 동작 세팅
     public void setActionView() {
-        tv_date.setText(getDate() + getDateDay(mDate));
+        // carbookRecord가 null이 아니면 수정모드 / carbookRecord가 null이면 작성 모드인 것이다.
+        if (carbookRecord != null) {
+            Date date = getDate(carbookRecord.carbookRecordExpendDate);
+            tv_date.setText(getStrDate(date) + calendarData.getDateDay(date));
+        } else {
+            mNow = System.currentTimeMillis(); // 디바이스 기준 표준 시간 적용
+            mDate = new Date(mNow);            // Date 객체에 디바이스 표준 시간 적용
+            tv_date.setText(getStrDate(mDate) + calendarData.getDateDay(mDate));
+        }
         ln_date.setOnClickListener(this);
         maintenanceOtherRecordComplete.setOnClickListener(this);
+    }
+
+    public Date getDate(String strDate) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
     /***
@@ -109,13 +132,12 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
      * 2. 해당 구분은 먼저 mainRecordItemCarbookRecordId키값으로 int값을 받아보고 만약 초기값인 0보다 작으면 항목선택에서 넘어온것으로 보고 ArrayList<String>를 반환한다.
      * 3. 그게 아니라면 null을 반환한다.
      */
-    public ArrayList<String> getIntentDate() {
+    public ArrayList<String> getItemSelectIntentDate() {
         Intent intent = getIntent();
-        carbookRecordId = intent.getIntExtra("mainRecordItemCarbookRecordId", 0);
-        if(carbookRecordId <= 0){
+        if (intent.getSerializableExtra("selectItemTitleList") != null) {
             selectItemTitleList = (ArrayList<String>) intent.getSerializableExtra("selectItemTitleList");
             return selectItemTitleList;
-        }else {
+        } else {
             return null;
         }
     }
@@ -135,24 +157,51 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     Time_DataBridge time_dataBridge = new Time_DataBridge();
                     String nowTime = time_dataBridge.getRealTime();
 
-                    // 기록 테이블은 하나씩 저장되니 반복문 필요 없다.
-                    mainRecordDataBridge.MainRecordInsert(new CarbookRecord(0,
-                            0,
-                            selectDate,
-                            0,
-                            maintenanceOtherRecordFragment.getTotalDistance(),
-                            nowTime,
-                            nowTime));
+                    // 수정모드면 첫번째, 작성모드면 두번째 조건으로 탄다.
+                    if (isModifyMode) { // < 수정 모드 >
 
-                    for (int i = 0; i < selectItemTitleList.size(); i++) {
-                        mainRecordItemDataBridge.MainRecordItemInsert(new CarbookRecordItem(mainRecordDataBridge.MainRecordSelectLastId(),
-                                "123",
-                                selectItemTitleList.get(i),
-                                carbookRecordItemExpenseMemoList.get(i),
-                                carbookRecordItemExpenseCostList.get(i),
+                        // 기록 테이블은 하나씩 저장되니 반복문 필요 없다.
+                        //todo 이 조건에 붙은 DB 작업 전부 업데이트로 바꿔야함.
+                        mainRecordDataBridge.getCarbookRecordUpdate(new CarbookRecord(carbookRecord._id,
+                                carbookRecordRepairMode,
+                                selectDate,
                                 0,
+                                maintenanceOtherRecordFragment.getTotalDistance(),
+                                nowTime,
+                                nowTime), carbookRecord._id);
+
+                        for (int i = 0; i < selectItemTitleList.size(); i++) {
+                            mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId,
+                                    "123",
+                                    selectItemTitleList.get(i),
+                                    carbookRecordItemExpenseMemoList.get(i),
+                                    carbookRecordItemExpenseCostList.get(i),
+                                    0,
+                                    nowTime,
+                                    nowTime), carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId);
+                        }
+                    } else { // < 작성 모드 >
+
+                        // 기록 테이블은 하나씩 저장되니 반복문 필요 없다.
+                        mainRecordDataBridge.mainRecordInsert(new CarbookRecord(0,
+                                carbookRecordRepairMode,
+                                selectDate,
+                                0,
+                                maintenanceOtherRecordFragment.getTotalDistance(),
                                 nowTime,
                                 nowTime));
+
+                        for (int i = 0; i < selectItemTitleList.size(); i++) {
+                            mainRecordItemDataBridge.MainRecordItemInsert(new CarbookRecordItem(0, mainRecordDataBridge.mainRecordSelectLastId(),
+                                    "123",
+                                    selectItemTitleList.get(i),
+                                    carbookRecordItemExpenseMemoList.get(i),
+                                    carbookRecordItemExpenseCostList.get(i),
+                                    0,
+                                    nowTime,
+                                    nowTime));
+                        }
+
                     }
                     Intent intent = new Intent(MaintenanceOtherRecordActivity.this, MainrecordActivity.class);
                     startActivity(intent);
@@ -163,50 +212,16 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     }
 
     // 현재 시간 구하기
-    public String getDate() {
-        mNow = System.currentTimeMillis(); // 디바이스 기준 표준 시간 적용
-        mDate = new Date(mNow);            // Date 객체에 디바이스 표준 시간 적용
+    public String getStrDate(Date date) {
 
         // 사용자가 달력 날짜를 선택한다고 지정할때를 대비해서 처음에 사용자 선택 날짜를 오늘로 지정할때 미리 오늘 날짜로 연월일을 디비 저장용 해당 기록 지출 날짜로 지정해놓는다.
-        selectDate = mFormat_saveOnly.format(mDate);
-        return mFormat.format(mDate);      // SimpleDateFormat에 적용된 양식으로 시간값 문자열 반환
-    }
-
-    public String getDateDay(Date mDate) {
-        String DAY_OF_WEEK = "";
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(mDate);
-        int dayNum = cal.get(Calendar.DAY_OF_WEEK);
-        switch (dayNum) {
-            case 1:
-                DAY_OF_WEEK = " (일)";
-                break;
-            case 2:
-                DAY_OF_WEEK = " (월)";
-                break;
-            case 3:
-                DAY_OF_WEEK = " (화)";
-                break;
-            case 4:
-                DAY_OF_WEEK = " (수)";
-                break;
-            case 5:
-                DAY_OF_WEEK = " (목)";
-                break;
-            case 6:
-                DAY_OF_WEEK = " (금)";
-                break;
-            case 7:
-                DAY_OF_WEEK = " (토)";
-                break;
-        }
-
-        return DAY_OF_WEEK;
+        selectDate = calendarData.getDateFormat(date, "yyyyMMdd");
+        return calendarData.getDateFormat(date, "yyyy.MM.dd");
     }
 
     public void setFragment(int fragment, ArrayList<String> selectItemTitleList) {
         fragmentManager = getSupportFragmentManager();
-        maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment(selectItemTitleList, carbookRecordId);
+        maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment(selectItemTitleList, carbookRecordId, isModifyMode);
         locationSearchFragment = new LocationSearchFragment();
         fragmentTransaction = fragmentManager.beginTransaction();
         switch (fragment) {
@@ -222,7 +237,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         }
     }
 
-    public int getIntentData(Intent intent) {
+    public int getModifyIntentData(Intent intent) {
         return intent.getIntExtra("mainRecordItemCarbookRecordId", 0);
     }
 

@@ -9,6 +9,14 @@ public class CarbookRecordItem_DataBridge {
     public void MainRecordItemInsert(CarbookRecordItem carbookRecordItem){
         CarbookRecordItem_DB carbookRecordItem_db = CarbookRecordItem_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
         carbookRecordItem_db.MainRecordItemDB_insert(carbookRecordItem);
+
+        Log.i("CarbookRecordItem", String.valueOf(carbookRecordItem));
+    }
+
+    // 메인에 불러오는 기록 항목들 (이름과 가격만 나오는 부분)을 불러오는 sql문을 불러올까 했지만 딱히 기록처럼 지출 금액 총 합등등 계산이 필요한 부분은 없어서 그냥 위의 MainRecordItemSelect()을 써서 전부 불러오기로함.
+    public void MainRecordItemUpdate(CarbookRecordItem carbookRecordItem, int id, int CarbookRecordId){
+        CarbookRecordItem_DB carbookRecordItem_db = CarbookRecordItem_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
+        carbookRecordItem_db.MainRecordItemDB_update(carbookRecordItem, id,CarbookRecordId);
     }
 
     public ArrayList<CarbookRecordItem> MainRecordItemSelect(){

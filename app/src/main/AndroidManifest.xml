@@ -34,13 +34,10 @@
         </provider>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".MainRecord.MainrecordActivity"
             android:exported="false" />
         <activity
             android:name=".MaintenanceRecords.SelectMaintenanceItemActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainRecord.MainrecordActivity"
             android:exported="true"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
