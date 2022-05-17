@@ -42,7 +42,7 @@ public class CarbookRecordItem_DB {
     public void MainRecordItemDB_update(CarbookRecordItem carbookRecordItem, int _id, int carbookRecordId) {
         try {
             SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
-            db.execSQL("UPDATE carbookRecordItem SET carbookRecordItemCategoryCode = " + carbookRecordItem.carbookRecordItemCategoryCode + ", "
+            db.execSQL("UPDATE carbookRecordItem SET _id = "+ _id +", carbookRecordItemCategoryCode = " + carbookRecordItem.carbookRecordItemCategoryCode + ", "
                     + "carbookRecordItemCategoryName = " + "'" + carbookRecordItem.carbookRecordItemCategoryName + "'" + ","
                     + "carbookRecordItemExpenseMemo = " + carbookRecordItem.carbookRecordItemExpenseMemo + ","
                     + "carbookRecordItemExpenseCost = " + carbookRecordItem.carbookRecordItemExpenseCost + ","

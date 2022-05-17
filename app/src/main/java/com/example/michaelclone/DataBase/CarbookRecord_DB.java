@@ -42,7 +42,7 @@ public class CarbookRecord_DB {
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
             db.beginTransaction();
-            db.execSQL("UPDATE carbookRecord SET carbookRecordRepairMode = " + carbookRecord.carbookRecordRepairMode + ", "
+            db.execSQL("UPDATE carbookRecord SET _id = "+ _id +", carbookRecordRepairMode = " + carbookRecord.carbookRecordRepairMode + ", "
                     + "carbookRecordExpendDate = " + "'"+ carbookRecord.carbookRecordExpendDate +"'" + ","
                     + "carbookRecordIsHidden = " + carbookRecord.carbookRecordIsHidden + ","
                     + "carbookRecordTotalDistance = " + "'"+ carbookRecord.carbookRecordTotalDistance +"'" + ","
