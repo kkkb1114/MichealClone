@@ -3,6 +3,7 @@ package com.example.michaelclone.MaintenanceRecords;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -86,6 +87,8 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                 carbookRecordId = getModifyIntentData(intent);
                 CarbookRecord_DataBridge carbookRecord_dataBridge = new CarbookRecord_DataBridge();
                 carbookRecord = carbookRecord_dataBridge.getSelectCarbookRecord(carbookRecordId);
+                Log.i("수정모드_carbookRecordId", String.valueOf(carbookRecordId));
+                Log.i("수정모드_carbookRecord", String.valueOf(carbookRecord));
             }
             setView();
             setFragment(1, getItemSelectIntentDate());
