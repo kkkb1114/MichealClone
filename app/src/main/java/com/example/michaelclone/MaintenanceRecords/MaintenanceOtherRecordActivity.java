@@ -163,6 +163,8 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     // 수정모드면 첫번째, 작성모드면 두번째 조건으로 탄다.
                     if (isModifyMode) { // < 수정 모드 >
 
+                        Log.i("onClick_maintenanceOtherRecordComplete_carbookRecord_id", String.valueOf(carbookRecord._id));
+                        Log.i("onClick_maintenanceOtherRecordComplete_carbookRecord_id", String.valueOf(carbookRecord._id));
                         // 기록 테이블은 하나씩 저장되니 반복문 필요 없다.
                         //todo 이 조건에 붙은 DB 작업 전부 업데이트로 바꿔야함.
                         mainRecordDataBridge.getCarbookRecordUpdate(new CarbookRecord(carbookRecord._id,
@@ -173,10 +175,10 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                 nowTime,
                                 nowTime), carbookRecord._id);
 
-                        for (int i = 0; i < selectItemTitleList.size(); i++) {
+                        for (int i = 0; i < carbookRecordItems.size(); i++) {
                             mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId,
                                     "123",
-                                    selectItemTitleList.get(i),
+                                    carbookRecordItems.get(i).carbookRecordItemCategoryName,
                                     carbookRecordItemExpenseMemoList.get(i),
                                     carbookRecordItemExpenseCostList.get(i),
                                     0,

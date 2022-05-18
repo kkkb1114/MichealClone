@@ -13,6 +13,7 @@ public class CarbookRecord_DataBridge {
 
     public void getCarbookRecordUpdate(CarbookRecord carbookRecord, int _id){
         CarbookRecord_DB carbookRecord_db = CarbookRecord_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
+        Log.i("getCarbookRecordUpdate", String.valueOf(_id));
         carbookRecord_db.MainRecordDB_update(carbookRecord, _id);
     }
 

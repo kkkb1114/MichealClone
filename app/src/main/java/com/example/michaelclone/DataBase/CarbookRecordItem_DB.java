@@ -40,20 +40,29 @@ public class CarbookRecordItem_DB {
     }
 
     public void MainRecordItemDB_update(CarbookRecordItem carbookRecordItem, int _id, int carbookRecordId) {
+        SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
-            SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
-            db.execSQL("UPDATE carbookRecordItem SET _id = "+ _id +", carbookRecordItemCategoryCode = " + carbookRecordItem.carbookRecordItemCategoryCode + ", "
+            Log.i("MainRecordItemDB_update_id", String.valueOf(_id));
+            Log.i("MainRecordItemDB_update_carbookRecord", String.valueOf(carbookRecordId));
+            db.beginTransaction();
+            db.execSQL("UPDATE carbookRecordItem SET _id = "+ _id +", carbookRecordId = " + carbookRecordItem.carbookRecordId + ", "
+                    + "carbookRecordItemCategoryCode = " + "'" + carbookRecordItem.carbookRecordItemCategoryCode + "'" + ","
                     + "carbookRecordItemCategoryName = " + "'" + carbookRecordItem.carbookRecordItemCategoryName + "'" + ","
                     + "carbookRecordItemExpenseMemo = " + carbookRecordItem.carbookRecordItemExpenseMemo + ","
                     + "carbookRecordItemExpenseCost = " + carbookRecordItem.carbookRecordItemExpenseCost + ","
                     + "carbookRecordItemIsHidden = " + "'" + carbookRecordItem.carbookRecordItemIsHidden + "'" + ","
                     + "carbookRecordRegTime = " + "'" + carbookRecordItem.carbookRecordItemRegTime + "'" + ","
                     + "carbookRecordUpdateTime = " + "'" + carbookRecordItem.carbookRecordItemUpdateTime + "'"
-                    + "WHERE _id = " + _id + "AND carbookRecordId =" + carbookRecordId);
+                    + "WHERE _id = " + _id);
+            // 위 쿼리문 실행 했다는 것을 알림.
+            db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-
+        }finally {
+            if (db != null){
+                // 위 쿼리 실행이 끝난후 해당 동작이 끝났다는것을 알림.
+                db.endTransaction();
+            }
         }
     }
 

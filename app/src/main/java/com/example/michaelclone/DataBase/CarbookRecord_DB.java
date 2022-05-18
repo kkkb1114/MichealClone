@@ -41,14 +41,15 @@ public class CarbookRecord_DB {
     public void MainRecordDB_update(CarbookRecord carbookRecord, int _id){
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
+            Log.i("MainRecordDB_update_id", String.valueOf(_id));
+            Log.i("MainRecordDB_update_carbookRecord", String.valueOf(carbookRecord));
             db.beginTransaction();
             db.execSQL("UPDATE carbookRecord SET _id = "+ _id +", carbookRecordRepairMode = " + carbookRecord.carbookRecordRepairMode + ", "
                     + "carbookRecordExpendDate = " + "'"+ carbookRecord.carbookRecordExpendDate +"'" + ","
                     + "carbookRecordIsHidden = " + carbookRecord.carbookRecordIsHidden + ","
                     + "carbookRecordTotalDistance = " + "'"+ carbookRecord.carbookRecordTotalDistance +"'" + ","
                     + "carbookRecordRegTime = " + "'"+ carbookRecord.carbookRecordRegTime +"'" + ","
-                    + "carbookRecordUpdateTime = " + "'"+ carbookRecord.carbookRecordUpdateTime +"'" + ","
-                    + "WHERE _id = " + _id);
+                    + "carbookRecordUpdateTime = " + "'"+ carbookRecord.carbookRecordUpdateTime +"'" + "WHERE _id = " + _id);
             // 위 쿼리문 실행 했다는 것을 알림.
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -88,6 +89,8 @@ public class CarbookRecord_DB {
             Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecord WHERE _id = "+ _id, null);
             CarbookRecord carbookRecords;
             carbookRecords = getMainRecordCursorSingle(cursor);
+
+            Log.i("getMainRecordCursorSingle", String.valueOf(carbookRecords));
             return carbookRecords;
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,10 +138,12 @@ public class CarbookRecord_DB {
     private CarbookRecord getMainRecordCursorSingle(Cursor cursor){
         CarbookRecord carbookRecord = null;
         while (cursor.moveToNext()){
-            //todo 여기서 cursor.getInt(0)으로 id 값을 받을수 있지 않을까 했는데 안받아져서 일단 뺐다.
             carbookRecord = new CarbookRecord(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4),
                     cursor.getString(5), cursor.getString(6));
+            Log.i("getMainRecordCursorSingle", String.valueOf( cursor.getInt(0)));
+            Log.i("getMainRecordCursorSingle", String.valueOf( cursor.getInt(1)));
         }
+
         cursor.close();
         return carbookRecord;
     }

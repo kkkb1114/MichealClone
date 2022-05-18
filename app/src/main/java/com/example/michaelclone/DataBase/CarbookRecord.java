@@ -11,6 +11,7 @@ public class CarbookRecord {
 
     public CarbookRecord(int _id, int carbookRecordRepairMode, String carbookRecordExpendDate, int carbookRecordIsHidden,
                          String carbookRecordTotalDistance, String carbookRecordRegTime, String carbookRecordUpdateTime){
+        this._id = _id;
         this.carbookRecordRepairMode = carbookRecordRepairMode;
         this.carbookRecordExpendDate = carbookRecordExpendDate;
         this.carbookRecordIsHidden = carbookRecordIsHidden;
