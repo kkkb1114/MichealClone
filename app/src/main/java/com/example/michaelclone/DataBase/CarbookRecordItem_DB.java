@@ -42,17 +42,17 @@ public class CarbookRecordItem_DB {
     public void MainRecordItemDB_update(CarbookRecordItem carbookRecordItem, int _id, int carbookRecordId) {
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
-            Log.i("MainRecordItemDB_update_id", String.valueOf(_id));
-            Log.i("MainRecordItemDB_update_carbookRecord", String.valueOf(carbookRecordId));
+            Log.i("수정모드 아이템 _id: ", String.valueOf(_id));
+            Log.i("수정모드 아이템: ", String.valueOf(carbookRecordItem));
             db.beginTransaction();
             db.execSQL("UPDATE carbookRecordItem SET _id = "+ _id +", carbookRecordId = " + carbookRecordItem.carbookRecordId + ", "
-                    + "carbookRecordItemCategoryCode = " + "'" + carbookRecordItem.carbookRecordItemCategoryCode + "'" + ","
-                    + "carbookRecordItemCategoryName = " + "'" + carbookRecordItem.carbookRecordItemCategoryName + "'" + ","
-                    + "carbookRecordItemExpenseMemo = " + carbookRecordItem.carbookRecordItemExpenseMemo + ","
-                    + "carbookRecordItemExpenseCost = " + carbookRecordItem.carbookRecordItemExpenseCost + ","
-                    + "carbookRecordItemIsHidden = " + "'" + carbookRecordItem.carbookRecordItemIsHidden + "'" + ","
-                    + "carbookRecordRegTime = " + "'" + carbookRecordItem.carbookRecordItemRegTime + "'" + ","
-                    + "carbookRecordUpdateTime = " + "'" + carbookRecordItem.carbookRecordItemUpdateTime + "'"
+                    + "carbookRecordItemCategoryCode = " + "'" + carbookRecordItem.carbookRecordItemCategoryCode + "'" + ", "
+                    + "carbookRecordItemCategoryName = " + "'" + carbookRecordItem.carbookRecordItemCategoryName + "'" + ", "
+                    + "carbookRecordItemExpenseMemo = " +  "'" + carbookRecordItem.carbookRecordItemExpenseMemo+ "'" + ", "
+                    + "carbookRecordItemExpenseCost = " + carbookRecordItem.carbookRecordItemExpenseCost + ", "
+                    + "carbookRecordItemIsHidden = " + "'" + carbookRecordItem.carbookRecordItemIsHidden + "'" + ", "
+                    + "carbookRecordItemRegTime = " + "'" + carbookRecordItem.carbookRecordItemRegTime + "'" + ", "
+                    + "carbookRecordItemUpdateTime = " + "'" + carbookRecordItem.carbookRecordItemUpdateTime + "'"
                     + "WHERE _id = " + _id);
             // 위 쿼리문 실행 했다는 것을 알림.
             db.setTransactionSuccessful();
