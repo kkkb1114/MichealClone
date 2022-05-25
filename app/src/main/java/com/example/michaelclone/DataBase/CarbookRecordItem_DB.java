@@ -76,11 +76,11 @@ public class CarbookRecordItem_DB {
         }
     }
 
-    public void MainRecordDB_delete(CarbookRecordItem carbookRecordItem, int _id, int carbookRecordId) {
+    public void MainRecordItemDB_delete(CarbookRecordItem carbookRecordItem, int _id) {
         try {
             SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
             db.execSQL("UPDATE carbookRecordItem SET carbookRecordItemIsHidden = " + carbookRecordItem.carbookRecordItemIsHidden + ","
-                    + "WHERE _id = " + _id + "AND carbookRecordId = " + carbookRecordId);
+                    + "WHERE _id = " + _id);
         } catch (Exception e) {
             e.printStackTrace();
         }

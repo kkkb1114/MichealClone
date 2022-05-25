@@ -30,6 +30,11 @@ public class CarbookRecordItem_DataBridge {
         return carbookRecordItem_db.getMainRecordItemItemArrayList(CarbookRecordId);
     }
 
+    public void MainRecordItemDelete(CarbookRecordItem carbookRecordItem, int _id){
+        CarbookRecordItem_DB carbookRecordItem_db = CarbookRecordItem_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
+        carbookRecordItem_db.MainRecordItemDB_delete(carbookRecordItem, _id);
+    }
+
     // 가끔 editText에서 에러터져서 null값이 들어가서 테스트환경에서 그런 데이터를 지우기위해 만든 메소드(원래는 delete를 하지않기에 쓰지 않는다.)
     public void test_delete(int _id){
         CarbookRecordItem_DB carbookRecordItem_db = CarbookRecordItem_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);

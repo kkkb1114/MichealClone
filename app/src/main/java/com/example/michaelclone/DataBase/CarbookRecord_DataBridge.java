@@ -33,6 +33,11 @@ public class CarbookRecord_DataBridge {
         return carbookRecord_db.getCarbookRecordLastId();
     }
 
+    public void MainRecordDelete(CarbookRecord carbookRecord, int _id){
+        CarbookRecord_DB carbookRecord_db = CarbookRecord_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
+        carbookRecord_db.MainRecordDB_delete(carbookRecord, _id);
+    }
+
     public ArrayList<MainRecordPage> getMainRecordData(){
         CarbookRecord_DB carbookRecord_db = CarbookRecord_DB.getInstance(Main_DataBridge.getMainContext(), "MichaelClone.db", null, 1);
         return carbookRecord_db.getMainRecordData();
