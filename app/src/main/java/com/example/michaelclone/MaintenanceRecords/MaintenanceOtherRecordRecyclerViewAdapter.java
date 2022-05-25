@@ -33,15 +33,16 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
     // 툴 클래스
     StringFormat stringFormat = new StringFormat();
 
-    public MaintenanceOtherRecordRecyclerViewAdapter(Context context, ArrayList<String> al_itemTitleList, int carbookRecordId) {
+    public MaintenanceOtherRecordRecyclerViewAdapter(Context context, ArrayList<String> al_itemTitleList, int carbookRecordId, ArrayList<CarbookRecordItem> carbookRecordItems) {
         this.context = context;
         this.al_itemTitleList = al_itemTitleList;
         this.carbookRecordId = carbookRecordId;
+        this.carbookRecordItems = carbookRecordItems;
 
         // carbookRecordId은 제대로 가져왔다면 0과 같거나 이하일수 없기에 >로 조건을 붙임
-        if (carbookRecordId > 0){
+        /*if (carbookRecordId > 0){
             carbookRecordItems = getCarbookRecordItems(carbookRecordId);
-        }
+        }*/
     }
 
     public ArrayList<CarbookRecordItem> getCarbookRecordItems(int carbookRecordId) {

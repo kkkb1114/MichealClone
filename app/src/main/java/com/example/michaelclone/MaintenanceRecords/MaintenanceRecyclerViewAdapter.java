@@ -47,6 +47,22 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
         this.itemTypeList = ItemTypeList;
         this.context = context;
         itemBlockHandler();
+        Log.i("??2", "??2");
+
+        // 처음에 checkedHashMap_maintenance에 ItemTitleList크기만큼 false를 넣는다.
+            for (int i = 0; i < itemTitleList.size(); i++) {
+                checkedHashMap_maintenance.put(i, false);
+            }
+
+        if(MaintenanceOtherRecordActivity.carbookRecordItems != null){
+            Log.i("??1", "??1");
+            for (int i = 0; i < MaintenanceOtherRecordActivity.carbookRecordItems.size(); i++) {
+                if(itemTitleList.contains(MaintenanceOtherRecordActivity.carbookRecordItems.get(i).carbookRecordItemCategoryName)){
+                    Log.i("??1.1", String.valueOf(MaintenanceOtherRecordActivity.carbookRecordItems.get(i).carbookRecordItemCategoryName));
+                    checkedHashMap_maintenance.put(i, true);
+                }
+            }
+        }
     }
 
     @Override
@@ -150,13 +166,6 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
 
 
     public void checkCheckBox(int position, ViewHolder holder) {
-        // 처음에 checkedHashMap_maintenance에 ItemTitleList크기만큼 false를 넣는다.
-        if (!setChecked) { // 체크
-            for (int i = 0; i < itemTitleList.size(); i++) {
-                checkedHashMap_maintenance.put(i, false);
-            }
-            setChecked = true; // 완료
-        }
 
         // 리사이클러뷰 특성상 뷰를 재활용 할 때 체크박스가 그대로 체크되어있는 것을 방지하기위해 position마다
         // 체크박스 isboolean여부가 들어있는 checkedHashMap_maintenance를 참고하여 체크박스 상태를 세팅한다.

@@ -48,9 +48,9 @@ public class CarbookRecordItem_DB {
             db.execSQL("UPDATE carbookRecordItem SET _id = "+ _id +", carbookRecordId = " + carbookRecordItem.carbookRecordId + ", "
                     + "carbookRecordItemCategoryCode = " + "'" + carbookRecordItem.carbookRecordItemCategoryCode + "'" + ","
                     + "carbookRecordItemCategoryName = " + "'" + carbookRecordItem.carbookRecordItemCategoryName + "'" + ","
-                    + "carbookRecordItemExpenseMemo = " + carbookRecordItem.carbookRecordItemExpenseMemo + ","
+                    + "carbookRecordItemExpenseMemo = " + "'" + carbookRecordItem.carbookRecordItemExpenseMemo + "'" + ","
                     + "carbookRecordItemExpenseCost = " + carbookRecordItem.carbookRecordItemExpenseCost + ","
-                    + "carbookRecordItemIsHidden = " + "'" + carbookRecordItem.carbookRecordItemIsHidden + "'" + ","
+                    + "carbookRecordItemIsHidden = " + carbookRecordItem.carbookRecordItemIsHidden + ","
                     + "carbookRecordRegTime = " + "'" + carbookRecordItem.carbookRecordItemRegTime + "'" + ","
                     + "carbookRecordUpdateTime = " + "'" + carbookRecordItem.carbookRecordItemUpdateTime + "'"
                     + "WHERE _id = " + _id);

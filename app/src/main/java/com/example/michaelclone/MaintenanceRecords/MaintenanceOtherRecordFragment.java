@@ -261,7 +261,10 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 setRepairState(1);
                 break;
             case R.id.tv_addRecordItem:
-                requireActivity().finish();
+                //requireActivity().finish();
+                Intent intent = new Intent(requireContext(), SelectMaintenanceItemActivity.class);
+                intent.putExtra("itemSelectMode", "modify");
+                startActivity(intent);
                 break;
         }
     }
@@ -318,9 +321,9 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             for (int i = 0; i < carbookRecordItems.size(); i++) {
                 selectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
             }
-            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList, carbookRecordId);
+            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList, carbookRecordId, carbookRecordItems);
         } else {
-            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList, carbookRecordId);
+            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList, carbookRecordId, carbookRecordItems);
         }
         rv_MtOtRecorditemList.setAdapter(maintenanceOtherRecordRecyclerViewAdapter);
         maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();

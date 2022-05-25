@@ -40,15 +40,24 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     public TextView tv_selectionConfirm;
     public TextView tv_itemCount;
 
+
     // 선택 화면 상단 선택한 항목 리스트
     // (프래그먼트 만들때 MaintenancePageViewPagerAdapter에 현재 엑티비티 자신을 넣어 "this" 프래그먼트에서 항목을 클릭할때 클릭한 아이템 텍스트를 엑티비티의 selectItemTitleList에 add했다.)
     public static ArrayList<String> selectItemTitleList = new ArrayList<>();
+    // 수정모드인지 기록 생성 모드인지 구분용 변수
+    public static String itemSelectMode = "create";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maintenance_records);
         context = this;
+        Intent intent = getIntent();
+        if (intent.getStringExtra("itemSelectMode").equals("modify")) {
+            itemSelectMode = "modify";
+        }else {
+            itemSelectMode = "create";
+        }
 
         // 뷰 초기화
         setView();
