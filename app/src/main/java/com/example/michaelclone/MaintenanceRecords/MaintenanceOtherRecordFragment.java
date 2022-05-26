@@ -17,6 +17,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -48,6 +50,7 @@ import com.example.michaelclone.DataBase.CarbookRecordItem;
 import com.example.michaelclone.DataBase.CarbookRecordItem_DataBridge;
 import com.example.michaelclone.DataBase.CarbookRecord_DataBridge;
 import com.example.michaelclone.Data_Record;
+import com.example.michaelclone.MainRecord.MainrecordActivity;
 import com.example.michaelclone.R;
 import com.example.michaelclone.Tools.StringFormat;
 
@@ -91,6 +94,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     boolean isModifyMode;
     CarbookRecord carbookRecords = null;
     ArrayList<CarbookRecordItem> carbookRecordItems = null;
+    ArrayList<String> MainrecordActivitySelectItemTitleList = MainrecordActivity.selectItemTitleList;
 
     // 카메라 찍을때 처음 일반 촬영하고 크롭으로 넘어가게끔 만들기 위한 변수
     boolean imageCrop = false;
@@ -120,6 +124,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         setView(view);
 
         // 수정모드로 들어왔을때 동작 메소드
+        dataControlHandler();
         getSelectItemDataList();
         setRepairMode();
 
@@ -263,7 +268,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             case R.id.tv_addRecordItem:
                 //requireActivity().finish();
                 Intent intent = new Intent(requireContext(), SelectMaintenanceItemActivity.class);
-                intent.putExtra("itemSelectMode", "modify");
                 startActivity(intent);
                 break;
         }
@@ -320,6 +324,13 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             }
             for (int i = 0; i < carbookRecordItems.size(); i++) {
                 selectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+            }
+            if (MainrecordActivitySelectItemTitleList != null) {
+                for (int i = 0; i < MainrecordActivitySelectItemTitleList.size(); i++) {
+                    selectItemTitleList.add(MainrecordActivitySelectItemTitleList.get(i)); 이걸 성공시켜야함
+                }
+            }else {
+                Log.i("asd", "asdasd");sadfgfjmnfdlk,jmgjnhsfdlkjg;lmfsd
             }
             maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList, carbookRecordId, carbookRecordItems);
         } else {
@@ -561,4 +572,47 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                     }
                 });
     }
+
+    public static Handler recordDataHandler = null;
+
+    private void dataControlHandler() {
+        try {
+            recordDataHandler = new Handler(new Handler.Callback() {
+                @Override
+                public boolean handleMessage(@NonNull Message msg) {
+                    try {
+                        switch (msg.what) {
+                            case 1:
+                                /**
+                                 * 1. 항목선택 화면에서 선택완료 버튼 클릭시 선택한 항목 문자열 리스트를 sendMessage로 보내서 여기서 받는다.
+                                 * 2. 받은 항목 리스트를 반복문으로 돌려 항목 문자열을 하나씩 체크해 기존의 항목 리스트에 해당 항목이 없으면 기존 항목 리스트에 추가한다.
+                                 * **/
+
+                                ArrayList<String> selectItemTitleListModify = msg.getData().getStringArrayList("selectItemTitleList");
+                                Log.i("111111", String.valueOf(selectItemTitleListModify));
+                                for (int i = 0; i < selectItemTitleListModify.size(); i++) {
+                                    Log.i("2222222", String.valueOf(selectItemTitleListModify.get(i)));
+                                    Log.i("2222222", String.valueOf(selectItemTitleList));
+                                    if (!selectItemTitleList.contains(selectItemTitleListModify.get(i))) {
+                                        selectItemTitleList.add(selectItemTitleListModify.get(i));
+                                        Log.i("3333333", selectItemTitleListModify.get(i));
+                                        Log.i("4444444", String.valueOf(selectItemTitleList));
+                                    }
+                                }
+                                maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
+                                Log.i("5555555", String.valueOf(selectItemTitleList));
+                                break;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

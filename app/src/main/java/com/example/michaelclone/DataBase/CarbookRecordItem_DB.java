@@ -51,9 +51,9 @@ public class CarbookRecordItem_DB {
                     + "carbookRecordItemExpenseMemo = " + "'" + carbookRecordItem.carbookRecordItemExpenseMemo + "'" + ","
                     + "carbookRecordItemExpenseCost = " + carbookRecordItem.carbookRecordItemExpenseCost + ","
                     + "carbookRecordItemIsHidden = " + carbookRecordItem.carbookRecordItemIsHidden + ","
-                    + "carbookRecordRegTime = " + "'" + carbookRecordItem.carbookRecordItemRegTime + "'" + ","
-                    + "carbookRecordUpdateTime = " + "'" + carbookRecordItem.carbookRecordItemUpdateTime + "'"
-                    + "WHERE _id = " + _id);
+                    + "carbookRecordItemRegTime = " + "'" + carbookRecordItem.carbookRecordItemRegTime + "'" + ","
+                    + "carbookRecordItemUpdateTime = " + "'" + carbookRecordItem.carbookRecordItemUpdateTime + "'"
+                    + " WHERE _id = " + _id);
             // 위 쿼리문 실행 했다는 것을 알림.
             db.setTransactionSuccessful();
         } catch (Exception e) {

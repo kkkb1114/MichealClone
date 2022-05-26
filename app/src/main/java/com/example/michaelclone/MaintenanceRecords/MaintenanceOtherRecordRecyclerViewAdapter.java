@@ -29,7 +29,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
     Context context;
     ArrayList<String> al_itemTitleList;
     int carbookRecordId;
-    ArrayList<CarbookRecordItem> carbookRecordItems = null;
+    ArrayList<CarbookRecordItem> carbookRecordItems;
     // 툴 클래스
     StringFormat stringFormat = new StringFormat();
 
@@ -69,6 +69,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
         // editText 글자 가져오기
         holder.setViewAction(position);
+        Log.i("ㅇㅇㅇ", String.valueOf(al_itemTitleList));
     }
 
     @Override
@@ -76,13 +77,16 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
         return al_itemTitleList.size();
     }
 
-    public void setViewText(ViewHolder holder, int position){
-        if (carbookRecordItems != null){
-            holder.tv_maintenanceOtherItemTitle.setText(carbookRecordItems.get(position).carbookRecordItemCategoryName);
-            holder.tv_maintenanceOtherItemMemoCount.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
-            holder.et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
-            holder.et_maintenanceOtherItemMemo.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
-        }else {
+    public void setViewText(ViewHolder holder, int position) {
+        if (carbookRecordItems != null) {
+            holder.tv_maintenanceOtherItemTitle.setText(al_itemTitleList.get(position));
+            if (carbookRecordItems.size() > position) {
+                Log.i("수정항목선택", "carbookRecordItems.size(): "+carbookRecordItems.size() +"position: "+ "\n" + position + "\n" + "carbookRecordItems: "+carbookRecordItems);
+                holder.tv_maintenanceOtherItemMemoCount.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
+                holder.et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
+                holder.et_maintenanceOtherItemMemo.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
+            }
+        } else {
             holder.tv_maintenanceOtherItemTitle.setText(al_itemTitleList.get(position));
         }
     }
