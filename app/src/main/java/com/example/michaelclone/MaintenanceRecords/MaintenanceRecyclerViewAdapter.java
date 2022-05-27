@@ -18,6 +18,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.michaelclone.DataBase.CarbookRecordItem;
+import com.example.michaelclone.MainRecord.MainrecordActivity;
 import com.example.michaelclone.R;
 
 import java.util.ArrayList;
@@ -35,6 +37,10 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
     boolean maintenanceSingleItemboolean = false;
     // itemBlock()메소드는 기타항목에서 단일 항목을 클릭했을때만 돌아야하기에 해당 boolean값으로 조건을 건다.
     boolean isExecutionViewHandler = false;
+    // 수정용 static CarbookRecordItem리스트
+    ArrayList<CarbookRecordItem> carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
+    // 항목 선택완료시 다음 화면으로 넘길 static 변수
+    ArrayList<String> selectItemTitleList = MainrecordActivity.selectItemTitleList;
 
     /**
      * 1. ItemTypeList을 기준으로 항목을 추가할지 새 항목 추가 버튼을 추가할지 정해지며 | 0: 항목, 1: 추가버튼이다.
@@ -47,6 +53,7 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
         this.itemTypeList = ItemTypeList;
         this.context = context;
         itemBlockHandler();
+        setChecked();
     }
 
     @Override
@@ -79,11 +86,44 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             bindView(position, holder);
             checkCheckBox(position, holder);
             holder.itemView.setOnClickListener(checkCheckBoxOnClickListener(holder));
-            if (isExecutionViewHandler){
+            if (isExecutionViewHandler) {
                 itemBlock(holder);
                 // 돌고나면 다시 bind때 계속 돌지 않도록 막아둔다.
                 isExecutionViewHandler = false;
             }
+        }
+    }
+
+    /**
+     * 1. 체크 박스 체크 여부를 결정할 checkedHashMap_maintenance을 초기 세팅한다.
+     * 2. 수정용 static 변수 MaintenanceOtherRecordActivity.carbookRecordItems가 null이 아니면 수정모드이기에
+     * 아이템 목록중 MaintenanceOtherRecordActivity.carbookRecordItems이 가지고 있는 문자열만
+     * checkedHashMap_maintenance값을 true로 바꾸고 SelectMaintenanceItemActivity.selectItemTitleList에 해당 문자열을 넣는다.
+     **/
+    public void setChecked() {
+        // 처음에 checkedHashMap_maintenance에 ItemTitleList크기만큼 false를 넣는다.
+        for (int i = 0; i < itemTitleList.size(); i++) {
+            checkedHashMap_maintenance.put(i, false);
+        }
+
+        Log.i("carbookRecordItems", String.valueOf(carbookRecordItems));
+        /**
+         * 1. carbookRecordItemTitleList에 carbookRecordItems의 carbookRecordItemCategoryName값을 전부 담아
+         * 2. itemTitleList를 기준으로 for문을 돌려 carbookRecordItemTitleList에 문자열이 있다면 해당 회차는 checkedHashMap_maintenance에 true값을 넣는다.
+         *
+         * **/
+        if (carbookRecordItems != null) {
+            ArrayList<String> carbookRecordItemTitleList = new ArrayList<>();
+            for (int i = 0; i < carbookRecordItems.size(); i++) {
+                carbookRecordItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+            }
+
+            for (int i = 0; i < itemTitleList.size(); i++) {
+                if (carbookRecordItemTitleList.contains(itemTitleList.get(i))) {
+                    checkedHashMap_maintenance.put(i, true);
+                }
+            }
+            Log.i("SelectMaintenanceItemActivity.selectItemTitleList", String.valueOf(MainrecordActivity.selectItemTitleList));
         }
     }
 
@@ -110,7 +150,7 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             // 아이템 뷰를 클릭시 체크박스가 false면 true, true면 false로 변경 후
             if (!holder.cb_maintenance_itemSelect.isChecked()) {
                 holder.cb_maintenance_itemSelect.setChecked(true);
-                SelectMaintenanceItemActivity.selectItemTitleList.add(holder.tv_maintenance_itemTitle.getText().toString());
+                selectItemTitleList.add(holder.tv_maintenance_itemTitle.getText().toString());
                 if (SelectMaintenanceItemActivity.viewHandler != null) {
                     SelectMaintenanceItemActivity.viewHandler.obtainMessage(1, holder.tv_maintenance_itemTitle.getText().toString()).sendToTarget();
                 }
@@ -118,7 +158,7 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
                 // 아이템 한개를 선택 취소할때 선택한 아이템 개수가 0개면 if문 첫번쨰를 타고 선택한 아이템 개수가 1개 이상이면 else문을 탄다.
             } else {
                 holder.cb_maintenance_itemSelect.setChecked(false);
-                SelectMaintenanceItemActivity.selectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
+                selectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
                 if (SelectMaintenanceItemActivity.viewHandler != null) {
                     SelectMaintenanceItemActivity.viewHandler.obtainMessage(2, holder.tv_maintenance_itemTitle.getText().toString()).sendToTarget();
                 }
@@ -150,13 +190,6 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
 
 
     public void checkCheckBox(int position, ViewHolder holder) {
-        // 처음에 checkedHashMap_maintenance에 ItemTitleList크기만큼 false를 넣는다.
-        if (!setChecked) { // 체크
-            for (int i = 0; i < itemTitleList.size(); i++) {
-                checkedHashMap_maintenance.put(i, false);
-            }
-            setChecked = true; // 완료
-        }
 
         // 리사이클러뷰 특성상 뷰를 재활용 할 때 체크박스가 그대로 체크되어있는 것을 방지하기위해 position마다
         // 체크박스 isboolean여부가 들어있는 checkedHashMap_maintenance를 참고하여 체크박스 상태를 세팅한다.
@@ -192,8 +225,8 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             // 체크 박스는 block처리되면 이제까지 체크했던 기록은 전부 없앤다. (어차피 block처리되면 리사이클러뷰가 초기화되기에 checkList에 저장된 데이터도 초기화되서 신경 쓸 필요 없다.)
             //holder.cb_maintenance_itemSelect.setChecked(true);
             // block하면서 체크했던 기록 전부 없앤다.
-            if (SelectMaintenanceItemActivity.selectItemTitleList.contains(holder.tv_maintenance_itemTitle.getText().toString())) {
-                SelectMaintenanceItemActivity.selectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
+            if (selectItemTitleList.contains(holder.tv_maintenance_itemTitle.getText().toString())) {
+                selectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
             }
 
         } else {

@@ -16,8 +16,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.michaelclone.DataBase.CarbookRecord;
+import com.example.michaelclone.DataBase.CarbookRecordItem;
 import com.example.michaelclone.DataBase.CarbookRecordItem_DB;
 import com.example.michaelclone.DataBase.CarbookRecord_Data;
+import com.example.michaelclone.MainRecord.MainrecordActivity;
 import com.example.michaelclone.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -40,15 +42,30 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     public TextView tv_selectionConfirm;
     public TextView tv_itemCount;
 
-    // 선택 화면 상단 선택한 항목 리스트
-    // (프래그먼트 만들때 MaintenancePageViewPagerAdapter에 현재 엑티비티 자신을 넣어 "this" 프래그먼트에서 항목을 클릭할때 클릭한 아이템 텍스트를 엑티비티의 selectItemTitleList에 add했다.)
-    public static ArrayList<String> selectItemTitleList = new ArrayList<>();
+    ArrayList<String> selectItemTitleList;
+
+    // 수정모드 구분
+    ArrayList<CarbookRecordItem> carbookRecordItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maintenance_records);
         context = this;
+        if (MainrecordActivity.selectItemTitleList == null){
+            // 해당 엑티비티 생성때마다 selectItemTitleList객체 생성
+            MainrecordActivity.createSelectItemTitleList();
+            selectItemTitleList = MainrecordActivity.selectItemTitleList;
+        }
+
+        // MaintenanceOtherRecordActivity.carbookRecordItems가 null이 아니라면 기록페이지에서 수정모드로 들어온것이기에
+        // 해당 carbookRecordItems를 받고 바로 carbookRecordItems에 있는 항목 이름 문자열을 selectItemTitleList에 넣는다.
+        if (MaintenanceOtherRecordActivity.carbookRecordItems != null){
+            carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
+            for (int i=0; i < carbookRecordItems.size(); i++){
+                selectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+            }
+        }
 
         // 뷰 초기화
         setView();
@@ -118,12 +135,25 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         tv_selectionConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //if (ad_maintenancePage.getFragment(0) instanceof MaintenanceFragment && ad_maintenancePage.getFragment(1) instanceof OtherFragment){}
-                Intent intent = new Intent(SelectMaintenanceItemActivity.this, MaintenanceOtherRecordActivity.class);
-                intent.putExtra("selectItemTitleList", selectItemTitleList);
-                startActivity(intent);
-                //finish();
+                // if (ad_maintenancePage.getFragment(0) instanceof MaintenanceFragment && ad_maintenancePage.getFragment(1) instanceof OtherFragment){}
+                // 수정모드면 기록페이지의 핸들러를 작동시키며 작성모드면 인텐트로 리스트객체를 전달한다.
+                if (carbookRecordItems != null){
+                    Log.i("tv_selectionConfirmrecordDataHandler", String.valueOf(selectItemTitleList));
+                    Message message = new Message();
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArrayList("selectItemTitleList", selectItemTitleList);
+                    message.setData(bundle);
+                    message.what = 1;
+                    Log.i("tv_selectionConfirmrecordDataHandlermessage", String.valueOf(message));
+                    MaintenanceOtherRecordFragment.recordDataHandler.sendMessage(message);
+                }else {
+                    Intent intent = new Intent(SelectMaintenanceItemActivity.this, MaintenanceOtherRecordActivity.class);
+                    intent.putExtra("selectItemTitleList", selectItemTitleList);
+                    startActivity(intent);
+                }
+                // 기록, 수정화면에 들어올떼마다 새로 사용할 변수이기에 완료시 초기화
+                MainrecordActivity.removeSelectItemTitleList();
+                finish();
             }
         });
         // 클릭 이벤트를 지정한 후에 막아야 막힌다.

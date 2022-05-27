@@ -58,6 +58,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     public static HashMap<Integer, String> carbookRecordItemExpenseCostList = new HashMap<>();
     public static int carbookRecordRepairMode = 0;
     // 일단 static으로 만들어 놓고 실제 차계부 만들때는 로직을 바꾸는게 좋을 것 같다.
+    // (수정모드일때 사용하는 변수로 해당 엑티비티의 프래그먼트에서 수정모드일경우 데이터를 불러와서 해당 변수에 담는다. 즉 해당 변수가 null이 아니면 수정모드인셈이다.)
     public static CarbookRecord carbookRecords = null;
     public static ArrayList<CarbookRecordItem> carbookRecordItems = null;
 
@@ -164,7 +165,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     if (isModifyMode) { // < 수정 모드 >
 
                         Log.i("onClick_maintenanceOtherRecordComplete_carbookRecord_id", String.valueOf(carbookRecord._id));
-                        Log.i("onClick_maintenanceOtherRecordComplete_carbookRecord_id", String.valueOf(carbookRecord._id));
+                        Log.i("onClick_maintenanceOtherRecordComplete_carbookRecordItems", String.valueOf(carbookRecordItems));
                         // 기록 테이블은 하나씩 저장되니 반복문 필요 없다.
                         //todo 이 조건에 붙은 DB 작업 전부 업데이트로 바꿔야함.
                         mainRecordDataBridge.getCarbookRecordUpdate(new CarbookRecord(carbookRecord._id,
@@ -208,6 +209,10 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         }
 
                     }
+                    // 완료 버튼 클릭시 수정모드 전용 변수를 항상 null로 초기화한다.
+                    carbookRecords = null;
+                    carbookRecordItems = null;
+
                     Intent intent = new Intent(MaintenanceOtherRecordActivity.this, MainrecordActivity.class);
                     startActivity(intent);
                 } catch (Exception e) {
