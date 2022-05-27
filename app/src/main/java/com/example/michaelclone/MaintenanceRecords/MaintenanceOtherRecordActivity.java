@@ -82,7 +82,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     MainrecordActivity.createSelectItemTitleList();
                 }else {
                     // 해당 엑티비티 생성때마다 selectItemTitleList객체 초기화
-                    MainrecordActivity.removeSelectItemTitleList();ㄴ
+                    MainrecordActivity.removeSelectItemTitleList();
                     MainrecordActivity.createSelectItemTitleList();
                 }
                 Intent intent = getIntent();
