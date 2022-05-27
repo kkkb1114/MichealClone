@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/User/development folder/MichealClone/app/src/main/res/layout/activity_mainrecord.xml" value="0.2391304347826087" />
+        <entry key="..\:/Users/User/development folder/MichealClone/app/src/main/res/layout/activity_maintenance_other_record.xml" value="0.11354166666666667" />
+        <entry key="..\:/Users/User/development folder/MichealClone/app/src/main/res/layout/fragment_maintenance_other_record.xml" value="0.2391304347826087" />
+        <entry key="..\:/Users/User/development folder/MichealClone/app/src/main/res/layout/mainrecord_item.xml" value="0.2391304347826087" />
+        <entry key="..\:/Users/User/development folder/MichealClone/app/src/main/res/layout/maintenance_other_record_item.xml" value="0.2391304347826087" />
+        <entry key="..\:/Users/User/development folder/MichealClone/app/src/main/res/layout/maintenance_records_item.xml" value="0.11354166666666667" />
         <entry key="..\:/Users/infocar/AndroidProjects/MichaelClone/app/src/main/res/layout/activity_mainrecord.xml" value="0.33" />
         <entry key="..\:/Users/infocar/AndroidProjects/MichaelClone/app/src/main/res/layout/activity_maintenance_other_record.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/infocar/AndroidProjects/MichaelClone/app/src/main/res/layout/activity_maintenance_records.xml" value="0.1953125" />

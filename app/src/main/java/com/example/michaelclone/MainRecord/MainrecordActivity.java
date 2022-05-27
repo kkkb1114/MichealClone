@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -36,6 +37,8 @@ public class MainrecordActivity extends AppCompatActivity {
     // 선택 화면 상단 선택한 항목 리스트
     // (프래그먼트 만들때 MaintenancePageViewPagerAdapter에 현재 엑티비티 자신을 넣어 "this" 프래그먼트에서 항목을 클릭할때 클릭한 아이템 텍스트를 엑티비티의 selectItemTitleList에 add했다.)
     public static ArrayList<String> selectItemTitleList;
+    // true: 수정모드, false: 기록모드
+    public static boolean isModify = false;
 
     //TODO FrameLayout 위에 툴바 넣을 예정이다. (아직 안넣음.)
     @Override
@@ -49,6 +52,8 @@ public class MainrecordActivity extends AppCompatActivity {
         tv_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 메인페이지 기록하기 클릭시 기록 모드로 설정
+                isModify = false;
                 // 작성 모드로 들어가면 수정모드 기준인 MaintenanceOtherRecordActivity의 carbookRecords, carbookRecordItems변수를 항상 null 초기화시켜준다.
                 MaintenanceOtherRecordActivity.carbookRecords = null;
                 MaintenanceOtherRecordActivity.carbookRecordItems = null;
@@ -80,6 +85,7 @@ public class MainrecordActivity extends AppCompatActivity {
     }
 
     public static void createSelectItemTitleList(){
+        Log.i("리스트객체생성", "생성");
         selectItemTitleList = new ArrayList<>();
     }
 

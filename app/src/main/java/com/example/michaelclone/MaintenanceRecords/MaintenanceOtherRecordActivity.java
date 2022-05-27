@@ -38,7 +38,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     // 수정 모드
     CarbookRecord carbookRecord = null;
     int carbookRecordId = 0;
-    boolean isModifyMode = false;
+    boolean isModifyMode = MainrecordActivity.isModify;
 
     TextView maintenanceOtherRecordComplete;
 
@@ -72,19 +72,20 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maintenance_other_record);
-
         try {
             mContext = this;
-            Intent intent = getIntent();
-            // 해당 인텐트 데이터가 있다면 무조건 0보다 크기 때문에 해당 조건으로 지정하였고 0보다 크면 수정모드로 인식한다.
-            if (getModifyIntentData(intent) > 0) {
-                isModifyMode = true;
-            } else {
-                isModifyMode = false;
-            }
 
             // 해당 페이지에서 수정모드와 작성모드를 하나의 조건문으로 구분 지어야하기에 보기 쉽게 boolean값 isModifyMode으로 기준 잡았다.
             if (isModifyMode) {
+                if (MainrecordActivity.selectItemTitleList == null) {
+                    // 해당 엑티비티 생성때마다 selectItemTitleList객체 초기화
+                    MainrecordActivity.createSelectItemTitleList();
+                }else {
+                    // 해당 엑티비티 생성때마다 selectItemTitleList객체 초기화
+                    MainrecordActivity.removeSelectItemTitleList();
+                    MainrecordActivity.createSelectItemTitleList();
+                }
+                Intent intent = getIntent();
                 carbookRecordId = getModifyIntentData(intent);
                 CarbookRecord_DataBridge carbookRecord_dataBridge = new CarbookRecord_DataBridge();
                 carbookRecord = carbookRecord_dataBridge.getSelectCarbookRecord(carbookRecordId);
@@ -163,9 +164,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
                     // 수정모드면 첫번째, 작성모드면 두번째 조건으로 탄다.
                     if (isModifyMode) { // < 수정 모드 >
-
-                        Log.i("onClick_maintenanceOtherRecordComplete_carbookRecord_id", String.valueOf(carbookRecord._id));
-                        Log.i("onClick_maintenanceOtherRecordComplete_carbookRecordItems", String.valueOf(carbookRecordItems));
                         // 기록 테이블은 하나씩 저장되니 반복문 필요 없다.
                         //todo 이 조건에 붙은 DB 작업 전부 업데이트로 바꿔야함.
                         mainRecordDataBridge.getCarbookRecordUpdate(new CarbookRecord(carbookRecord._id,
@@ -212,6 +210,9 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     // 완료 버튼 클릭시 수정모드 전용 변수를 항상 null로 초기화한다.
                     carbookRecords = null;
                     carbookRecordItems = null;
+
+                    // 기록, 수정화면에 들어올떼마다 새로 사용할 변수이기에 완료시 초기화
+                    MainrecordActivity.removeSelectItemTitleList();
 
                     Intent intent = new Intent(MaintenanceOtherRecordActivity.this, MainrecordActivity.class);
                     startActivity(intent);

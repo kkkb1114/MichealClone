@@ -1,12 +1,14 @@
 package com.example.michaelclone.MaintenanceRecords;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.michaelclone.MainRecord.MainrecordActivity;
 import com.example.michaelclone.R;
 
 import java.text.DecimalFormat;
@@ -27,6 +29,9 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
     // 기타 항목
     ArrayList<String> itemTitleList_other = new ArrayList<>();
     ArrayList<Integer> itemTypeList_other = new ArrayList<>();
+
+    // 각 프래그먼트 리사이클러뷰에 보내줄 아이템 타이틀 리스트에 추가할 수정모드에서 추가한 타이틀
+    ArrayList<String> selectItemTitleList = MainrecordActivity.selectItemTitleList;
 
     int itemType = 0;
     int itemAddType = 1;

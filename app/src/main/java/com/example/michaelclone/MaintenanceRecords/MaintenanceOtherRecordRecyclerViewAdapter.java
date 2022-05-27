@@ -28,7 +28,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
     Context context;
     ArrayList<String> al_itemTitleList;
-    int carbookRecordId;
     ArrayList<CarbookRecordItem> carbookRecordItems;
     // 툴 클래스
     StringFormat stringFormat = new StringFormat();
@@ -36,23 +35,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
     public MaintenanceOtherRecordRecyclerViewAdapter(Context context, ArrayList<String> al_itemTitleList, int carbookRecordId, ArrayList<CarbookRecordItem> carbookRecordItems) {
         this.context = context;
         this.al_itemTitleList = al_itemTitleList;
-        this.carbookRecordId = carbookRecordId;
         this.carbookRecordItems = carbookRecordItems;
-
-        // carbookRecordId은 제대로 가져왔다면 0과 같거나 이하일수 없기에 >로 조건을 붙임
-        /*if (carbookRecordId > 0){
-            carbookRecordItems = getCarbookRecordItems(carbookRecordId);
-        }*/
-    }
-
-    public ArrayList<CarbookRecordItem> getCarbookRecordItems(int carbookRecordId) {
-        CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
-        ArrayList<CarbookRecordItem> carbookRecordItems = carbookRecordItem_dataBridge.getMainRecordItemItemData(carbookRecordId);
-        if (carbookRecordItems != null) {
-            return carbookRecordItems;
-        } else {
-            return null;
-        }
     }
 
     @NonNull
@@ -69,7 +52,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
         // editText 글자 가져오기
         holder.setViewAction(position);
-        Log.i("ㅇㅇㅇ", String.valueOf(al_itemTitleList));
     }
 
     @Override
@@ -81,10 +63,15 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
         if (carbookRecordItems != null) {
             holder.tv_maintenanceOtherItemTitle.setText(al_itemTitleList.get(position));
             if (carbookRecordItems.size() > position) {
-                Log.i("수정항목선택", "carbookRecordItems.size(): "+carbookRecordItems.size() +"position: "+ "\n" + position + "\n" + "carbookRecordItems: "+carbookRecordItems);
                 holder.tv_maintenanceOtherItemMemoCount.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
                 holder.et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
                 holder.et_maintenanceOtherItemMemo.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
+            }else {
+                // 아무래도 아이템이 처음에 세팅되었던 텍스트를 가지고 있어서 지웠다가 다시 새로고침해서 다시 뷰를 재활용할경우
+                // 세팅되었던 데이터가 그대로 다시 나오는것같아서 DB에서 가져온 데이터를 참조하여 데이터 없을경우 뷰안의 텍스트값을 초기화 시킨다.
+                holder.tv_maintenanceOtherItemMemoCount.setText("");
+                holder.et_maintenanceOtherItemCost.setText("");
+                holder.et_maintenanceOtherItemMemo.setText("");
             }
         } else {
             holder.tv_maintenanceOtherItemTitle.setText(al_itemTitleList.get(position));

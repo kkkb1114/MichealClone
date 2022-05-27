@@ -155,6 +155,8 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
         holder.Ln_mainRecordItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 메인 기록 클릭해서 들어갈경우 수정모드로
+                MainrecordActivity.isModify = true;
                 Intent intent = new Intent(v.getContext(), MaintenanceOtherRecordActivity.class);
                 intent.putExtra("mainRecordItemCarbookRecordId", CarbookRecord_Data.mainRecordPageArrayList.get(position).id);
                 context.startActivity(intent);

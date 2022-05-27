@@ -110,12 +110,12 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
         /**
          * 1. carbookRecordItemTitleList에 carbookRecordItems의 carbookRecordItemCategoryName값을 전부 담아
          * 2. itemTitleList를 기준으로 for문을 돌려 carbookRecordItemTitleList에 문자열이 있다면 해당 회차는 checkedHashMap_maintenance에 true값을 넣는다.
-         *
          * **/
         if (carbookRecordItems != null) {
             ArrayList<String> carbookRecordItemTitleList = new ArrayList<>();
-            for (int i = 0; i < carbookRecordItems.size(); i++) {
-                carbookRecordItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+            for (int i = 0; i < selectItemTitleList.size(); i++) {
+                //carbookRecordItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+                carbookRecordItemTitleList.add(selectItemTitleList.get(i));
             }
 
             for (int i = 0; i < itemTitleList.size(); i++) {
@@ -123,7 +123,8 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
                     checkedHashMap_maintenance.put(i, true);
                 }
             }
-            Log.i("SelectMaintenanceItemActivity.selectItemTitleList", String.valueOf(MainrecordActivity.selectItemTitleList));
+            Log.i("SelectMaintenanceItemActivity.selectItemTitleList", String.valueOf(carbookRecordItemTitleList));
+            Log.i("SelectMaintenanceItemActivity.selectItemTitleList", String.valueOf(checkedHashMap_maintenance));
         }
     }
 

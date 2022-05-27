@@ -3,6 +3,7 @@ package com.example.michaelclone.MaintenanceRecords;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -119,6 +120,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         context = getContext();
+        Log.i("보자한번2", String.valueOf(MainrecordActivity.selectItemTitleList));
         View view = inflater.inflate(R.layout.fragment_maintenance_other_record, container, false);
 
         setView(view);
@@ -134,12 +136,12 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         setViewAction();
         setOnClick();
         requestPermission();
+        Log.i("보자한번3", String.valueOf(MainrecordActivity.selectItemTitleList));
 
         return view;
     }
 
     public void getSelectItemDataList() {
-        // carbookRecordId > 0 조건은 carbookRecordId가 0보다 크면 수정모드이기에 붙인 조건 => isModifyMode
         if (isModifyMode) {
             CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
             MaintenanceOtherRecordActivity.carbookRecords = mainRecordDataBridge.getSelectCarbookRecord(carbookRecordId);
@@ -148,7 +150,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
             MaintenanceOtherRecordActivity.carbookRecordItems = carbookRecordItem_dataBridge.getMainRecordItemItemData(carbookRecordId);
             carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
-            Log.i("getSelectItemDataList", String.valueOf(carbookRecordItems));
 
             getSelectItemDataSetView(stringFormat.makeStringComma(carbookRecords.carbookRecordTotalDistance));
         }
@@ -267,6 +268,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 break;
             case R.id.tv_addRecordItem:
                 //requireActivity().finish();
+                Log.i("보자한번1", String.valueOf(MainrecordActivity.selectItemTitleList));
                 Intent intent = new Intent(requireContext(), SelectMaintenanceItemActivity.class);
                 startActivity(intent);
                 break;
@@ -315,6 +317,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     }
 
     // 선택 항목 리사이클러뷰 세팅
+    // 최초에 해당 기록 페이지 보여줄때 메인 타이틀 리스트에 전부 담는다.
     public void set_RvSelectItem() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         rv_MtOtRecorditemList.setLayoutManager(linearLayoutManager);
@@ -323,18 +326,11 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 selectItemTitleList = new ArrayList<>();
             }
             for (int i = 0; i < carbookRecordItems.size(); i++) {
-                selectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+                MainrecordActivitySelectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
             }
-            if (MainrecordActivitySelectItemTitleList != null) {
-                for (int i = 0; i < MainrecordActivitySelectItemTitleList.size(); i++) {
-                    selectItemTitleList.add(MainrecordActivitySelectItemTitleList.get(i)); 이걸 성공시켜야함
-                }
-            }else {
-                Log.i("asd", "asdasd");sadfgfjmnfdlk,jmgjnhsfdlkjg;lmfsd
-            }
-            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList, carbookRecordId, carbookRecordItems);
+            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, MainrecordActivitySelectItemTitleList, carbookRecordId, carbookRecordItems);
         } else {
-            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, selectItemTitleList, carbookRecordId, carbookRecordItems);
+            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, MainrecordActivitySelectItemTitleList, carbookRecordId, carbookRecordItems);
         }
         rv_MtOtRecorditemList.setAdapter(maintenanceOtherRecordRecyclerViewAdapter);
         maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
@@ -578,6 +574,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     private void dataControlHandler() {
         try {
             recordDataHandler = new Handler(new Handler.Callback() {
+                @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public boolean handleMessage(@NonNull Message msg) {
                     try {
@@ -589,18 +586,24 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                  * **/
 
                                 ArrayList<String> selectItemTitleListModify = msg.getData().getStringArrayList("selectItemTitleList");
-                                Log.i("111111", String.valueOf(selectItemTitleListModify));
                                 for (int i = 0; i < selectItemTitleListModify.size(); i++) {
-                                    Log.i("2222222", String.valueOf(selectItemTitleListModify.get(i)));
-                                    Log.i("2222222", String.valueOf(selectItemTitleList));
-                                    if (!selectItemTitleList.contains(selectItemTitleListModify.get(i))) {
-                                        selectItemTitleList.add(selectItemTitleListModify.get(i));
-                                        Log.i("3333333", selectItemTitleListModify.get(i));
-                                        Log.i("4444444", String.valueOf(selectItemTitleList));
+                                    if (!MainrecordActivitySelectItemTitleList.contains(selectItemTitleListModify.get(i))) {
+                                        MainrecordActivitySelectItemTitleList.add(selectItemTitleListModify.get(i));
                                     }
                                 }
+                                // 아이템이 지워
+                                for (int i=0; i<carbookRecordItems.size(); i++){
+                                    if (!MainrecordActivitySelectItemTitleList.contains(carbookRecordItems.get(i).carbookRecordItemCategoryName)){
+                                        Log.i("무엇을제거했나", String.valueOf(carbookRecordItems.get(i).carbookRecordItemCategoryName));
+                                        Log.i("무엇을제거했나", String.valueOf(MainrecordActivitySelectItemTitleList));
+                                        Log.i("무엇을제거했나", String.valueOf(carbookRecordItems.size()));
+                                        carbookRecordItems.remove(i);
+                                    }
+                                }
+                                Log.i("결과를보자", String.valueOf(carbookRecordItems));
+                                Log.i("결과를보자", String.valueOf(carbookRecordItems.size()));
                                 maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
-                                Log.i("5555555", String.valueOf(selectItemTitleList));
+                                Log.i("5555555", String.valueOf(MainrecordActivitySelectItemTitleList));
                                 break;
                         }
                     } catch (Exception e) {
