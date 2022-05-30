@@ -95,7 +95,9 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     boolean isModifyMode;
     CarbookRecord carbookRecords = null;
     ArrayList<CarbookRecordItem> carbookRecordItems = null;
+    ArrayList<CarbookRecordItem> carbookRecordItemsRevisionCriteria = MaintenanceOtherRecordActivity.carbookRecordItemsStandardCriteria;
     ArrayList<String> MainrecordActivitySelectItemTitleList = MainrecordActivity.selectItemTitleList;
+
 
     // 카메라 찍을때 처음 일반 촬영하고 크롭으로 넘어가게끔 만들기 위한 변수
     boolean imageCrop = false;
@@ -150,6 +152,9 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
             MaintenanceOtherRecordActivity.carbookRecordItems = carbookRecordItem_dataBridge.getMainRecordItemItemData(carbookRecordId);
             carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
+
+            // 나중에 수정모드에서 기록은 수정 완료 눌렀을때 기록 제거 및 추가를 하기위해 필요한 기준이다.
+            carbookRecordItemsRevisionCriteria.addAll(carbookRecordItems);
 
             getSelectItemDataSetView(stringFormat.makeStringComma(carbookRecords.carbookRecordTotalDistance));
         }

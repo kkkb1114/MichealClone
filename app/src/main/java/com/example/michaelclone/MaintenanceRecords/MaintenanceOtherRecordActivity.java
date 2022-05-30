@@ -58,9 +58,10 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     public static HashMap<Integer, String> carbookRecordItemExpenseCostList = new HashMap<>();
     public static int carbookRecordRepairMode = 0;
     // 일단 static으로 만들어 놓고 실제 차계부 만들때는 로직을 바꾸는게 좋을 것 같다.
-    // (수정모드일때 사용하는 변수로 해당 엑티비티의 프래그먼트에서 수정모드일경우 데이터를 불러와서 해당 변수에 담는다. 즉 해당 변수가 null이 아니면 수정모드인셈이다.)
     public static CarbookRecord carbookRecords = null;
     public static ArrayList<CarbookRecordItem> carbookRecordItems = null;
+    // 나중에 항목 수정사항 적용을 위한 기준 리스트
+    public static ArrayList<CarbookRecordItem> carbookRecordItemsStandardCriteria;
 
 
     // 달력 다이얼로그에서 날짜를 정하고 확인 누를때 해당 MaintenanceOtherRecordActivity의 selectDate변수 값을 선택한 날짜로 지정해준다.
@@ -84,6 +85,10 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     // 해당 엑티비티 생성때마다 selectItemTitleList객체 초기화
                     MainrecordActivity.removeSelectItemTitleList();
                     MainrecordActivity.createSelectItemTitleList();
+                }
+                // 나중에 항목 수정사항 적용을 위한 기준 리스트
+                if(carbookRecordItemsStandardCriteria == null){
+                    carbookRecordItemsStandardCriteria = new ArrayList<>();
                 }
                 Intent intent = getIntent();
                 carbookRecordId = getModifyIntentData(intent);
@@ -174,16 +179,66 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                 nowTime,
                                 nowTime), carbookRecord._id);
 
-                        for (int i = 0; i < carbookRecordItems.size(); i++) {
-                            mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId,
-                                    "123",
-                                    carbookRecordItems.get(i).carbookRecordItemCategoryName,
-                                    carbookRecordItemExpenseMemoList.get(i),
-                                    carbookRecordItemExpenseCostList.get(i),
-                                    0,
-                                    nowTime,
-                                    nowTime), carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId);
+                        // 기준 리스트
+                        ArrayList<String> carbookRecordItemsTitleStandardArrayList = new ArrayList<>();
+                        ArrayList<Integer> carbookRecordItemsIdStandardArrayList = new ArrayList<>();
+                        // 수정된 리스트
+                        ArrayList<String> carbookRecordItemsTitleModifyArrayList = MainrecordActivity.selectItemTitleList;
+
+                        for (int i = 0; i < carbookRecordItemsStandardCriteria.size(); i++){
+                            carbookRecordItemsTitleStandardArrayList.add(carbookRecordItemsStandardCriteria.get(i).carbookRecordItemCategoryName);
+                            carbookRecordItemsIdStandardArrayList.add(carbookRecordItemsStandardCriteria.get(i)._id);
                         }
+
+                        /*for (int i = 0; i < carbookRecordItems.size(); i++){
+                            carbookRecordItemsTitleModifyArrayList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+                        }*/
+
+                        Log.i("carbookRecordItemsRevisionCriteria", String.valueOf(carbookRecordItemsStandardCriteria));
+                        // 데이터 수정 리스트 기준으로 돌려야 삭제까지 가능
+                        for (int i = 0; i < carbookRecordItemsTitleStandardArrayList.size(); i++) {
+
+                            Log.i("항목삭제1", String.valueOf(carbookRecordItemsTitleStandardArrayList.get(i)));
+                            
+                            // 데이터 수정 리스트에 i번째 id가 포함 되어있다면 업데이트, 없다면 히든처리
+                            if(carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))){
+                                mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId,
+                                        "123",
+                                        carbookRecordItems.get(i).carbookRecordItemCategoryName,
+                                        carbookRecordItemExpenseMemoList.get(i),
+                                        carbookRecordItemExpenseCostList.get(i),
+                                        0,
+                                        nowTime,
+                                        nowTime), carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId);
+                            }else {
+                                mainRecordItemDataBridge.MainRecordItemDelete(carbookRecordItemsIdStandardArrayList.get(i));
+                            }
+                        }
+
+                        Log.i("검사1selectMainItemTitleList: ", String.valueOf(carbookRecordItemsTitleStandardArrayList));
+                        Log.i("검사1carbookRecordItemsTitleModifyArrayList: ", String.valueOf(carbookRecordItemsTitleModifyArrayList));
+
+                        // 수정, 삭제 후에는 수정된 리스트를 기준으로 i번째 기준 리스트 id가 없다면 insert
+                        for (int i = 0; i < carbookRecordItemsTitleModifyArrayList.size(); i++){
+                            if(!carbookRecordItemsTitleStandardArrayList.contains(carbookRecordItemsTitleModifyArrayList.get(i))){
+                                mainRecordItemDataBridge.MainRecordItemInsert(new CarbookRecordItem(0, carbookRecordId,
+                                        "123",
+                                        carbookRecordItemsTitleModifyArrayList.get(i),
+                                        carbookRecordItemExpenseMemoList.get(i),
+                                        carbookRecordItemExpenseCostList.get(i),
+                                        0,
+                                        nowTime,
+                                        nowTime));
+                                Log.i("검사2", String.valueOf(carbookRecordId));
+                                Log.i("검사2", String.valueOf(carbookRecordItemsTitleModifyArrayList.get(i)));
+                                Log.i("검사2", String.valueOf(carbookRecordItemExpenseMemoList.get(i)));
+                                Log.i("검사2", String.valueOf(carbookRecordItemExpenseCostList.get(i)));
+                            }
+                        }
+                        // 수정 체크용 리스트 변수 초기화
+                        carbookRecordItemsTitleStandardArrayList = null;
+                        carbookRecordItemsTitleModifyArrayList = null;
+                        carbookRecordItemsIdStandardArrayList = null;
                     } else { // < 작성 모드 >
 
                         // 기록 테이블은 하나씩 저장되니 반복문 필요 없다.
@@ -210,6 +265,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                     // 완료 버튼 클릭시 수정모드 전용 변수를 항상 null로 초기화한다.
                     carbookRecords = null;
                     carbookRecordItems = null;
+                    carbookRecordItemsStandardCriteria = null;
 
                     // 기록, 수정화면에 들어올떼마다 새로 사용할 변수이기에 완료시 초기화
                     MainrecordActivity.removeSelectItemTitleList();

@@ -70,15 +70,14 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
 
     public void ModifyCheck() {
         if (!isModify) {
+            if (MainrecordActivity.selectItemTitleList == null) {
+                MainrecordActivity.createSelectItemTitleList();
+            }
             // 해당 엑티비티 생성때마다 selectItemTitleList객체 생성
             //MainrecordActivity.createSelectItemTitleList();
             selectItemTitleList = MainrecordActivity.selectItemTitleList;
-            Log.i("createSelectItemTitleList", String.valueOf(selectItemTitleList));
-            Log.i("createSelectItemTitleList", String.valueOf(isModify));
         } else {
             selectItemTitleList = MainrecordActivity.selectItemTitleList;
-            Log.i("not_createSelectItemTitleList", String.valueOf(selectItemTitleList));
-            Log.i("not_createSelectItemTitleList", String.valueOf(isModify));
             if (selectItemTitleList.size() > 0) {
                 tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
                 tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));

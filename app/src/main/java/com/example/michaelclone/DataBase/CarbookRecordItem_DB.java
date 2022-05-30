@@ -76,11 +76,10 @@ public class CarbookRecordItem_DB {
         }
     }
 
-    public void MainRecordItemDB_delete(CarbookRecordItem carbookRecordItem, int _id) {
+    public void MainRecordItemDB_delete(int _id) {
         try {
             SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
-            db.execSQL("UPDATE carbookRecordItem SET carbookRecordItemIsHidden = " + carbookRecordItem.carbookRecordItemIsHidden + ","
-                    + "WHERE _id = " + _id);
+            db.execSQL("UPDATE carbookRecordItem SET carbookRecordItemIsHidden = "+ 1 +" WHERE _id = " + _id);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,12 +93,12 @@ public class CarbookRecordItem_DB {
 
     public ArrayList<CarbookRecordItem> getMainRecordItemArrayList() {
         try {
-            //Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM MainRecordItem WHERE carbookRecordId = "+ 0, null);
             Cursor cursor = null;
-            cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem", null);
+            cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordItemIsHidden = " + 0, null);
 
             ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
             carbookRecordItemArrayList = getMainRecordItemCursor(cursor, carbookRecordItemArrayList);
+            Log.i("오오오", String.valueOf(carbookRecordItemArrayList));
             return carbookRecordItemArrayList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,9 +108,10 @@ public class CarbookRecordItem_DB {
 
     public ArrayList<CarbookRecordItem> getMainRecordItemItemArrayList(int mainRecordItemCarbookRecordId) {
         try {
-            Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordId = " + mainRecordItemCarbookRecordId, null);
+            Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordId = " + mainRecordItemCarbookRecordId + " AND carbookRecordItemIsHidden = " + 0, null);
             ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
             carbookRecordItemArrayList = getMainRecordItemCursor(cursor, carbookRecordItemArrayList);
+            Log.i("오오오2", String.valueOf(carbookRecordItemArrayList));
             return carbookRecordItemArrayList;
         } catch (Exception e) {
             e.printStackTrace();
