@@ -185,7 +185,7 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
             // 아이템 한개를 선택할때 선택 아이템 개수가 0개일수는 없으니 추가 했을떄의 예외처리만 있다.
             if (!holder.cb_other_itemSelect.isChecked()) {
                 holder.cb_other_itemSelect.setChecked(true);
-                MainrecordActivity.selectItemTitleList.add(holder.tv_other_itemTitle.getText().toString());
+                MainrecordActivity.resultSelectItemTitleList.add(holder.tv_other_itemTitle.getText().toString());
                 if (SelectMaintenanceItemActivity.viewHandler != null) {
                     SelectMaintenanceItemActivity.viewHandler.obtainMessage(1, holder.tv_other_itemTitle.getText().toString()).sendToTarget();
                 }
@@ -195,7 +195,7 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
                 // 아이템 한개를 선택 취소할때 선택한 아이템 개수가 0개면 if문 첫번쨰를 타고 선택한 아이템 개수가 1개 이상이면 else문을 탄다.
             } else {
                 holder.cb_other_itemSelect.setChecked(false);
-                MainrecordActivity.selectItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
+                MainrecordActivity.resultSelectItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
                 if (SelectMaintenanceItemActivity.viewHandler != null) {
                     SelectMaintenanceItemActivity.viewHandler.obtainMessage(2, holder.tv_other_itemTitle.getText().toString()).sendToTarget();
                 }
@@ -219,10 +219,10 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
                 otherSingleItemboolean = true;
                 singleItemTitle = holder.tv_other_itemTitle.getText().toString();
                 singleItemTitleList.add(holder.tv_other_itemTitle.getText().toString());
-                MainrecordActivity.selectItemTitleList.clear();
+                MainrecordActivity.resultSelectItemTitleList.clear();
 
                 // 새로운
-                MainrecordActivity.selectItemTitleList.add(holder.tv_other_itemTitle.getText().toString());
+                MainrecordActivity.resultSelectItemTitleList.add(holder.tv_other_itemTitle.getText().toString());
                 // 단일 항목 선택으로 인한 정비 항목 block
                 bundle.putBoolean("singleItemCheck", true);
 
@@ -232,7 +232,7 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
                 singleItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
 
                 // 새로운
-                MainrecordActivity.selectItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
+                MainrecordActivity.resultSelectItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
                 // 단일 항목 선택해제로 인한 정비 항목 block 품
                 bundle.putBoolean("singleItemCheck", false);
             }

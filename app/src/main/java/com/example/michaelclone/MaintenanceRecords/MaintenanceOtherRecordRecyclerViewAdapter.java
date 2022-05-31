@@ -23,12 +23,16 @@ import com.example.michaelclone.Tools.StringFormat;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adapter<MaintenanceOtherRecordRecyclerViewAdapter.ViewHolder> {
 
     Context context;
     ArrayList<String> al_itemTitleList;
     ArrayList<CarbookRecordItem> carbookRecordItems;
+    // 메모와 비용 담을 static 해쉬맵 변수
+    HashMap<Integer, String> carbookRecordItemExpenseMemoList = MaintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList;
+    HashMap<Integer, String> carbookRecordItemExpenseCostList = MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList;
     // 툴 클래스
     StringFormat stringFormat = new StringFormat();
 
@@ -52,6 +56,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
         // editText 글자 가져오기
         holder.setViewAction(position);
+        Log.i("al_itemTitleList222", String.valueOf(al_itemTitleList));
     }
 
     @Override
@@ -66,6 +71,9 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 holder.tv_maintenanceOtherItemMemoCount.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
                 holder.et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
                 holder.et_maintenanceOtherItemMemo.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
+                // 처음 세팅을 위한 static 메모, 비용 리스트 세팅
+                carbookRecordItemExpenseMemoList.put(position, carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
+                carbookRecordItemExpenseCostList.put(position, carbookRecordItems.get(position).carbookRecordItemExpenseCost);
             }else {
                 // 아무래도 아이템이 처음에 세팅되었던 텍스트를 가지고 있어서 지웠다가 다시 새로고침해서 다시 뷰를 재활용할경우
                 // 세팅되었던 데이터가 그대로 다시 나오는것같아서 DB에서 가져온 데이터를 참조하여 데이터 없을경우 뷰안의 텍스트값을 초기화 시킨다.
@@ -129,8 +137,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                             tv_maintenanceOtherItemMemoCount.setText(input_MtOtMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
 
                             // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                            MaintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList.put(position, et_maintenanceOtherItemMemo.getText().toString());
-                            //CarbookRecord_Data.carbookRecordItemArrayList_insertDB.get(position).carbookRecordItemExpenseMemo = et_MtOtItemMemo.getText().toString();
+                            carbookRecordItemExpenseMemoList.put(position, et_maintenanceOtherItemMemo.getText().toString());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -162,16 +169,14 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                         }
                         try {
                             ItemPrice = s.toString().replace(",", "");
-                            Log.i("ItemPrice111", ItemPrice);
                             // 숫자가 아닌 문자열이 들어왔을때에 대한 예외처리
                             // (간혹 해외폰에서 숫자키패드 제한을 걸어도 문자 키패드가 나타나는 경우가 있어 걸어놓은 제한)
                             if (ItemPrice.matches("^[0-9]*$")) {
                                 ItemPrice = String.valueOf(Integer.parseInt(ItemPrice));
                                 // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
-                                if (MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList != null) {
+                                if (carbookRecordItemExpenseCostList != null) {
                                     // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                                    MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList.put(position, ItemPrice);
-                                    Log.i("ItemPrice222", ItemPrice);
+                                    carbookRecordItemExpenseCostList.put(position, ItemPrice);
                                 }
 
                                 ItemPrice = stringFormat.makeStringComma(ItemPrice);

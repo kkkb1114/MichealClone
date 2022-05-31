@@ -7,12 +7,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.michaelclone.DataBase.CarbookRecord;
-import com.example.michaelclone.DataBase.CarbookRecordItem;
 import com.example.michaelclone.DataBase.CarbookRecordItem_DB;
 import com.example.michaelclone.DataBase.CarbookRecord_DB;
 import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordActivity;
@@ -36,7 +33,9 @@ public class MainrecordActivity extends AppCompatActivity {
 
     // 선택 화면 상단 선택한 항목 리스트
     // (프래그먼트 만들때 MaintenancePageViewPagerAdapter에 현재 엑티비티 자신을 넣어 "this" 프래그먼트에서 항목을 클릭할때 클릭한 아이템 텍스트를 엑티비티의 selectItemTitleList에 add했다.)
-    public static ArrayList<String> selectItemTitleList;
+    public static ArrayList<String> resultSelectItemTitleList;
+    // 리사이클러뷰에서 선택항목을 return하는 메소드를 만들어 받을까했지만 엑티비티에서 해당 어뎁터까지 2번을 걸쳐 반환을 받아야했기에 복잡해질것을 우려하여 static으로 만들었다.
+    public static ArrayList<String> beforeSelectItemTitleList;
     // true: 수정모드, false: 기록모드
     public static boolean isModify = false;
 
@@ -84,12 +83,19 @@ public class MainrecordActivity extends AppCompatActivity {
         }
     }
 
-    public static void createSelectItemTitleList(){
-        Log.i("리스트객체생성", "생성");
-        selectItemTitleList = new ArrayList<>();
+    public static void createResultSelectItemTitleList(){
+        resultSelectItemTitleList = new ArrayList<>();
     }
 
-    public static void removeSelectItemTitleList(){
-        selectItemTitleList = null;
+    public static void removeResultSelectItemTitleList(){
+        resultSelectItemTitleList = null;
+    }
+
+    public static void createBeforeSelectItemTitleList(){
+        beforeSelectItemTitleList = new ArrayList<>();
+    }
+
+    public static void removeBeforeSelectItemTitleList(){
+        beforeSelectItemTitleList = null;
     }
 }

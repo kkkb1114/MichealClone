@@ -79,8 +79,6 @@ public class VpAp_fueling extends RecyclerView.Adapter<VpAp_fueling.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
             holder.bindItem(position, holder);
-            // 지울것!!
-            Log.i("typeList", String.valueOf(typeList.size()));
     }
 
     @Override
@@ -108,10 +106,8 @@ public class VpAp_fueling extends RecyclerView.Adapter<VpAp_fueling.ViewHolder> 
 
         public void bindItem(int position, ViewHolder holder){
             if(typeList.get(position).equals("0")){
-                Log.i(":asd", "asd");
                 setItemaddClick();
             }else {
-                Log.i(":111", "222");
                 WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
 
@@ -166,9 +162,6 @@ public class VpAp_fueling extends RecyclerView.Adapter<VpAp_fueling.ViewHolder> 
                     }
                     notifyDataSetChanged(); // 리사이클러뷰 어뎁터에서 새로고침
                     fueling_imageCount.setText(bitmapArrayList.size()+"/5");
-
-                    Log.i("typeList.size()", String.valueOf(typeList.size()));
-                    Log.i("bitmapArrayList.size()", String.valueOf(bitmapArrayList.size()));
                 }
             });
         }

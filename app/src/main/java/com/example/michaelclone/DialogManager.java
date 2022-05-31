@@ -264,8 +264,6 @@ public class DialogManager extends AlertDialog.Builder {
                     Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     rootPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/MichaelClone/"; // 주차 위치 카메라 촬영시 기기 내부 이미지 저장 위치
                     String fileName = initDate()+".jpg";
-                    // 지울것!!
-                    Log.i("fileName", fileName);
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/MichaelClone",
                             fileName);
                     newPath = rootPath + fileName;
@@ -280,8 +278,6 @@ public class DialogManager extends AlertDialog.Builder {
                     intentCamera.putExtra("return-data", true);
                     MaintenanceOtherRecordFragment.mStartForResult.launch(intentCamera);
 
-                    // 지울것!!
-                    Log.i("카메라", String.valueOf(data_Record.getType()));
                     dismiss();
                     break;
                 case R.id.Ln_Album :
@@ -293,8 +289,6 @@ public class DialogManager extends AlertDialog.Builder {
                     intentAlbum.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                     intentAlbum.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     MaintenanceOtherRecordFragment.mStartForResult.launch(intentAlbum);
-                    // 지울것!!
-                    Log.i("앨범", String.valueOf(data_Record.getType()));
                     dismiss();
                     break;
             }

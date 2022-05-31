@@ -11,14 +11,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.michaelclone.DataBase.CarbookRecord;
 import com.example.michaelclone.DataBase.CarbookRecordItem;
 import com.example.michaelclone.DataBase.CarbookRecordItem_DB;
-import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.MainRecord.MainrecordActivity;
 import com.example.michaelclone.R;
 import com.google.android.material.tabs.TabLayout;
@@ -60,24 +57,30 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         // 테이블 레이아웃 뷰 추가
         setTabLayout();
         setDatatransferNextPage();
-
         ModifyCheck();
-
         initHandler();
-
         CarbookRecordItem_DB carbookRecordItem_db = CarbookRecordItem_DB.getInstance(context, "MainRecord.db", null, 1);
     }
 
     public void ModifyCheck() {
         if (!isModify) {
-            if (MainrecordActivity.selectItemTitleList == null) {
-                MainrecordActivity.createSelectItemTitleList();
+            if (MainrecordActivity.resultSelectItemTitleList == null) {
+                MainrecordActivity.createResultSelectItemTitleList();
+            }else {
+                MainrecordActivity.removeResultSelectItemTitleList();
+                MainrecordActivity.createResultSelectItemTitleList();
+            }
+            if (MainrecordActivity.beforeSelectItemTitleList == null) {
+                // 확인 누르기 전 선택 항목 데이터 리스트 객체 생성
+                MainrecordActivity.createBeforeSelectItemTitleList();
+            }else {
+                MainrecordActivity.removeBeforeSelectItemTitleList();
+                MainrecordActivity.createBeforeSelectItemTitleList();
             }
             // 해당 엑티비티 생성때마다 selectItemTitleList객체 생성
-            //MainrecordActivity.createSelectItemTitleList();
-            selectItemTitleList = MainrecordActivity.selectItemTitleList;
+            selectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
         } else {
-            selectItemTitleList = MainrecordActivity.selectItemTitleList;
+            selectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
             if (selectItemTitleList.size() > 0) {
                 tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
                 tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
@@ -155,21 +158,20 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 // if (ad_maintenancePage.getFragment(0) instanceof MaintenanceFragment && ad_maintenancePage.getFragment(1) instanceof OtherFragment){}
                 // 수정모드면 기록페이지의 핸들러를 작동시키며 작성모드면 인텐트로 리스트객체를 전달한다.
                 if (isModify) {
-                    Log.i("tv_selectionConfirmrecordDataHandler", String.valueOf(selectItemTitleList));
                     Message message = new Message();
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArrayList("selectItemTitleList", selectItemTitleList);
-                    message.setData(bundle);
+                    /*Bundle bundle = new Bundle();
+                    bundle.putStringArrayList("", );
+                    message.setData(bundle);*/
                     message.what = 1;
-                    Log.i("tv_selectionConfirmrecordDataHandlermessage", String.valueOf(message));
                     MaintenanceOtherRecordFragment.recordDataHandler.sendMessage(message);
                 } else {
+                    MainrecordActivity.resultSelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
                     Intent intent = new Intent(SelectMaintenanceItemActivity.this, MaintenanceOtherRecordActivity.class);
                     intent.putExtra("selectItemTitleList", selectItemTitleList);
                     startActivity(intent);
                 }
-                /*// 기록, 수정화면에 들어올떼마다 새로 사용할 변수이기에 완료시 초기화
-                MainrecordActivity.removeSelectItemTitleList();*/
+                // 완료시 임시 항목 선택 리스트 초기화
+                //MainrecordActivity.removeBeforeSelectItemTitleList();
                 finish();
             }
         });

@@ -30,9 +30,6 @@ public class MaintenancePageViewPagerAdapter extends FragmentStateAdapter {
     ArrayList<String> itemTitleList_other = new ArrayList<>();
     ArrayList<Integer> itemTypeList_other = new ArrayList<>();
 
-    // 각 프래그먼트 리사이클러뷰에 보내줄 아이템 타이틀 리스트에 추가할 수정모드에서 추가한 타이틀
-    ArrayList<String> selectItemTitleList = MainrecordActivity.selectItemTitleList;
-
     int itemType = 0;
     int itemAddType = 1;
 

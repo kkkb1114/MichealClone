@@ -40,7 +40,8 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
     // 수정용 static CarbookRecordItem리스트
     ArrayList<CarbookRecordItem> carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
     // 항목 선택완료시 다음 화면으로 넘길 static 변수
-    ArrayList<String> selectItemTitleList = MainrecordActivity.selectItemTitleList;
+    ArrayList<String> resultSelectItemTitleList = MainrecordActivity.resultSelectItemTitleList;
+    ArrayList<String> beforeSelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
 
     /**
      * 1. ItemTypeList을 기준으로 항목을 추가할지 새 항목 추가 버튼을 추가할지 정해지며 | 0: 항목, 1: 추가버튼이다.
@@ -52,6 +53,10 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
         this.itemLifeSpanList = ItemLifeSpanList;
         this.itemTypeList = ItemTypeList;
         this.context = context;
+
+        // 처음 선택 항목은 넣어놓는다.
+        beforeSelectItemTitleList.addAll(resultSelectItemTitleList);이게 문제인데... 일단 처음을 위해서 넣어주기는 해야한다. 어디서 넣어주지?
+
         itemBlockHandler();
         setChecked();
     }
@@ -106,25 +111,22 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             checkedHashMap_maintenance.put(i, false);
         }
 
-        Log.i("carbookRecordItems", String.valueOf(carbookRecordItems));
         /**
          * 1. carbookRecordItemTitleList에 carbookRecordItems의 carbookRecordItemCategoryName값을 전부 담아
          * 2. itemTitleList를 기준으로 for문을 돌려 carbookRecordItemTitleList에 문자열이 있다면 해당 회차는 checkedHashMap_maintenance에 true값을 넣는다.
          * **/
         if (carbookRecordItems != null) {
-            ArrayList<String> carbookRecordItemTitleList = new ArrayList<>();
-            for (int i = 0; i < selectItemTitleList.size(); i++) {
+            /*ArrayList<String> carbookRecordItemTitleList = new ArrayList<>();
+            for (int i = 0; i < resultSelectItemTitleList.size(); i++) {
                 //carbookRecordItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
-                carbookRecordItemTitleList.add(selectItemTitleList.get(i));
-            }
+                carbookRecordItemTitleList.add(resultSelectItemTitleList.get(i));
+            }*/
 
             for (int i = 0; i < itemTitleList.size(); i++) {
-                if (carbookRecordItemTitleList.contains(itemTitleList.get(i))) {
+                if (resultSelectItemTitleList.contains(itemTitleList.get(i))) {
                     checkedHashMap_maintenance.put(i, true);
                 }
             }
-            Log.i("SelectMaintenanceItemActivity.selectItemTitleList", String.valueOf(carbookRecordItemTitleList));
-            Log.i("SelectMaintenanceItemActivity.selectItemTitleList", String.valueOf(checkedHashMap_maintenance));
         }
     }
 
@@ -151,7 +153,7 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             // 아이템 뷰를 클릭시 체크박스가 false면 true, true면 false로 변경 후
             if (!holder.cb_maintenance_itemSelect.isChecked()) {
                 holder.cb_maintenance_itemSelect.setChecked(true);
-                selectItemTitleList.add(holder.tv_maintenance_itemTitle.getText().toString());
+                beforeSelectItemTitleList.add(holder.tv_maintenance_itemTitle.getText().toString());
                 if (SelectMaintenanceItemActivity.viewHandler != null) {
                     SelectMaintenanceItemActivity.viewHandler.obtainMessage(1, holder.tv_maintenance_itemTitle.getText().toString()).sendToTarget();
                 }
@@ -159,7 +161,7 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
                 // 아이템 한개를 선택 취소할때 선택한 아이템 개수가 0개면 if문 첫번쨰를 타고 선택한 아이템 개수가 1개 이상이면 else문을 탄다.
             } else {
                 holder.cb_maintenance_itemSelect.setChecked(false);
-                selectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
+                beforeSelectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
                 if (SelectMaintenanceItemActivity.viewHandler != null) {
                     SelectMaintenanceItemActivity.viewHandler.obtainMessage(2, holder.tv_maintenance_itemTitle.getText().toString()).sendToTarget();
                 }
@@ -194,13 +196,11 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
 
         // 리사이클러뷰 특성상 뷰를 재활용 할 때 체크박스가 그대로 체크되어있는 것을 방지하기위해 position마다
         // 체크박스 isboolean여부가 들어있는 checkedHashMap_maintenance를 참고하여 체크박스 상태를 세팅한다.
-        Log.i("checkedHashMap_maintenance111", String.valueOf(checkedHashMap_maintenance.get(position)));
         if (checkedHashMap_maintenance.get(position)) {
             holder.cb_maintenance_itemSelect.setChecked(true);
         } else {
             holder.cb_maintenance_itemSelect.setChecked(false);
         }
-        Log.i("checkedHashMap_maintenance222", String.valueOf(checkedHashMap_maintenance.get(position)));
     }
 
     public void bindView(int position, ViewHolder holder) {
@@ -226,8 +226,8 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             // 체크 박스는 block처리되면 이제까지 체크했던 기록은 전부 없앤다. (어차피 block처리되면 리사이클러뷰가 초기화되기에 checkList에 저장된 데이터도 초기화되서 신경 쓸 필요 없다.)
             //holder.cb_maintenance_itemSelect.setChecked(true);
             // block하면서 체크했던 기록 전부 없앤다.
-            if (selectItemTitleList.contains(holder.tv_maintenance_itemTitle.getText().toString())) {
-                selectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
+            if (beforeSelectItemTitleList.contains(holder.tv_maintenance_itemTitle.getText().toString())) {
+                beforeSelectItemTitleList.remove(holder.tv_maintenance_itemTitle.getText().toString());
             }
 
         } else {

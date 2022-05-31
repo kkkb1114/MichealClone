@@ -42,8 +42,6 @@ public class CarbookRecordItem_DB {
     public void MainRecordItemDB_update(CarbookRecordItem carbookRecordItem, int _id, int carbookRecordId) {
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
-            Log.i("MainRecordItemDB_update_id", String.valueOf(_id));
-            Log.i("MainRecordItemDB_update_carbookRecord", String.valueOf(carbookRecordId));
             db.beginTransaction();
             db.execSQL("UPDATE carbookRecordItem SET _id = "+ _id +", carbookRecordId = " + carbookRecordItem.carbookRecordId + ", "
                     + "carbookRecordItemCategoryCode = " + "'" + carbookRecordItem.carbookRecordItemCategoryCode + "'" + ","
@@ -98,7 +96,6 @@ public class CarbookRecordItem_DB {
 
             ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
             carbookRecordItemArrayList = getMainRecordItemCursor(cursor, carbookRecordItemArrayList);
-            Log.i("오오오", String.valueOf(carbookRecordItemArrayList));
             return carbookRecordItemArrayList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +108,6 @@ public class CarbookRecordItem_DB {
             Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordId = " + mainRecordItemCarbookRecordId + " AND carbookRecordItemIsHidden = " + 0, null);
             ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
             carbookRecordItemArrayList = getMainRecordItemCursor(cursor, carbookRecordItemArrayList);
-            Log.i("오오오2", String.valueOf(carbookRecordItemArrayList));
             return carbookRecordItemArrayList;
         } catch (Exception e) {
             e.printStackTrace();

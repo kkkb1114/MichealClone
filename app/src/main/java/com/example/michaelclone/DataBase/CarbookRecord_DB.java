@@ -41,8 +41,6 @@ public class CarbookRecord_DB {
     public void MainRecordDB_update(CarbookRecord carbookRecord, int _id){
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
-            Log.i("MainRecordDB_update_id", String.valueOf(_id));
-            Log.i("MainRecordDB_update_carbookRecord", String.valueOf(carbookRecord));
             db.beginTransaction();
             db.execSQL("UPDATE carbookRecord SET _id = "+ _id +", carbookRecordRepairMode = " + carbookRecord.carbookRecordRepairMode + ", "
                     + "carbookRecordExpendDate = " + "'"+ carbookRecord.carbookRecordExpendDate +"'" + ","
@@ -78,7 +76,6 @@ public class CarbookRecord_DB {
             Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecord WHERE carbookRecordIsHidden = " + 0, null);
             ArrayList<CarbookRecord> CarbookRecords = new ArrayList<>();
             CarbookRecords = getMainRecordCursor(cursor, CarbookRecords);
-            Log.i("오오오기록1", String.valueOf(CarbookRecords));
             return CarbookRecords;
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,7 +89,6 @@ public class CarbookRecord_DB {
             CarbookRecord carbookRecords;
             carbookRecords = getMainRecordCursorSingle(cursor);
 
-            Log.i("오오오기록2", String.valueOf(carbookRecords));
             return carbookRecords;
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,8 +138,6 @@ public class CarbookRecord_DB {
         while (cursor.moveToNext()){
             carbookRecord = new CarbookRecord(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4),
                     cursor.getString(5), cursor.getString(6));
-            Log.i("getMainRecordCursorSingle", String.valueOf( cursor.getInt(0)));
-            Log.i("getMainRecordCursorSingle", String.valueOf( cursor.getInt(1)));
         }
 
         cursor.close();
@@ -157,7 +151,8 @@ public class CarbookRecord_DB {
             db.beginTransaction();
             Cursor cursor = db.rawQuery("SELECT A.*, B.count, B.totalCost, B.carbookRecordItemCategoryName, B.carbookRecordItemExpenseMemo, substr(carbookRecordExpendDate, 0,7) as month," +
                     "substr(carbookRecordExpendDate, 0,5) as year FROM carbookRecord as A JOIN (SELECT carbookRecordId, carbookRecordItemCategoryName, carbookRecordItemExpenseMemo," +
-                    "COUNT(*) as 'count', SUM(carbookRecordItemExpenseCost) as 'totalCost' FROM carbookRecordItem GROUP BY carbookRecordId) as B ON (A._id = B.carbookRecordId) WHERE A.carbookRecordIsHidden = 0 ORDER BY carbookRecordExpendDate DESC", null);
+                    "COUNT(CASE WHEN carbookRecordItemIsHidden = 0 THEN 1 END) as 'count', SUM(CASE WHEN carbookRecordItemIsHidden = 0 THEN carbookRecordItemExpenseCost END) as 'totalCost' " +
+                    "FROM carbookRecordItem GROUP BY carbookRecordId) as B ON (A._id = B.carbookRecordId) WHERE A.carbookRecordIsHidden = 0 ORDER BY carbookRecordExpendDate DESC", null);
 
             while (cursor.moveToNext()){
                 MainRecordPage mainRecordPage = new MainRecordPage(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getDouble(4),

@@ -243,16 +243,10 @@ public class FuelingRecordActivity extends AppCompatActivity {
                     public void onActivityResult(ActivityResult result) {
                         if (result != null){
                             data_Record = new Data_Record();
-                            // 지울것!!
-                            Log.i("결과", String.valueOf(result.getResultCode()));
                             if (data_Record.getType() == 0 && result.getResultCode() == RESULT_OK) { //todo 카메라
                                 Intent intent = result.getData();
 
                                 //cropImage();
-                                // 지울것!!
-                                Log.i("결과", String.valueOf(intent));
-                                // 지울것!!
-                                Log.i("data_fuelingRecord.getType()", String.valueOf(data_Record.getType()));
                                 // Bundle로 데이터를 입력
                                 Bundle extras = result.getData().getExtras();
 
@@ -264,8 +258,6 @@ public class FuelingRecordActivity extends AppCompatActivity {
                                 typeList.clear(); // 이미지 추가 아이템을 맨 뒤로 보내야 하기에 초기화 시켜주고 다시 넣는다.
                                 for (int i=0; i<bitmapArrayList.size(); i++){
                                     typeList.add("1");
-                                    // 지울것!!
-                                    Log.i("typeList", typeList.get(i));
                                 }
                                 if (bitmapArrayList.size() < 5){ // 이미지 리스트가 5이하면 이미지 추가 버튼 생성
                                     typeList.add("0");
@@ -280,7 +272,6 @@ public class FuelingRecordActivity extends AppCompatActivity {
                                         Toast.makeText(mContext, "다중선택이 불가한 기기입니다.", Toast.LENGTH_SHORT).show();
                                     }else {
                                         ClipData clipData = result.getData().getClipData();
-                                        Log.i("ClipData 개수", String.valueOf(clipData.getItemCount()));
                                         if (clipData.getItemCount() >= 6){ // 선택한 사진이 5장 초과면 제한 안내
                                             Toast.makeText(mContext, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
                                         }else if (clipData.getItemCount() == 1){ // 선택한 사진 1장이면 getClipData에 있는 이미지 리스트중 인덱스가 0에 있는 사진의 uri를 지정해준다.
@@ -294,8 +285,6 @@ public class FuelingRecordActivity extends AppCompatActivity {
                                                 typeList.clear(); // 이미지 추가 아이템을 맨 뒤로 보내야 하기에 초기화 시켜주고 다시 넣는다.
                                                 for (int i=0; i<bitmapArrayList.size(); i++){
                                                     typeList.add("1");
-                                                    // 지울것!!
-                                                    Log.i("typeList", typeList.get(i));
                                                 }
                                                 if (bitmapArrayList.size() < 5){ // 이미지 리스트가 5이하면 이미지 추가 버튼 생성
                                                     typeList.add("0");
@@ -312,13 +301,10 @@ public class FuelingRecordActivity extends AppCompatActivity {
                                                     File file = new File(imagePath);
                                                     Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
                                                     bitmapArrayList.add(bitmap);
-                                                    Log.i("clipData.getItemCount", String.valueOf(clipData.getItemAt(i).getUri()));
                                                 }
                                                 typeList.clear(); // 이미지 추가 아이템을 맨 뒤로 보내야 하기에 초기화 시켜주고 다시 넣는다.
                                                 for (int i=0; i<bitmapArrayList.size(); i++){
                                                     typeList.add("1");
-                                                    // 지울것!!
-                                                    Log.i("typeList", typeList.get(i));
                                                 }
                                                 if (bitmapArrayList.size() < 5){ // 이미지 리스트가 5이하면 이미지 추가 버튼 생성
                                                     typeList.add("0");
@@ -341,8 +327,6 @@ public class FuelingRecordActivity extends AppCompatActivity {
         try {
             PackageManager packageManager = mContext.getPackageManager();
             if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-                // 지울것!!
-                Log.i("data_fuelingRecord.getImageUri()", data_Record.getImageUri());
                 mContext.grantUriPermission("com.android.camera", Uri.parse(data_Record.getImageUri()),
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
