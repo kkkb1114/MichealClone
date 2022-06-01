@@ -218,6 +218,8 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                             }
                             // 수정된 데이터 리스트에 i번째 기존 리스트 항목이 있다면 업데이트, 없다면 지운다.
                             if (carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))) {
+                                Log.i("memoUpdate", memoUpdate);
+                                Log.i("costUpdate", costUpdate);
                                 mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItemsStandardCriteria.get(i)._id, carbookRecordId,
                                         "123",
                                         carbookRecordItemsStandardCriteria.get(i).carbookRecordItemCategoryName,

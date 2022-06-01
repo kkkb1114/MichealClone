@@ -69,7 +69,14 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
             holder.tv_maintenanceOtherItemTitle.setText(al_itemTitleList.get(position));
             if (carbookRecordItems.size() > position) {
                 holder.tv_maintenanceOtherItemMemoCount.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
-                holder.et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
+                // 비용이 0이면 아예 edittext에 set하지 않고 0이 아니면 컴마 메소드를 태워서 set한다.
+                Log.i("carbookRecordItemExpenseCost", carbookRecordItems.get(position).carbookRecordItemExpenseCost);
+                if(carbookRecordItems.get(position).carbookRecordItemExpenseCost.equals("0")){
+                    Log.i("carbookRecordItemExpenseCost333", carbookRecordItems.get(position).carbookRecordItemExpenseCost);
+                }else {
+                    Log.i("carbookRecordItemExpenseCost222", carbookRecordItems.get(position).carbookRecordItemExpenseCost);
+                    holder.et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
+                }
                 holder.et_maintenanceOtherItemMemo.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
                 // 처음 세팅을 위한 static 메모, 비용 리스트 세팅
                 carbookRecordItemExpenseMemoList.put(position, carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
@@ -171,7 +178,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(ItemPrice) && et_maintenanceOtherItemCost != null) {
+                    if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(ItemPrice)) {
                         if (et_maintenanceOtherItemCost.getText().toString().matches("0")) {
                             // 맨 처음 앞자리가 0이면 더이상 입력 못하게 지운다
                             et_maintenanceOtherItemCost.setText("");
@@ -205,7 +212,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                         // 위처럼 setSelection()로 다이렉트로 커서 위치 시키면 바로 되는 것을 아래처럼 하는 이유를 조사해서 알기전까진 위 방법으로 할 생각이다.
                     /*Editable editable = et_cumulativeMileage.getText();
                     Selection.setSelection(editable, CumulativeMileage.length());*/
-                    } else {
+                    } else if(s.toString().equals("0") || s.toString().equals("")){
                         Log.i("carbookRecordItemExpenseCostList2", String.valueOf(s.toString()));
                         // edittext에 데이터가 ""이면 그냥 "0"으로 넣는다.
                         if (carbookRecordItemExpenseCostList != null) {
