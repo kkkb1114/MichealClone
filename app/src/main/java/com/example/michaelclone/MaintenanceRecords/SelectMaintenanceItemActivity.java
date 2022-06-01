@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -81,6 +82,9 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
             selectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
         } else {
             selectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
+            // 처음 선택 항목은 넣어놓는다. (항목 선택 화면에만 쓰이기에 들어올때마다 항상 클리어를 해줘야함)
+            selectItemTitleList.clear();
+            selectItemTitleList.addAll(MainrecordActivity.resultSelectItemTitleList);
             if (selectItemTitleList.size() > 0) {
                 tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
                 tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
@@ -172,6 +176,8 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 }
                 // 완료시 임시 항목 선택 리스트 초기화
                 //MainrecordActivity.removeBeforeSelectItemTitleList();
+                Log.i("항목확인메모", String.valueOf(MaintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList));
+                Log.i("항목확인비용", String.valueOf(MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList));
                 finish();
             }
         });

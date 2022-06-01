@@ -2,6 +2,7 @@ package com.example.michaelclone.MainRecord;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,7 +116,13 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
             holder.tv_mainrecordTitle.setText(tv_mainrecordTitle);
             holder.tv_mainrecordDistance.setText(Distance);
             holder.tv_mainrecordCost.setText(totalCost);
-            holder.tv_mainrecordMemo.setText(String.valueOf(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo));
+            Log.i("메인화면첫째이름", CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemCategoryName);
+            Log.i("메인화면첫째메모", CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo);
+            if(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo.equals("")){
+                holder.tv_mainrecordMemo.setVisibility(View.GONE);
+            }else {
+                holder.tv_mainrecordMemo.setText(String.valueOf(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo));
+            }
 
             ArrayList<String> nameList = new ArrayList<>();
             ArrayList<String> costList = new ArrayList<>();

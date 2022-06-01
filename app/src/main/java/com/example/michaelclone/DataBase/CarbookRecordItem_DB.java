@@ -43,6 +43,7 @@ public class CarbookRecordItem_DB {
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
             db.beginTransaction();
+            Log.i("?????", String.valueOf(carbookRecordItem));
             db.execSQL("UPDATE carbookRecordItem SET _id = "+ _id +", carbookRecordId = " + carbookRecordItem.carbookRecordId + ", "
                     + "carbookRecordItemCategoryCode = " + "'" + carbookRecordItem.carbookRecordItemCategoryCode + "'" + ","
                     + "carbookRecordItemCategoryName = " + "'" + carbookRecordItem.carbookRecordItemCategoryName + "'" + ","

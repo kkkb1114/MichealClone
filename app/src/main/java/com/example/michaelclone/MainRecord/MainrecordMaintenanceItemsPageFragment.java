@@ -53,5 +53,4 @@ public class MainrecordMaintenanceItemsPageFragment extends Fragment {
         rv_mainTotalPage.setAdapter(mainRecordPageRecyclerViewAdapter);
         mainRecordPageRecyclerViewAdapter.notifyDataSetChanged();
     }
-
 }

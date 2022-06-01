@@ -17,16 +17,16 @@ public class MainRecordPageViewPagerAdapter extends FragmentStateAdapter {
     MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter;
     Context context;
 
-    public MainRecordPageViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, int pageNum, Context context) {
+    public MainRecordPageViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, int pageNum, Context context, MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter) {
         super(fragmentActivity);
         this.pageNum = pageNum;
         this.context = context;
+        this.mainRecordPageRecyclerViewAdapter = mainRecordPageRecyclerViewAdapter;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        mainRecordPageRecyclerViewAdapter = create_apRv_MainTotalPage();
         switch (position){
             case 0:
                 return new MainrecordMaintenanceItemsPageFragment(mainRecordPageRecyclerViewAdapter);
@@ -40,16 +40,6 @@ public class MainRecordPageViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public int getItemCount() {
         return pageNum;
-    }
-
-    // 각 프래그먼트에 넣을 리사이클러뷰 어뎁터 (일단 통합 어뎁터를 먼저 만들었고 다 만든 후에 추가로 정비/기타 어뎁터 만들 예정)
-    public MainRecordPageRecyclerViewAdapter create_apRv_MainTotalPage(){
-        setting_apRv_mainRecordPage();
-        return new MainRecordPageRecyclerViewAdapter(context);
-    }
-
-    public void setting_apRv_mainRecordPage(){
-
     }
 
 }

@@ -1,7 +1,12 @@
 package com.example.michaelclone.MainRecord;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +30,7 @@ public class MainrecordFragment extends Fragment {
     Context context;
     TabLayout tl_mainhistorypage;
     ArrayList<String> mainhistoryTabNameList = new ArrayList<>();
+    MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter;
 
     // 뷰페이저2
     private ViewPager2 vp_mainhistory;
@@ -34,25 +40,28 @@ public class MainrecordFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         context = getContext();
+        mainRecordPageRecyclerViewAdapter = new MainRecordPageRecyclerViewAdapter(context);
         View view = inflater.inflate(R.layout.fragment_mainrecordpage, container, false);
         setView(view);
         getMainrecordDataList();
         setTabLayout();
+        // 핸들러 준비
+        initHandler();
 
         return view;
     }
 
-    public void setView(View view){
+    public void setView(View view) {
         tl_mainhistorypage = view.findViewById(R.id.tl_mainhistorypage);
         vp_mainhistory = view.findViewById(R.id.vp_maintenanceOther);
 
     }
 
-    public void setTabLayout(){
+    public void setTabLayout() {
         mainhistoryTabNameList.add(getResources().getString(R.string.HistoryPageFullTab));
         mainhistoryTabNameList.add(getResources().getString(R.string.HistoryPageMaintenanceOthers));
 
-        ad_mainhistory = new MainRecordPageViewPagerAdapter(requireActivity(), 2, context);
+        ad_mainhistory = new MainRecordPageViewPagerAdapter(requireActivity(), 2, context, mainRecordPageRecyclerViewAdapter);
         vp_mainhistory.setAdapter(ad_mainhistory);
 
         new TabLayoutMediator(tl_mainhistorypage, vp_mainhistory, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -64,7 +73,7 @@ public class MainrecordFragment extends Fragment {
     }
 
     // 기록 페이지에 들어오면 DB에 저장된 MainRecord, MainRecordItem데이터를 전부 불러와서 MainRecord_Data클래스안에 메인 페이지 전용 ArrayList에 전부 넣어준다.
-    public void getMainrecordDataList(){
+    public void getMainrecordDataList() {
         CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
         CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB = carbookRecordItem_dataBridge.MainRecordItemSelect();
 
@@ -74,4 +83,31 @@ public class MainrecordFragment extends Fragment {
         // 가끔 editText에서 에러터져서 null값이 들어가서 테스트환경에서 그런 데이터를 지우기위해 만든 메소드(원래는 delete를 하지않기에 쓰지 않는다.)
         //mainRecordItem_dataBridge.test_delete(37);
     }
+
+    public static Handler viewHandler = null;
+
+    private void initHandler() {
+        try {
+            viewHandler = new Handler(new Handler.Callback() {
+                @Override
+                public boolean handleMessage(@NonNull Message msg) {
+                    try {
+                        switch (msg.what) {
+                            case 1:
+                                /*Log.i("뷰핸들러", "시작");
+                                getMainrecordDataList();
+                                mainRecordPageRecyclerViewAdapter.notifyDataSetChanged();*/
+                                break;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

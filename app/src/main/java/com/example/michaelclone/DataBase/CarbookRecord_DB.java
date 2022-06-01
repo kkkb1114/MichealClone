@@ -149,6 +149,8 @@ public class CarbookRecord_DB {
         ArrayList<MainRecordPage> mainRecordPageArrayList = new ArrayList<>();
         try {
             db.beginTransaction();
+            // 아래처럼 메모 조건을 붙여봤는데 안되네...
+            //CASE B.carbookRecordItemExpenseMemo WHEN B.carbookRecordItemIsHidden = 0 THEN 1 END
             Cursor cursor = db.rawQuery("SELECT A.*, B.count, B.totalCost, B.carbookRecordItemCategoryName, B.carbookRecordItemExpenseMemo, substr(carbookRecordExpendDate, 0,7) as month," +
                     "substr(carbookRecordExpendDate, 0,5) as year FROM carbookRecord as A JOIN (SELECT carbookRecordId, carbookRecordItemCategoryName, carbookRecordItemExpenseMemo," +
                     "COUNT(CASE WHEN carbookRecordItemIsHidden = 0 THEN 1 END) as 'count', SUM(CASE WHEN carbookRecordItemIsHidden = 0 THEN carbookRecordItemExpenseCost END) as 'totalCost' " +

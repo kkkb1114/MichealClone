@@ -59,6 +59,7 @@ import com.example.michaelclone.Tools.StringFormat;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MaintenanceOtherRecordFragment extends Fragment implements View.OnClickListener {
 
@@ -70,6 +71,10 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     // 선택 항목 리스트
     RecyclerView rv_MtOtRecorditemList;
     MaintenanceOtherRecordRecyclerViewAdapter maintenanceOtherRecordRecyclerViewAdapter;
+
+    // 항목 아이템에 적용시킬 메모, 비용 리스트 (리사이클러뷰 아이템의 해당데이터는 이 해쉬맵으로 통일 시킴)
+    HashMap<Integer, String> carbookRecordItemExpenseCostList = MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList;
+    HashMap<Integer, String> carbookRecordItemExpenseMemoList = MaintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList;
 
     // 카메라, 앨범 선택 핸들러
     public static ActivityResultLauncher<Intent> mStartForResult;
@@ -104,7 +109,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     boolean imageCrop = false;
 
     public MaintenanceOtherRecordFragment(ArrayList<String> selectItemTitleList, int carbookRecordId, boolean isModifyMode) {
-        this.selectItemTitleList = selectItemTitleList;
+        //this.selectItemTitleList = selectItemTitleList;
         this.carbookRecordId = carbookRecordId;
         this.isModifyMode = isModifyMode;
     }
@@ -158,6 +163,14 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
             MaintenanceOtherRecordActivity.carbookRecordItems = carbookRecordItem_dataBridge.getMainRecordItemItemData(carbookRecordId);
             carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
+
+            // 항목 아이템에 적용시킬 리스트 처음 세팅 (어차피 static이라 리사이클러뷰 어뎁터에 넣지 않는다.)
+            selectItemTitleList = new ArrayList<>();
+            for (int i = 0; i < carbookRecordItems.size(); i++){
+                selectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+                carbookRecordItemExpenseCostList.put(i, carbookRecordItems.get(i).carbookRecordItemExpenseCost);
+                carbookRecordItemExpenseMemoList.put(i, carbookRecordItems.get(i).carbookRecordItemExpenseMemo);
+            }
 
             // 나중에 수정모드에서 기록은 수정 완료 눌렀을때 기록 제거 및 추가를 하기위해 필요한 기준이다.
             carbookRecordItemsRevisionCriteria.addAll(carbookRecordItems);
@@ -232,6 +245,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(CumulativeMileage)) {
                 CumulativeMileage = makeStringComma(s.toString().replace(",", ""));
                 et_cumulativeMileage.setText(CumulativeMileage);
+                // 매번 콤마 적용을 시키면 커서가 앞으로 움직이기에 맨 뒤로 이동하게끔 만들었다. (클릭시 숫자로 변하고 벗어나면 자동으로 콤마 계산을 하면 좋은데 해당 방법을 아직 못찾음.)
                 et_cumulativeMileage.setSelection(et_cumulativeMileage.length());
                 // 아래 방법은 CumulativeMileage 문자열 길이를 뽑아서 해당 길이가 4면 커서를 4만큼만 이동시키겠다 인데 Editable이걸 왜 만드는지 모르겠다.
                 // 위처럼 setSelection()로 다이렉트로 커서 위치 시키면 바로 되는 것을 아래처럼 하는 이유를 조사해서 알기전까진 위 방법으로 할 생각이다.

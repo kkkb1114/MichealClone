@@ -54,9 +54,6 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
         this.itemTypeList = ItemTypeList;
         this.context = context;
 
-        // 처음 선택 항목은 넣어놓는다.
-        beforeSelectItemTitleList.addAll(resultSelectItemTitleList);이게 문제인데... 일단 처음을 위해서 넣어주기는 해야한다. 어디서 넣어주지?
-
         itemBlockHandler();
         setChecked();
     }

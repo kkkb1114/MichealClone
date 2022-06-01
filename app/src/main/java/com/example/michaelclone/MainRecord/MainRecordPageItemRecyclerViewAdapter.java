@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,14 +40,18 @@ public class MainRecordPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String cost;
+        String costResult;
         if (costList.get(position).contains(",")){
             cost = costList.get(position).replace(",", "");
         }else {
             cost = costList.get(position);
         }
-        // 항목 금액
-        String costResult = "₩" + decimalFormat.format(Integer.parseInt(cost));
-
+        if(cost.equals("")){
+            costResult = "₩ 0";
+        }else {
+            // 항목 금액
+            costResult = "₩ " + decimalFormat.format(Integer.parseInt(cost));
+        }
         holder.tv_mainrecordRvItemTitle.setText(nameList.get(position));
         holder.tv_mainrecordRvItemCost.setText(costResult);
     }
@@ -59,6 +64,7 @@ public class MainRecordPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_mainrecordRvItemTitle;
         TextView tv_mainrecordRvItemCost;
+        LinearLayout Ln_mainRecordItemItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +74,7 @@ public class MainRecordPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
         public void setView() {
             tv_mainrecordRvItemTitle = itemView.findViewById(R.id.tv_mainrecordRvItemTitle);
             tv_mainrecordRvItemCost = itemView.findViewById(R.id.tv_mainrecordRvItemCost);
+            Ln_mainRecordItemItem = itemView.findViewById(R.id.Ln_mainRecordItemItem);
         }
     }
 }
