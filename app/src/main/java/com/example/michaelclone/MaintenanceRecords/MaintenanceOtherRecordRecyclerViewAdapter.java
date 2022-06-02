@@ -79,8 +79,10 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 }
                 holder.et_maintenanceOtherItemMemo.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
                 // 처음 세팅을 위한 static 메모, 비용 리스트 세팅
-                carbookRecordItemExpenseMemoList.put(position, carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
-                carbookRecordItemExpenseCostList.put(position, carbookRecordItems.get(position).carbookRecordItemExpenseCost);
+                //todo 1-3
+                /*carbookRecordItemExpenseMemoList.put(position, carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
+                carbookRecordItemExpenseCostList.put(position, carbookRecordItems.get(position).carbookRecordItemExpenseCost);*/
+                //todo 1-3
             } else {
                 // 아무래도 아이템이 처음에 세팅되었던 텍스트를 가지고 있어서 지웠다가 다시 새로고침해서 다시 뷰를 재활용할경우
                 // 세팅되었던 데이터가 그대로 다시 나오는것같아서 DB에서 가져온 데이터를 참조하여 데이터 없을경우 뷰안의 텍스트값을 초기화 시킨다.
@@ -145,7 +147,10 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                             tv_maintenanceOtherItemMemoCount.setText(input_MtOtMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
 
                             // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                            carbookRecordItemExpenseMemoList.put(position, input_MtOtMemo);
+                            //todo 1-3
+                            //carbookRecordItemExpenseMemoList.put(position, input_MtOtMemo);
+                            carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
+                            //todo 1-3
                             Log.i("input_MtOtMemo", String.valueOf(input_MtOtMemo));
                         } else {
                             input_MtOtMemo = "";
@@ -153,7 +158,10 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
                             // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
                             Log.i("포시젼", String.valueOf(position));
-                            carbookRecordItemExpenseMemoList.put(position, input_MtOtMemo);
+                            //todo 1-3
+                            //carbookRecordItemExpenseMemoList.put(position, input_MtOtMemo);
+                            carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
+                            //todo 1-3
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -187,9 +195,12 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                             if (ItemPrice.matches("^[0-9]*$")) {
                                 ItemPrice = String.valueOf(Integer.parseInt(ItemPrice));
                                 // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
-                                if (carbookRecordItemExpenseCostList != null) {
+                                if (carbookRecordItems != null) {
                                     // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                                    carbookRecordItemExpenseCostList.put(position, ItemPrice);
+                                    //todo 1-3
+                                    //carbookRecordItemExpenseCostList.put(position, ItemPrice);
+                                    carbookRecordItems.get(position).carbookRecordItemExpenseCost = ItemPrice;
+                                    //todo 1-3
                                 }
 
                                 ItemPrice = stringFormat.makeStringComma(ItemPrice);
@@ -204,9 +215,12 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                     Selection.setSelection(editable, CumulativeMileage.length());*/
                     } else if (s.toString().equals("0") || s.toString().equals("")) {
                         // edittext에 데이터가 ""이면 그냥 "0"으로 넣는다.
-                        if (carbookRecordItemExpenseCostList != null) {
+                        if (carbookRecordItems != null) {
                             // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                            carbookRecordItemExpenseCostList.put(position, "0");
+                            //todo 1-3
+                            //carbookRecordItemExpenseCostList.put(position, "0");
+                            carbookRecordItems.get(position).carbookRecordItemExpenseCost = "0";
+                            //todo 1-3
                         }
                     }
                 }

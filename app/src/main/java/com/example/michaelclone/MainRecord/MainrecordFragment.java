@@ -79,6 +79,7 @@ public class MainrecordFragment extends Fragment {
 
         CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
         CarbookRecord_Data.mainRecordPageArrayList = mainRecordDataBridge.getMainRecordData();
+        Log.i("CarbookRecord_DatamainRecordPageArrayList", String.valueOf(CarbookRecord_Data.mainRecordPageArrayList));
 
         // 가끔 editText에서 에러터져서 null값이 들어가서 테스트환경에서 그런 데이터를 지우기위해 만든 메소드(원래는 delete를 하지않기에 쓰지 않는다.)
         //mainRecordItem_dataBridge.test_delete(37);

@@ -55,6 +55,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     String selectDate;
 
     // editText의 텍스트가 바뀔때마다 실시간으로 변경이 되어야 하기에 해당 동작마다 다른 클래스의 핸들러를 타서 add 방식이 괜찮을까 싶어 static으로 했다.
+    // TODO 이 해쉬맵들을 전부 지우고 해당 해쉬맵이 put되는곳에 항목 아이템 객체에 set시킨다. 1-3
     public static HashMap<Integer, String> carbookRecordItemExpenseMemoList;
     public static HashMap<Integer, String> carbookRecordItemExpenseCostList;
     public static int carbookRecordRepairMode = 0;

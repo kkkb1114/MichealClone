@@ -34,8 +34,10 @@ public class MainrecordActivity extends AppCompatActivity {
 
     // 선택 화면 상단 선택한 항목 리스트
     // (프래그먼트 만들때 MaintenancePageViewPagerAdapter에 현재 엑티비티 자신을 넣어 "this" 프래그먼트에서 항목을 클릭할때 클릭한 아이템 텍스트를 엑티비티의 selectItemTitleList에 add했다.)
+    // TODO 이 리스트를 아이템 객체 리스트로 대체해야한다. 1-1
     public static ArrayList<String> resultSelectItemTitleList;
     // 리사이클러뷰에서 선택항목을 return하는 메소드를 만들어 받을까했지만 엑티비티에서 해당 어뎁터까지 2번을 걸쳐 반환을 받아야했기에 복잡해질것을 우려하여 static으로 만들었다.
+    // TODO 이 리스트를 항목 선택 화면으로 보내고 항목선택 화면에 생성될때 객체 생성하고 선택 완료를 누르면 해당 리스트를 전부 아이템객체 리스트에 SET및 add를 한다. 1-2
     public static ArrayList<String> beforeSelectItemTitleList;
     // true: 수정모드, false: 기록모드
     public static boolean isModify = false;
