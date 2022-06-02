@@ -28,17 +28,12 @@ import java.util.HashMap;
 public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adapter<MaintenanceOtherRecordRecyclerViewAdapter.ViewHolder> {
 
     Context context;
-    ArrayList<String> al_itemTitleList;
     ArrayList<CarbookRecordItem> carbookRecordItems;
-    // 메모와 비용 담을 static 해쉬맵 변수
-    HashMap<Integer, String> carbookRecordItemExpenseMemoList = MaintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList;
-    HashMap<Integer, String> carbookRecordItemExpenseCostList = MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList;
     // 툴 클래스
     StringFormat stringFormat = new StringFormat();
 
-    public MaintenanceOtherRecordRecyclerViewAdapter(Context context, ArrayList<String> al_itemTitleList, int carbookRecordId, ArrayList<CarbookRecordItem> carbookRecordItems) {
+    public MaintenanceOtherRecordRecyclerViewAdapter(Context context, ArrayList<CarbookRecordItem> carbookRecordItems) {
         this.context = context;
-        this.al_itemTitleList = al_itemTitleList;
         this.carbookRecordItems = carbookRecordItems;
     }
 
@@ -56,17 +51,17 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
         // editText 글자 가져오기
         holder.setViewAction(position);
-        Log.i("al_itemTitleList222", String.valueOf(al_itemTitleList));
     }
 
     @Override
     public int getItemCount() {
-        return al_itemTitleList.size();
+        return carbookRecordItems.size();
     }
 
     public void setViewText(ViewHolder holder, int position) {
+
         if (carbookRecordItems != null) {
-            holder.tv_maintenanceOtherItemTitle.setText(al_itemTitleList.get(position));
+            holder.tv_maintenanceOtherItemTitle.setText(carbookRecordItems.get(position).carbookRecordItemCategoryName);
             if (carbookRecordItems.size() > position) {
                 holder.tv_maintenanceOtherItemMemoCount.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
                 // 비용이 0이면 아예 edittext에 set하지 않고 0이 아니면 컴마 메소드를 태워서 set한다.
@@ -78,11 +73,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                     holder.et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
                 }
                 holder.et_maintenanceOtherItemMemo.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
-                // 처음 세팅을 위한 static 메모, 비용 리스트 세팅
-                //todo 1-3
-                /*carbookRecordItemExpenseMemoList.put(position, carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
-                carbookRecordItemExpenseCostList.put(position, carbookRecordItems.get(position).carbookRecordItemExpenseCost);*/
-                //todo 1-3
             } else {
                 // 아무래도 아이템이 처음에 세팅되었던 텍스트를 가지고 있어서 지웠다가 다시 새로고침해서 다시 뷰를 재활용할경우
                 // 세팅되었던 데이터가 그대로 다시 나오는것같아서 DB에서 가져온 데이터를 참조하여 데이터 없을경우 뷰안의 텍스트값을 초기화 시킨다.
@@ -91,7 +81,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 holder.et_maintenanceOtherItemMemo.setText("");
             }
         } else {
-            holder.tv_maintenanceOtherItemTitle.setText(al_itemTitleList.get(position));
+            holder.tv_maintenanceOtherItemTitle.setText(carbookRecordItems.get(position).carbookRecordItemCategoryName);
         }
     }
 
@@ -120,7 +110,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
         // 아이템 마지막은 구분선이 계속 생기면 아래 구분선이 2개가 되기때문에 없애준다.
         public void goneMaintenanceItemLine(int position) {
-            if (al_itemTitleList.size() == 1 || position == al_itemTitleList.size() - 1) {
+            if (carbookRecordItems.size() == 1 || position == carbookRecordItems.size() - 1) {
                 View_maintenanceOtherItemLine.setVisibility(View.GONE);
             }
         }
@@ -148,7 +138,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
                             // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
                             //todo 1-3
-                            //carbookRecordItemExpenseMemoList.put(position, input_MtOtMemo);
                             carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
                             //todo 1-3
                             Log.i("input_MtOtMemo", String.valueOf(input_MtOtMemo));
@@ -159,7 +148,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                             // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
                             Log.i("포시젼", String.valueOf(position));
                             //todo 1-3
-                            //carbookRecordItemExpenseMemoList.put(position, input_MtOtMemo);
                             carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
                             //todo 1-3
                         }

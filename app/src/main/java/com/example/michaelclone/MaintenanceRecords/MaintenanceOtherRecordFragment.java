@@ -72,10 +72,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     RecyclerView rv_MtOtRecorditemList;
     MaintenanceOtherRecordRecyclerViewAdapter maintenanceOtherRecordRecyclerViewAdapter;
 
-    // 항목 아이템에 적용시킬 메모, 비용 리스트 (리사이클러뷰 아이템의 해당데이터는 이 해쉬맵으로 통일 시킴)
-    HashMap<Integer, String> carbookRecordItemExpenseCostList = MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList;
-    HashMap<Integer, String> carbookRecordItemExpenseMemoList = MaintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList;
-
     // 카메라, 앨범 선택 핸들러
     public static ActivityResultLauncher<Intent> mStartForResult;
 
@@ -99,9 +95,8 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     // 수정모드로 들어왔을때 동작 변수
     int carbookRecordId;
     boolean isModifyMode;
-    CarbookRecord carbookRecords = null;
-    ArrayList<CarbookRecordItem> carbookRecordItems = null;
-    ArrayList<CarbookRecordItem> carbookRecordItemsRevisionCriteria = MaintenanceOtherRecordActivity.carbookRecordItemsStandardCriteria;
+    CarbookRecord carbookRecords = MaintenanceOtherRecordActivity.carbookRecords;
+    ArrayList<CarbookRecordItem> carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
     ArrayList<String> MainrecordActivitySelectItemTitleList;
 
 
@@ -130,12 +125,9 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_maintenance_other_record, container, false);
 
+
         // 최초 페이지 생성시 항목 리스트 세팅 (수정모드면 MainrecordActivity.resultSelectItemTitleList로 기록모드면 항목 )
-        if (MainrecordActivity.isModify) {
-            MainrecordActivitySelectItemTitleList = MainrecordActivity.resultSelectItemTitleList;
-        } else {
-            MainrecordActivitySelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
-        }
+        MainrecordActivitySelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
 
         setView(view);
 
@@ -156,25 +148,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
 
     public void getSelectItemDataList() {
         if (isModifyMode) {
-            CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
-            MaintenanceOtherRecordActivity.carbookRecords = mainRecordDataBridge.getSelectCarbookRecord(carbookRecordId);
-            carbookRecords = MaintenanceOtherRecordActivity.carbookRecords;
-
-            CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
-            MaintenanceOtherRecordActivity.carbookRecordItems = carbookRecordItem_dataBridge.getMainRecordItemItemData(carbookRecordId);
-            carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
-
-            // 항목 아이템에 적용시킬 리스트 처음 세팅 (어차피 static이라 리사이클러뷰 어뎁터에 넣지 않는다.)
-            selectItemTitleList = new ArrayList<>();
-            for (int i = 0; i < carbookRecordItems.size(); i++){
-                selectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
-                carbookRecordItemExpenseCostList.put(i, carbookRecordItems.get(i).carbookRecordItemExpenseCost);
-                carbookRecordItemExpenseMemoList.put(i, carbookRecordItems.get(i).carbookRecordItemExpenseMemo);
-            }
-
-            // 나중에 수정모드에서 기록은 수정 완료 눌렀을때 기록 제거 및 추가를 하기위해 필요한 기준이다.
-            carbookRecordItemsRevisionCriteria.addAll(carbookRecordItems);
-
             getSelectItemDataSetView(stringFormat.makeStringComma(carbookRecords.carbookRecordTotalDistance));
         }
     }
@@ -359,14 +332,13 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             if (selectItemTitleList == null) {
                 selectItemTitleList = new ArrayList<>();
             }
-            // 수정모드로 최초로 진입시 항목을 보여주기 위한 항목 리스트.add
+            // 수정모드로 최초로 진입시 항목을 보여주기 위한 항목 리스트.add 나중에 수정, 삭제, 추가를 하기위해 비교용으로 하나 필요함.
             for (int i = 0; i < carbookRecordItems.size(); i++) {
                 MainrecordActivitySelectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
             }
-            Log.i("MainrecordActivitySelectItemTitleList", String.valueOf(MainrecordActivitySelectItemTitleList));
-            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, MainrecordActivitySelectItemTitleList, carbookRecordId, carbookRecordItems);
+            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, carbookRecordItems);
         } else {
-            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, MainrecordActivitySelectItemTitleList, carbookRecordId, carbookRecordItems);
+            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, carbookRecordItems);
         }
         rv_MtOtRecorditemList.setAdapter(maintenanceOtherRecordRecyclerViewAdapter);
         maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
@@ -627,7 +599,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                 MainrecordActivitySelectItemTitleList.clear();
                                 MainrecordActivitySelectItemTitleList.addAll(beforeSelectItemTitleList);
 
-                                Log.i("MainrecordActivitySelectItemTitleList222", String.valueOf(MainrecordActivitySelectItemTitleList));
                                 // 기존 항목 객체 리스트를 기준으로 i번째 이름이 수정된 항목 static 이름 리스트에 없다면 제거 리스트에 올린후 마지막에 한번에 지운다.
                                 ArrayList<CarbookRecordItem> carbookRecordItemremoveList = new ArrayList<>();
                                 for (int i = 0; i < carbookRecordItems.size(); i++) {
@@ -637,32 +608,19 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                 }
 
                                 ArrayList<String> carbookRecordItemNameList = new ArrayList<>();
-                                ArrayList<String> carbookRecordItemCostList = new ArrayList<>();
-                                ArrayList<String> carbookRecordItemMemoList = new ArrayList<>();
                                 ArrayList<CarbookRecordItem> carbookRecordItemaddList = new ArrayList<>();
-
-                                Log.i("수정항목이름크기11: ", String.valueOf(carbookRecordItems.size()));
-                                Log.i("수정항목메모크기11: ", String.valueOf(MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList.size()));
-                                Log.i("수정항목가격크기11: ", String.valueOf(MaintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList.size()));
 
                                 // 항목 객체 리스트를 이용한 이름, 비용, 메모 리스트 생성
                                 for (int i = 0; i < carbookRecordItems.size(); i++) {
                                     carbookRecordItemNameList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
                                 }
-                                carbookRecordItemCostList.addAll(MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList.values());
-                                carbookRecordItemMemoList.addAll(MaintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList.values());
+
                                 Time_DataBridge time_dataBridge = new Time_DataBridge();
                                 String nowTime = time_dataBridge.getRealTime();
 
-                                Log.i("수정항목이름크기22: ", String.valueOf(MainrecordActivitySelectItemTitleList.size()));
-                                Log.i("수정항목메모크기22: ", String.valueOf(carbookRecordItemMemoList.size()));
-                                Log.i("수정항목가격크기22: ", String.valueOf(carbookRecordItemCostList.size()));
-
                                 // 항목 객체 리스트를 이용한 (이름, 비용, 메모)리스트, 현재 시간 변수 생성
                                 for (int i = 0; i < MainrecordActivitySelectItemTitleList.size(); i++) {
-                                    Log.i("수정항목이름이없다면: ", MainrecordActivitySelectItemTitleList.get(i));
                                     if (!carbookRecordItemNameList.contains(MainrecordActivitySelectItemTitleList.get(i))) {
-                                        Log.i("수정항목이름이없다면객체추가: ", MainrecordActivitySelectItemTitleList.get(i));
                                         // carbookRecordItemMemoList i번째에 데이터가 있다면 메모, 비용을 넣고 없다면 빈값을 넣는다.
                                         carbookRecordItemaddList.add(new CarbookRecordItem(
                                                 0,
@@ -674,16 +632,12 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                                 0,
                                                 nowTime,
                                                 nowTime));
-
                                     }
                                 }
                                 // selectActivity에서 항목 선택 완료했을때 해당 핸들러로 완료한 리스트를 보내 해당 리스트를 기준으로 비교해서 포함되지 않은 기존 데이터는 지우고 기존에 없던
                                 // 데이터는 추가한다.
                                 carbookRecordItems.addAll(carbookRecordItemaddList);
                                 carbookRecordItems.removeAll(carbookRecordItemremoveList);
-                                Log.i("수정항목객체리스트크기: ", String.valueOf(carbookRecordItems.size()));
-                                Log.i("수정항목객체리스트: ", String.valueOf(carbookRecordItems));
-                                Log.i("al_itemTitleList111", String.valueOf(MainrecordActivitySelectItemTitleList));
                                 maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
                                 break;
                         }

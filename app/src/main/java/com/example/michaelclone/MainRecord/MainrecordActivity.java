@@ -86,14 +86,6 @@ public class MainrecordActivity extends AppCompatActivity {
         }
     }
 
-    public static void createResultSelectItemTitleList(){
-        resultSelectItemTitleList = new ArrayList<>();
-    }
-
-    public static void removeResultSelectItemTitleList(){
-        resultSelectItemTitleList = null;
-    }
-
     public static void createBeforeSelectItemTitleList(){
         beforeSelectItemTitleList = new ArrayList<>();
     }

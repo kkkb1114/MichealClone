@@ -65,12 +65,6 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
 
     public void ModifyCheck() {
         if (!isModify) {
-            if (MainrecordActivity.resultSelectItemTitleList == null) {
-                MainrecordActivity.createResultSelectItemTitleList();
-            }else {
-                MainrecordActivity.removeResultSelectItemTitleList();
-                MainrecordActivity.createResultSelectItemTitleList();
-            }
             if (MainrecordActivity.beforeSelectItemTitleList == null) {
                 // 확인 누르기 전 선택 항목 데이터 리스트 객체 생성
                 MainrecordActivity.createBeforeSelectItemTitleList();
@@ -176,8 +170,6 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 }
                 // 완료시 임시 항목 선택 리스트 초기화
                 //MainrecordActivity.removeBeforeSelectItemTitleList();
-                Log.i("항목확인메모", String.valueOf(MaintenanceOtherRecordActivity.carbookRecordItemExpenseMemoList));
-                Log.i("항목확인비용", String.valueOf(MaintenanceOtherRecordActivity.carbookRecordItemExpenseCostList));
                 finish();
             }
         });
