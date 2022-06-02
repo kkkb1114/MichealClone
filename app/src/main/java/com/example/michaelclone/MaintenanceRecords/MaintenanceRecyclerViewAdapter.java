@@ -40,7 +40,6 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
     // 수정용 static CarbookRecordItem리스트
     ArrayList<CarbookRecordItem> carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
     // 항목 선택완료시 다음 화면으로 넘길 static 변수
-    ArrayList<String> resultSelectItemTitleList = MainrecordActivity.resultSelectItemTitleList;
     ArrayList<String> beforeSelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
 
     /**
@@ -113,14 +112,9 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
          * 2. itemTitleList를 기준으로 for문을 돌려 carbookRecordItemTitleList에 문자열이 있다면 해당 회차는 checkedHashMap_maintenance에 true값을 넣는다.
          * **/
         if (carbookRecordItems != null) {
-            /*ArrayList<String> carbookRecordItemTitleList = new ArrayList<>();
-            for (int i = 0; i < resultSelectItemTitleList.size(); i++) {
-                //carbookRecordItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
-                carbookRecordItemTitleList.add(resultSelectItemTitleList.get(i));
-            }*/
 
             for (int i = 0; i < itemTitleList.size(); i++) {
-                if (resultSelectItemTitleList.contains(itemTitleList.get(i))) {
+                if (beforeSelectItemTitleList.contains(itemTitleList.get(i))) {
                     checkedHashMap_maintenance.put(i, true);
                 }
             }

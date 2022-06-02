@@ -95,8 +95,8 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     // 수정모드로 들어왔을때 동작 변수
     int carbookRecordId;
     boolean isModifyMode;
-    CarbookRecord carbookRecords = MaintenanceOtherRecordActivity.carbookRecords;
-    ArrayList<CarbookRecordItem> carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
+    CarbookRecord carbookRecords;
+    ArrayList<CarbookRecordItem> carbookRecordItems;
     ArrayList<String> MainrecordActivitySelectItemTitleList;
 
 
@@ -104,7 +104,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     boolean imageCrop = false;
 
     public MaintenanceOtherRecordFragment(ArrayList<String> selectItemTitleList, int carbookRecordId, boolean isModifyMode) {
-        //this.selectItemTitleList = selectItemTitleList;
+        this.selectItemTitleList = selectItemTitleList;
         this.carbookRecordId = carbookRecordId;
         this.isModifyMode = isModifyMode;
     }
@@ -130,6 +130,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         MainrecordActivitySelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
 
         setView(view);
+        setCarbookRecords(selectItemTitleList);
 
         // 수정모드로 들어왔을때 동작 메소드
         dataControlHandler();
@@ -149,6 +150,31 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     public void getSelectItemDataList() {
         if (isModifyMode) {
             getSelectItemDataSetView(stringFormat.makeStringComma(carbookRecords.carbookRecordTotalDistance));
+        }
+    }
+
+    public void setCarbookRecords(ArrayList<String> selectItemTitleList){
+        if(isModifyMode){
+            carbookRecords = MaintenanceOtherRecordActivity.carbookRecords;
+            carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
+        }else {
+            Time_DataBridge time_dataBridge = new Time_DataBridge();
+            String nowTime = time_dataBridge.getRealTime();
+            MaintenanceOtherRecordActivity.carbookRecordItems = new ArrayList<>();
+            carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
+            Log.i("asdasdasdsad", String.valueOf(selectItemTitleList));
+            for (int i = 0; i < selectItemTitleList.size(); i++){
+                carbookRecordItems.add(new CarbookRecordItem(
+                        0,
+                        carbookRecordId,
+                        "123",
+                        selectItemTitleList.get(i),
+                        "",
+                        "",
+                        0,
+                        nowTime,
+                        nowTime));
+            }
         }
     }
 

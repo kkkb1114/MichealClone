@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -42,10 +41,10 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
 
     boolean isModify = MainrecordActivity.isModify;
 
-    ArrayList<String> selectItemTitleList;
+    ArrayList<String> beforeSelectItemTitleList;
 
     // 수정모드 구분
-    ArrayList<CarbookRecordItem> carbookRecordItems;
+    ArrayList<CarbookRecordItem> carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,32 +63,25 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     }
 
     public void ModifyCheck() {
-        if (!isModify) {
-            if (MainrecordActivity.beforeSelectItemTitleList == null) {
-                // 확인 누르기 전 선택 항목 데이터 리스트 객체 생성
-                MainrecordActivity.createBeforeSelectItemTitleList();
-            }else {
-                MainrecordActivity.removeBeforeSelectItemTitleList();
-                MainrecordActivity.createBeforeSelectItemTitleList();
-            }
-            // 해당 엑티비티 생성때마다 selectItemTitleList객체 생성
-            selectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
-        } else {
-            selectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
+        if (!isModify) { // 기록모드
+            beforeSelectItemTitleListReset();
+        } else { // 수정 모드
             // 처음 선택 항목은 넣어놓는다. (항목 선택 화면에만 쓰이기에 들어올때마다 항상 클리어를 해줘야함)
-            selectItemTitleList.clear();
-            selectItemTitleList.addAll(MainrecordActivity.resultSelectItemTitleList);
-            if (selectItemTitleList.size() > 0) {
-                tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
+            beforeSelectItemTitleListReset();
+            for (int i = 0; i < carbookRecordItems.size(); i++){
+                beforeSelectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+            }
+            if (beforeSelectItemTitleList.size() > 0) {
+                tv_itemCount.setText(String.valueOf(beforeSelectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
                 tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
                 tv_selectionConfirm.setClickable(true);
             } else {
-                if (selectItemTitleList.size() <= 0) {
+                if (beforeSelectItemTitleList.size() <= 0) {
                     tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
                     tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
                     tv_selectionConfirm.setClickable(false);
                 } else {
-                    tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
+                    tv_itemCount.setText(String.valueOf(beforeSelectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
                     tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
                     tv_selectionConfirm.setClickable(true);
                 }
@@ -107,20 +99,20 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                     try {
                         switch (msg.what) {
                             case 1:
-                                tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
-                                if (selectItemTitleList.size() > 0) {
+                                tv_itemCount.setText(String.valueOf(beforeSelectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
+                                if (beforeSelectItemTitleList.size() > 0) {
                                     tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
                                     tv_selectionConfirm.setClickable(true);
                                 }
                                 break;
                             case 2:
-                                tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
-                                if (selectItemTitleList.size() <= 0) {
+                                tv_itemCount.setText(String.valueOf(beforeSelectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
+                                if (beforeSelectItemTitleList.size() <= 0) {
                                     tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
                                     tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
                                     tv_selectionConfirm.setClickable(false);
                                 } else {
-                                    tv_itemCount.setText(String.valueOf(selectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
+                                    tv_itemCount.setText(String.valueOf(beforeSelectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
                                     tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
                                     tv_selectionConfirm.setClickable(true);
                                 }
@@ -163,9 +155,8 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                     message.what = 1;
                     MaintenanceOtherRecordFragment.recordDataHandler.sendMessage(message);
                 } else {
-                    MainrecordActivity.resultSelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
                     Intent intent = new Intent(SelectMaintenanceItemActivity.this, MaintenanceOtherRecordActivity.class);
-                    intent.putExtra("selectItemTitleList", selectItemTitleList);
+                    intent.putExtra("selectItemTitleList", beforeSelectItemTitleList);
                     startActivity(intent);
                 }
                 // 완료시 임시 항목 선택 리스트 초기화
@@ -197,5 +188,16 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 tab.setText(tabNameList.get(position));
             }
         }).attach();
+    }
+
+    public void beforeSelectItemTitleListReset(){
+        if (MainrecordActivity.beforeSelectItemTitleList == null) {
+            // 확인 누르기 전 선택 항목 데이터 리스트 객체 생성
+            MainrecordActivity.createBeforeSelectItemTitleList();
+        }else {
+            MainrecordActivity.removeBeforeSelectItemTitleList();
+            MainrecordActivity.createBeforeSelectItemTitleList();
+        }
+        beforeSelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
     }
 }

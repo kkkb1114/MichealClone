@@ -104,6 +104,5 @@ public class MainrecordActivity extends AppCompatActivity {
         } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
             finish();
         }
-
     }
 }

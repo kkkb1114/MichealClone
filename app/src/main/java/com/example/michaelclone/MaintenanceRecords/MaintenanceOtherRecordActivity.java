@@ -61,6 +61,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     // 일단 static으로 만들어 놓고 실제 차계부 만들때는 로직을 바꾸는게 좋을 것 같다.
     public static CarbookRecord carbookRecords = null;
     public static ArrayList<CarbookRecordItem> carbookRecordItems = null;
+    ArrayList<String> firstRecordSelectItemTitleList = new ArrayList<>();
     // 나중에 항목 수정사항 적용을 위한 기준 리스트
     ArrayList<String> carbookRecordItemsTitleStandardArrayList = new ArrayList<>();
 
@@ -96,6 +97,9 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                 for (int i = 0; i < carbookRecordItems.size(); i++) {
                     carbookRecordItemsTitleStandardArrayList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
                 }
+            }else {
+                Intent intent = getIntent();
+                firstRecordSelectItemTitleList = intent.getStringArrayListExtra("selectItemTitleList");
             }
             setView();
             setFragment(1, getItemSelectIntentDate());
@@ -144,7 +148,9 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
      */
     public ArrayList<String> getItemSelectIntentDate() {
         if (MainrecordActivity.beforeSelectItemTitleList != null) {
-            selectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
+            //selectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
+            Log.i("123123123", String.valueOf(firstRecordSelectItemTitleList));
+            selectItemTitleList = firstRecordSelectItemTitleList; // todo 여기 건들임
         }
         return selectItemTitleList;
     }
@@ -186,12 +192,12 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         String costUpdate;
                         // 데이터 수정 리스트 기준으로 돌려야 삭제까지 가능
                         for (int i = 0; i < carbookRecordItemsTitleStandardArrayList.size(); i++) {
-                            if (carbookRecordItems.get(i).carbookRecordItemExpenseMemo == null || carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
+                            if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
                                 memoUpdate = "";
                             } else {
                                 memoUpdate = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
                             }
-                            if (carbookRecordItems.get(i).carbookRecordItemExpenseCost == null || carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
+                            if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
                                 costUpdate = "0";
                             } else {
                                 costUpdate = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
@@ -215,12 +221,12 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         String costInsert;
                         // 수정, 삭제 후에는 수정된 리스트를 기준으로 i번째 기준 리스트 id가 없다면 insert
                         for (int i = 0; i < carbookRecordItemsTitleModifyArrayList.size(); i++) {
-                            if (carbookRecordItems.get(i).carbookRecordItemExpenseMemo == null || carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
+                            if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
                                 memoInsert = "";
                             } else {
                                 memoInsert = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
                             }
-                            if (carbookRecordItems.get(i).carbookRecordItemExpenseCost == null || carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
+                            if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
                                 costInsert = "0";
                             } else {
                                 costInsert = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
@@ -252,13 +258,14 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
                         String memoInsert;
                         String costInsert;
+                        Log.i("carbookRecordItemsasdasdsad", String.valueOf(carbookRecordItems.size()));
                         for (int i = 0; i < selectItemTitleList.size(); i++) {
-                            if (carbookRecordItems.get(i).carbookRecordItemExpenseMemo == null || carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
+                            if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
                                 memoInsert = "";
                             } else {
                                 memoInsert = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
                             }
-                            if (carbookRecordItems.get(i).carbookRecordItemExpenseCost == null || carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
+                            if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
                                 costInsert = "0";
                             } else {
                                 costInsert = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
