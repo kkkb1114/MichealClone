@@ -191,6 +191,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         String memoUpdate;
                         String costUpdate;
                         // 데이터 수정 리스트 기준으로 돌려야 삭제까지 가능
+                        기록과 수정 둘다 이 메모, 비용 세팅할때 타이틀은 carbookRecordItemsTitleStandardArrayList로 따로 가져가고 메모, 비용은 아이템 객체로 가져가서 문제인것 같다.
                         for (int i = 0; i < carbookRecordItemsTitleStandardArrayList.size(); i++) {
                             if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
                                 memoUpdate = "";
