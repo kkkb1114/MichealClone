@@ -63,6 +63,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     public static ArrayList<CarbookRecordItem> carbookRecordItems = null;
     ArrayList<String> firstRecordSelectItemTitleList = new ArrayList<>();
     // 나중에 항목 수정사항 적용을 위한 기준 리스트
+    ArrayList<CarbookRecordItem> carbookRecordItemsStandardArrayList = new ArrayList<>();
     ArrayList<String> carbookRecordItemsTitleStandardArrayList = new ArrayList<>();
 
 
@@ -97,7 +98,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                 for (int i = 0; i < carbookRecordItems.size(); i++) {
                     carbookRecordItemsTitleStandardArrayList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
                 }
-            }else {
+            } else {
                 Intent intent = getIntent();
                 firstRecordSelectItemTitleList = intent.getStringArrayListExtra("selectItemTitleList");
             }
@@ -183,7 +184,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
                         // 수정된 리스트
                         ArrayList<String> carbookRecordItemsTitleModifyArrayList = new ArrayList<>();
-                        for (int i=0; i<carbookRecordItems.size(); i++){
+                        for (int i = 0; i < carbookRecordItems.size(); i++) {
                             carbookRecordItemsTitleModifyArrayList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
                         }
 
@@ -191,18 +192,26 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         String memoUpdate;
                         String costUpdate;
                         // 데이터 수정 리스트 기준으로 돌려야 삭제까지 가능
-                        기록과 수정 둘다 이 메모, 비용 세팅할때 타이틀은 carbookRecordItemsTitleStandardArrayList로 따로 가져가고 메모, 비용은 아이템 객체로 가져가서 문제인것 같다.
+                        /*기록과 수정 둘다 이 메모, 비용 세팅할때 타이틀은 carbookRecordItemsTitleStandardArrayList로 따로
+                        가져가고 메모, 비용은 아이템 객체로 가져가서 문제인것 같다.*/
                         for (int i = 0; i < carbookRecordItemsTitleStandardArrayList.size(); i++) {
-                            if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
+                            Log.i("iiiiiiiiii", String.valueOf(i));
+                            if (carbookRecordItems.size() > i) {
+                                if (carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
+                                    memoUpdate = "";
+                                } else {
+                                    memoUpdate = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
+                                }
+                                if (carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
+                                    costUpdate = "0";
+                                } else {
+                                    costUpdate = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
+                                }
+                            } else {
                                 memoUpdate = "";
-                            } else {
-                                memoUpdate = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
-                            }
-                            if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
                                 costUpdate = "0";
-                            } else {
-                                costUpdate = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
                             }
+
                             // 수정된 데이터 리스트에 i번째 기존 리스트 항목이 있다면 업데이트, 없다면 지운다.
                             if (carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))) {
                                 mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordId,
@@ -214,7 +223,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                         nowTime,
                                         nowTime), carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId);
                             } else {
-                                mainRecordItemDataBridge.MainRecordItemDelete(carbookRecordItems.get(i)._id);
+                                mainRecordItemDataBridge.MainRecordItemDelete(carbookRecordItemsStandardArrayList.get(i)._id);
                             }
                         }
 
@@ -334,10 +343,10 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
             CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
             carbookRecordItems = carbookRecordItem_dataBridge.getMainRecordItemItemData(carbookRecordId);
-
+            carbookRecordItemsStandardArrayList.addAll(carbookRecordItems);
             // 항목 아이템에 적용시킬 리스트 처음 세팅 (어차피 static이라 리사이클러뷰 어뎁터에 넣지 않는다.)
             selectItemTitleList = new ArrayList<>();
-            for (int i = 0; i < carbookRecordItems.size(); i++){
+            for (int i = 0; i < carbookRecordItems.size(); i++) {
                 selectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
             }
         }
