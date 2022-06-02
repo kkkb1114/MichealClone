@@ -71,9 +71,9 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 holder.tv_maintenanceOtherItemMemoCount.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
                 // 비용이 0이면 아예 edittext에 set하지 않고 0이 아니면 컴마 메소드를 태워서 set한다.
                 Log.i("carbookRecordItemExpenseCost", carbookRecordItems.get(position).carbookRecordItemExpenseCost);
-                if(carbookRecordItems.get(position).carbookRecordItemExpenseCost.equals("0")){
+                if (carbookRecordItems.get(position).carbookRecordItemExpenseCost.equals("0")) {
                     Log.i("carbookRecordItemExpenseCost333", carbookRecordItems.get(position).carbookRecordItemExpenseCost);
-                }else {
+                } else {
                     Log.i("carbookRecordItemExpenseCost222", carbookRecordItems.get(position).carbookRecordItemExpenseCost);
                     holder.et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
                 }
@@ -179,10 +179,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(ItemPrice)) {
-                        if (et_maintenanceOtherItemCost.getText().toString().matches("0")) {
-                            // 맨 처음 앞자리가 0이면 더이상 입력 못하게 지운다
-                            et_maintenanceOtherItemCost.setText("");
-                        }
+
                         try {
                             ItemPrice = s.toString().replace(",", "");
                             // 숫자가 아닌 문자열이 들어왔을때에 대한 예외처리
@@ -191,19 +188,12 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                                 ItemPrice = String.valueOf(Integer.parseInt(ItemPrice));
                                 // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
                                 if (carbookRecordItemExpenseCostList != null) {
-                                    Log.i("carbookRecordItemExpenseCostList1", String.valueOf(s.toString()));
                                     // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
                                     carbookRecordItemExpenseCostList.put(position, ItemPrice);
                                 }
 
                                 ItemPrice = stringFormat.makeStringComma(ItemPrice);
-                                et_maintenanceOtherItemCost.setText(ItemPrice);
-                                // 매번 콤마 적용을 시키면 커서가 앞으로 움직이기에 맨 뒤로 이동하게끔 만들었다. (클릭시 숫자로 변하고 벗어나면 자동으로 콤마 계산을 하면 좋은데 해당 방법을 아직 못찾음.)
-                                et_maintenanceOtherItemCost.setSelection(et_maintenanceOtherItemCost.length());
 
-                            } else {
-                                Toast.makeText(context, "숫자만 입력해주세요.", Toast.LENGTH_SHORT).show();
-                                et_maintenanceOtherItemCost.setText("");
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -212,13 +202,11 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                         // 위처럼 setSelection()로 다이렉트로 커서 위치 시키면 바로 되는 것을 아래처럼 하는 이유를 조사해서 알기전까진 위 방법으로 할 생각이다.
                     /*Editable editable = et_cumulativeMileage.getText();
                     Selection.setSelection(editable, CumulativeMileage.length());*/
-                    } else if(s.toString().equals("0") || s.toString().equals("")){
-                        Log.i("carbookRecordItemExpenseCostList2", String.valueOf(s.toString()));
+                    } else if (s.toString().equals("0") || s.toString().equals("")) {
                         // edittext에 데이터가 ""이면 그냥 "0"으로 넣는다.
                         if (carbookRecordItemExpenseCostList != null) {
                             // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
                             carbookRecordItemExpenseCostList.put(position, "0");
-                            Log.i("carbookRecordItemExpenseCostList3", carbookRecordItemExpenseCostList.get(position));
                         }
                     }
                 }
@@ -229,6 +217,22 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
             };
             et_maintenanceOtherItemMemo.addTextChangedListener(textWatcherMemo);
             et_maintenanceOtherItemCost.addTextChangedListener(textWatcherCost);
+            et_maintenanceOtherItemCost.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    // editText에 포커스가 잡혀있다면 ,를 빼고 포커스가 벗어나면 콤마 메소드를 태워 ,를 넣는다.
+                    if (hasFocus) {
+                        String cost = et_maintenanceOtherItemCost.getText().toString();
+                        et_maintenanceOtherItemCost.setText(cost.replace(",", ""));
+                    } else {
+                        String cost = et_maintenanceOtherItemCost.getText().toString();
+                        if (!cost.equals("") || !cost.equals("0")) {
+                            // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
+                            et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(cost));
+                        }
+                    }
+                }
+            });
         }
     }
 }

@@ -46,11 +46,13 @@ public class MainRecordPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
         }else {
             cost = costList.get(position);
         }
+
         if(cost.equals("")){
             costResult = "₩ 0";
         }else {
+            Log.i("계산", cost);
             // 항목 금액
-            costResult = "₩ " + decimalFormat.format(Integer.parseInt(cost));
+            costResult = "₩ " + decimalFormat.format(Long.parseLong(cost));
         }
         holder.tv_mainrecordRvItemTitle.setText(nameList.get(position));
         holder.tv_mainrecordRvItemCost.setText(costResult);

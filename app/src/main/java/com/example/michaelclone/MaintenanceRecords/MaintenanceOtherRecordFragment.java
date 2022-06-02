@@ -229,9 +229,26 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         });*/
 
         et_cumulativeMileage.addTextChangedListener(textWatcherCumulativeMileage);
+        et_cumulativeMileage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // editText에 포커스가 잡혀있다면 ,를 빼고 포커스가 벗어나면 콤마 메소드를 태워 ,를 넣는다.
+                if (hasFocus) {
+                    String cost = et_cumulativeMileage.getText().toString();
+                    et_cumulativeMileage.setText(cost.replace(",", ""));
+                } else {
+                    String cost = et_cumulativeMileage.getText().toString();
+                    if (!cost.equals("") || !cost.equals("0")) {
+                        // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
+                        et_cumulativeMileage.setText(stringFormat.makeStringComma(cost));
+                    }
+                }
+            }
+        });
     }
 
     // 텍스트 바뀔때마다 MainRecord_Data.mainRecordArrayList안에 있는 mainRecord에 데이터 삽입
+    // todo 일단 얘는 작성때마다의 동작은 대기
     TextWatcher textWatcherCumulativeMileage = new TextWatcher() {
 
         String CumulativeMileage = "";
@@ -243,14 +260,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(CumulativeMileage)) {
-                CumulativeMileage = makeStringComma(s.toString().replace(",", ""));
-                et_cumulativeMileage.setText(CumulativeMileage);
-                // 매번 콤마 적용을 시키면 커서가 앞으로 움직이기에 맨 뒤로 이동하게끔 만들었다. (클릭시 숫자로 변하고 벗어나면 자동으로 콤마 계산을 하면 좋은데 해당 방법을 아직 못찾음.)
-                et_cumulativeMileage.setSelection(et_cumulativeMileage.length());
-                // 아래 방법은 CumulativeMileage 문자열 길이를 뽑아서 해당 길이가 4면 커서를 4만큼만 이동시키겠다 인데 Editable이걸 왜 만드는지 모르겠다.
-                // 위처럼 setSelection()로 다이렉트로 커서 위치 시키면 바로 되는 것을 아래처럼 하는 이유를 조사해서 알기전까진 위 방법으로 할 생각이다.
-                /*Editable editable = et_cumulativeMileage.getText();
-                  Selection.setSelection(editable, CumulativeMileage.length());*/
+               
             }
         }
 
