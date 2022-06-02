@@ -222,7 +222,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                 Log.i("costUpdate", costUpdate);
                                 mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItemsStandardCriteria.get(i)._id, carbookRecordId,
                                         "123",
-                                        carbookRecordItemsStandardCriteria.get(i).carbookRecordItemCategoryName,
+                                        carbookRecordItemsTitleStandardArrayList.get(i),
                                         memoUpdate,
                                         costUpdate,
                                         0,

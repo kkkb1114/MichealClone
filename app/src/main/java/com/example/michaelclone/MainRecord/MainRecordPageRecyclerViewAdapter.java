@@ -118,10 +118,29 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
             holder.tv_mainrecordCost.setText(totalCost);
             Log.i("메인화면첫째이름", CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemCategoryName);
             Log.i("메인화면첫째메모", CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo);
-            if(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo.equals("")){
+            /*if(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo.equals("")){
                 holder.tv_mainrecordMemo.setVisibility(View.GONE);
             }else {
                 holder.tv_mainrecordMemo.setText(String.valueOf(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo));
+            }*/
+            for (int i=0; i<CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.size(); i++){
+                Log.i("으아아아아111", CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo);
+                Log.i("으아아아아111", String.valueOf(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordIsHidden));
+                if(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(i).carbookRecordItemIsHidden == 1){
+                    Log.i("으아아아아222", CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo);
+                    Log.i("으아아아아222", String.valueOf(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordIsHidden));
+                    holder.tv_mainrecordMemo.setVisibility(View.GONE);
+                }else {
+                    if(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(position).carbookRecordItemExpenseMemo.equals("")){
+                        holder.tv_mainrecordMemo.setVisibility(View.GONE);
+                    }else {
+                        holder.tv_mainrecordMemo.setText(String.valueOf(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(position).carbookRecordItemExpenseMemo));
+                    }
+                    Log.i("으아아아아333", CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(position).carbookRecordItemExpenseMemo);
+                    Log.i("으아아아아333", String.valueOf(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(position).carbookRecordItemIsHidden));
+                    Log.i("으아아아아333", String.valueOf(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(position)));
+                    break;
+                }
             }
 
             ArrayList<String> nameList = new ArrayList<>();
