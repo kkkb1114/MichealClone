@@ -152,9 +152,9 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                     Message message = new Message();
                     /*Bundle bundle = new Bundle();
                     bundle.putStringArrayList("", );
-                    message.setData(bundle);*/
-                    message.what = 1;
-                    MaintenanceOtherRecordFragment.recordDataHandler.sendMessage(message);
+                    message.setData(bundle);
+                    message.what = 1;*/
+                    MaintenanceOtherRecordFragment.recordDataHandler.obtainMessage(1).sendToTarget();
                 } else {
                     Intent intent = new Intent(SelectMaintenanceItemActivity.this, MaintenanceOtherRecordActivity.class);
                     intent.putExtra("selectItemTitleList", beforeSelectItemTitleList);

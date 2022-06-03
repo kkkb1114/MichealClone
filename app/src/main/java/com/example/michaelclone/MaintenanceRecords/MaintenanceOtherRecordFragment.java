@@ -663,8 +663,14 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                 }
                                 // selectActivity에서 항목 선택 완료했을때 해당 핸들러로 완료한 리스트를 보내 해당 리스트를 기준으로 비교해서 포함되지 않은 기존 데이터는 지우고 기존에 없던
                                 // 데이터는 추가한다.
-                                carbookRecordItems.addAll(carbookRecordItemaddList);
-                                carbookRecordItems.removeAll(carbookRecordItemremoveList);
+                                for (int i=0; i<carbookRecordItemaddList.size(); i++){
+                                    carbookRecordItems.add(carbookRecordItemaddList.get(i));
+                                }
+                                for (int i=0; i<carbookRecordItemremoveList.size(); i++){
+                                    carbookRecordItems.remove(carbookRecordItemremoveList.get(i));
+                                }
+                                //carbookRecordItems.addAll(carbookRecordItemaddList);
+                                //carbookRecordItems.removeAll(carbookRecordItemremoveList);
                                 maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
                                 Log.i("항목선택완료핸들러시작후", String.valueOf(carbookRecordItems));
                                 break;

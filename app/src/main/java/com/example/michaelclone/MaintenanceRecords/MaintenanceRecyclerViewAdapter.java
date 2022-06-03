@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -143,12 +144,15 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
             // 아이템 한개를 선택할때 선택 아이템 개수가 0개일수는 없으니 추가 했을떄의 예외처리만 있다.
             // 아이템 뷰를 클릭시 체크박스가 false면 true, true면 false로 변경 후
             if (!holder.cb_maintenance_itemSelect.isChecked()) {
-                holder.cb_maintenance_itemSelect.setChecked(true);
-                beforeSelectItemTitleList.add(holder.tv_maintenance_itemTitle.getText().toString());
-                if (SelectMaintenanceItemActivity.viewHandler != null) {
-                    SelectMaintenanceItemActivity.viewHandler.obtainMessage(1, holder.tv_maintenance_itemTitle.getText().toString()).sendToTarget();
+                if (beforeSelectItemTitleList != null && beforeSelectItemTitleList.size() >= 10){
+                    Toast.makeText(context, "항목은 10개까지만 선택이 가능합니다.", Toast.LENGTH_SHORT).show();
+                }else {
+                    holder.cb_maintenance_itemSelect.setChecked(true);
+                    beforeSelectItemTitleList.add(holder.tv_maintenance_itemTitle.getText().toString());
+                    if (SelectMaintenanceItemActivity.viewHandler != null) {
+                        SelectMaintenanceItemActivity.viewHandler.obtainMessage(1, holder.tv_maintenance_itemTitle.getText().toString()).sendToTarget();
+                    }
                 }
-
                 // 아이템 한개를 선택 취소할때 선택한 아이템 개수가 0개면 if문 첫번쨰를 타고 선택한 아이템 개수가 1개 이상이면 else문을 탄다.
             } else {
                 holder.cb_maintenance_itemSelect.setChecked(false);

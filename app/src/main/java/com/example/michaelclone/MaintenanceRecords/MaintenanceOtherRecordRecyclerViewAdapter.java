@@ -31,12 +31,12 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
     ArrayList<CarbookRecordItem> carbookRecordItems;
     // 툴 클래스
     StringFormat stringFormat = new StringFormat();
-    boolean isFirstCycle = false;
+    //boolean isFocus;
 
     public MaintenanceOtherRecordRecyclerViewAdapter(Context context, ArrayList<CarbookRecordItem> carbookRecordItems) {
         this.context = context;
         this.carbookRecordItems = carbookRecordItems;
-        Log.i("항목어뎁터", String.valueOf(carbookRecordItems));
+        Log.i("항목어뎁터111", String.valueOf(carbookRecordItems));
     }
 
     @NonNull
@@ -48,11 +48,10 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        //isFocus = false;
         Log.i("항목어뎁터", String.valueOf(carbookRecordItems));
-        setViewText(holder, position);
+        setViewText(holder, holder.getAdapterPosition());
         holder.goneMaintenanceItemLine(position);
-
-        // editText 글자 가져오기
         holder.setViewAction(position);
     }
 
@@ -62,7 +61,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
     }
 
     public void setViewText(ViewHolder holder, int position) {
-
         if (carbookRecordItems != null) {
             holder.tv_maintenanceOtherItemTitle.setText(carbookRecordItems.get(position).carbookRecordItemCategoryName);
             Log.i("setViewTextcarbookRecordItemExpenseMemo_Position", String.valueOf(position));
@@ -130,17 +128,22 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     try {
-                        if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(input_MtOtMemo)) {
-                            input_MtOtMemo = s.toString();
-                            tv_maintenanceOtherItemMemoCount.setText(input_MtOtMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
-                            // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                            carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
+                        // editText 글자 가져오기
+                        if (et_maintenanceOtherItemMemo.isFocused()) {
+                            if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(input_MtOtMemo)) {
+                                input_MtOtMemo = s.toString();
+                                tv_maintenanceOtherItemMemoCount.setText(input_MtOtMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
+                                // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
+                                carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
+                                Log.i("isFocus_carbookRecordItems.get(position).carbookRecordItemExpenseMemo ", String.valueOf(carbookRecordItems.get(position).carbookRecordItemExpenseMemo));
+                            }
+                            if (TextUtils.isEmpty(s.toString()) && s.toString().equals("")) {
+                                input_MtOtMemo = "";
+                                tv_maintenanceOtherItemMemoCount.setText("0" + context.getString(R.string.ItemMemoCharacterLimit));
+                                carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
+                            }
                         }
-                        if (TextUtils.isEmpty(s.toString()) && s.toString().equals("")) {
-                            input_MtOtMemo = "";
-                            tv_maintenanceOtherItemMemoCount.setText("0" + context.getString(R.string.ItemMemoCharacterLimit));
-                            carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
-                        }
+                        Log.i("isFocus22: ", String.valueOf(et_maintenanceOtherItemMemo.isFocused()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -166,20 +169,32 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(ItemPrice)) {
                         try {
-                            ItemPrice = s.toString().replace(",", "");
-                            // 숫자가 아닌 문자열이 들어왔을때에 대한 예외처리
-                            // (간혹 해외폰에서 숫자키패드 제한을 걸어도 문자 키패드가 나타나는 경우가 있어 걸어놓은 제한)
-                            if (ItemPrice.matches("^[0-9]*$")) {
-                                ItemPrice = String.valueOf(Integer.parseInt(ItemPrice));
-                                // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
-                                if (carbookRecordItems != null) {
-                                    // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                                    carbookRecordItems.get(position).carbookRecordItemExpenseCost = ItemPrice;
+                            // editText 글자 가져오기
+                            if (et_maintenanceOtherItemCost.isFocused()) {
+                                ItemPrice = s.toString().replace(",", "");
+                                // 숫자가 아닌 문자열이 들어왔을때에 대한 예외처리
+                                // (간혹 해외폰에서 숫자키패드 제한을 걸어도 문자 키패드가 나타나는 경우가 있어 걸어놓은 제한)
+                                if (ItemPrice.matches("^[0-9]*$")) {
+                                    ItemPrice = String.valueOf(Integer.parseInt(ItemPrice));
+                                    // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
+                                    if (carbookRecordItems != null) {
+                                        // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
+                                        carbookRecordItems.get(position).carbookRecordItemExpenseCost = ItemPrice;
+                                        Log.i("isFocus_carbookRecordItems.get(position).carbookRecordItemExpenseCost ", String.valueOf(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
+                                    }
+
+                                    ItemPrice = stringFormat.makeStringComma(ItemPrice);
+
                                 }
-
-                                ItemPrice = stringFormat.makeStringComma(ItemPrice);
-
+                                if (s.toString().equals("0") || s.toString().equals("")) {
+                                    // edittext에 데이터가 ""이면 그냥 "0"으로 넣는다.
+                                    if (carbookRecordItems != null) {
+                                        // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
+                                        carbookRecordItems.get(position).carbookRecordItemExpenseCost = "0";
+                                    }
+                                }
                             }
+                            Log.i("isFocus: ", String.valueOf(et_maintenanceOtherItemMemo.isFocused()));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -188,13 +203,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                     /*Editable editable = et_cumulativeMileage.getText();
                     Selection.setSelection(editable, CumulativeMileage.length());*/
                     }
-                    if (s.toString().equals("0") || s.toString().equals("")) {
-                        // edittext에 데이터가 ""이면 그냥 "0"으로 넣는다.
-                        if (carbookRecordItems != null) {
-                            // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                            carbookRecordItems.get(position).carbookRecordItemExpenseCost = "0";
-                        }
-                    }
                 }
 
                 @Override
@@ -202,21 +210,34 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 }
             };
             et_maintenanceOtherItemMemo.addTextChangedListener(textWatcherMemo);
+          /*  et_maintenanceOtherItemMemo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        isFocus = true;
+                    }else {
+                        isFocus = false;
+                    }
+                }
+            });*/
             et_maintenanceOtherItemCost.addTextChangedListener(textWatcherCost);
             et_maintenanceOtherItemCost.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     // editText에 포커스가 잡혀있다면 ,를 빼고 포커스가 벗어나면 콤마 메소드를 태워 ,를 넣는다.
-                    if (hasFocus) {
-                        String cost = et_maintenanceOtherItemCost.getText().toString();
-                        et_maintenanceOtherItemCost.setText(cost.replace(",", ""));
-                    } else {
-                        String cost = et_maintenanceOtherItemCost.getText().toString();
-                        if (!cost.equals("") || !cost.equals("0")) {
-                            // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
-                            et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(cost));
+                    // editText 글자 가져오기
+                        if (hasFocus) {
+                            String cost = et_maintenanceOtherItemCost.getText().toString();
+                            et_maintenanceOtherItemCost.setText(cost.replace(",", ""));
+                            //isFocus = true;
+                        } else {
+                            String cost = et_maintenanceOtherItemCost.getText().toString();
+                            if (!cost.equals("") || !cost.equals("0")) {
+                                // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
+                                et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(cost));
+                            }
+                            //isFocus = false;
                         }
-                    }
                 }
             });
         }
