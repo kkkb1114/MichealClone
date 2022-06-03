@@ -189,31 +189,31 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         }
 
 
-                        String memoUpdate;
-                        String costUpdate;
+                        String memo;
+                        String cost;
                         // 데이터 수정 리스트 기준으로 돌려야 삭제까지 가능
                         /*기록과 수정 둘다 이 메모, 비용 세팅할때 타이틀은 carbookRecordItemsTitleStandardArrayList로 따로
                         가져가고 메모, 비용은 아이템 객체로 가져가서 문제인것 같다.*/
-                        for (int i = 0; i < carbookRecordItemsTitleStandardArrayList.size(); i++) {
+                        for (int i = 0; i < carbookRecordItems.size(); i++) {
                             Log.i("iiiiiiiiii", String.valueOf(i));
                             if (carbookRecordItems.size() > i) {
                                 if (carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
-                                    memoUpdate = "";
+                                    memo = "";
                                 } else {
-                                    memoUpdate = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
+                                    memo = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
                                 }
                                 if (carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
-                                    costUpdate = "0";
+                                    cost = "0";
                                 } else {
-                                    costUpdate = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
+                                    cost = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
                                 }
                             } else {
-                                memoUpdate = "";
-                                costUpdate = "0";
+                                memo = "";
+                                cost = "0";
                             }
 
                             // 수정된 데이터 리스트에 i번째 기존 리스트 항목이 있다면 업데이트, 없다면 지운다.
-                            if (carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))) {
+                            /*if (carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))) {
                                 mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordId,
                                         "123",
                                         carbookRecordItems.get(i).carbookRecordItemCategoryName,
@@ -224,32 +224,32 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                         nowTime), carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId);
                             } else {
                                 mainRecordItemDataBridge.MainRecordItemDelete(carbookRecordItemsStandardArrayList.get(i)._id);
-                            }
-                        }
-
-                        String memoInsert;
-                        String costInsert;
-                        // 수정, 삭제 후에는 수정된 리스트를 기준으로 i번째 기준 리스트 id가 없다면 insert
-                        for (int i = 0; i < carbookRecordItemsTitleModifyArrayList.size(); i++) {
-                            if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
-                                memoInsert = "";
+                            }*/
+                            if (carbookRecordItemsTitleStandardArrayList.contains(carbookRecordItemsTitleModifyArrayList.get(i))) {
+                                mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordId,
+                                        "123",
+                                        carbookRecordItems.get(i).carbookRecordItemCategoryName,
+                                        memo,
+                                        cost,
+                                        0,
+                                        nowTime,
+                                        nowTime), carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId);
                             } else {
-                                memoInsert = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
-                            }
-                            if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
-                                costInsert = "0";
-                            } else {
-                                costInsert = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
-                            }
-                            if (!carbookRecordItemsTitleStandardArrayList.contains(carbookRecordItemsTitleModifyArrayList.get(i))) {
                                 mainRecordItemDataBridge.MainRecordItemInsert(new CarbookRecordItem(0, carbookRecordId,
                                         "123",
                                         carbookRecordItemsTitleModifyArrayList.get(i),
-                                        memoInsert,
-                                        costInsert,
+                                        memo,
+                                        cost,
                                         0,
                                         nowTime,
                                         nowTime));
+                            }
+                        }
+
+                        // 수정, 삭제 후에는 수정된 리스트를 기준으로 i번째 기준 리스트 id가 없다면 insert
+                        for (int i = 0; i < carbookRecordItemsTitleStandardArrayList.size(); i++) {
+                            if (!carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))){
+                                mainRecordItemDataBridge.MainRecordItemDelete(carbookRecordItemsStandardArrayList.get(i)._id);
                             }
                         }
                         // 수정 체크용 리스트 변수 초기화

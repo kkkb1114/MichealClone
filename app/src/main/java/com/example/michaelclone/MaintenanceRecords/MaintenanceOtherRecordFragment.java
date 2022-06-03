@@ -619,6 +619,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                  *    를 이용하여 )
                                  * **/
 
+                                Log.i("항목선택완료핸들러시작전", String.valueOf(carbookRecordItems));
                                 // 항목 선택이 완료되면 MainrecordActivity.resultSelectItemTitleList에 MainrecordActivity.beforeSelectItemTitleList를 덮어 씌운다.
                                 //MainrecordActivity.resultSelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
                                 ArrayList<String> beforeSelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
@@ -665,6 +666,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                 carbookRecordItems.addAll(carbookRecordItemaddList);
                                 carbookRecordItems.removeAll(carbookRecordItemremoveList);
                                 maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
+                                Log.i("항목선택완료핸들러시작후", String.valueOf(carbookRecordItems));
                                 break;
                         }
                     } catch (Exception e) {

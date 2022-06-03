@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -159,6 +160,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                     intent.putExtra("selectItemTitleList", beforeSelectItemTitleList);
                     startActivity(intent);
                 }
+                Log.i("항목선택완료", String.valueOf(carbookRecordItems));
                 // 완료시 임시 항목 선택 리스트 초기화
                 //MainrecordActivity.removeBeforeSelectItemTitleList();
                 finish();

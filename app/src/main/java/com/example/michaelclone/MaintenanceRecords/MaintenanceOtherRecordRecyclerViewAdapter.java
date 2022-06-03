@@ -31,10 +31,12 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
     ArrayList<CarbookRecordItem> carbookRecordItems;
     // 툴 클래스
     StringFormat stringFormat = new StringFormat();
+    boolean isFirstCycle = false;
 
     public MaintenanceOtherRecordRecyclerViewAdapter(Context context, ArrayList<CarbookRecordItem> carbookRecordItems) {
         this.context = context;
         this.carbookRecordItems = carbookRecordItems;
+        Log.i("항목어뎁터", String.valueOf(carbookRecordItems));
     }
 
     @NonNull
@@ -46,6 +48,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.i("항목어뎁터", String.valueOf(carbookRecordItems));
         setViewText(holder, position);
         holder.goneMaintenanceItemLine(position);
 
@@ -62,23 +65,19 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
         if (carbookRecordItems != null) {
             holder.tv_maintenanceOtherItemTitle.setText(carbookRecordItems.get(position).carbookRecordItemCategoryName);
-            if (carbookRecordItems.size() > position) {
-                holder.tv_maintenanceOtherItemMemoCount.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
-                // 비용이 0이면 아예 edittext에 set하지 않고 0이 아니면 컴마 메소드를 태워서 set한다.
-                Log.i("carbookRecordItemExpenseCost", carbookRecordItems.get(position).carbookRecordItemExpenseCost);
-                if (carbookRecordItems.get(position).carbookRecordItemExpenseCost.equals("0")) {
-                    Log.i("carbookRecordItemExpenseCost333", carbookRecordItems.get(position).carbookRecordItemExpenseCost);
-                } else {
-                    Log.i("carbookRecordItemExpenseCost222", carbookRecordItems.get(position).carbookRecordItemExpenseCost);
-                    holder.et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
-                }
-                holder.et_maintenanceOtherItemMemo.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
-            } else {
-                // 아무래도 아이템이 처음에 세팅되었던 텍스트를 가지고 있어서 지웠다가 다시 새로고침해서 다시 뷰를 재활용할경우
-                // 세팅되었던 데이터가 그대로 다시 나오는것같아서 DB에서 가져온 데이터를 참조하여 데이터 없을경우 뷰안의 텍스트값을 초기화 시킨다.
-                holder.tv_maintenanceOtherItemMemoCount.setText("");
-                holder.et_maintenanceOtherItemCost.setText("");
+            Log.i("setViewTextcarbookRecordItemExpenseMemo_Position", String.valueOf(position));
+            Log.i("setViewTextcarbookRecordItemExpenseMemo", carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
+            if (carbookRecordItems.get(position).carbookRecordItemExpenseMemo.equals("")) {
+                holder.tv_maintenanceOtherItemMemoCount.setText("0" + context.getString(R.string.ItemMemoCharacterLimit));
                 holder.et_maintenanceOtherItemMemo.setText("");
+            } else {
+                holder.tv_maintenanceOtherItemMemoCount.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
+                holder.et_maintenanceOtherItemMemo.setText(carbookRecordItems.get(position).carbookRecordItemExpenseMemo);
+            }
+            if (carbookRecordItems.get(position).carbookRecordItemExpenseCost.equals("0")) {
+                holder.et_maintenanceOtherItemCost.setText("");
+            } else {
+                holder.et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
             }
         } else {
             holder.tv_maintenanceOtherItemTitle.setText(carbookRecordItems.get(position).carbookRecordItemCategoryName);
@@ -131,25 +130,16 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     try {
-                        Log.i("input_MtOtMemo", String.valueOf(s.toString()));
-                        if (s.toString() != null && !TextUtils.isEmpty(s.toString()) && !s.toString().equals(input_MtOtMemo)) {
+                        if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(input_MtOtMemo)) {
                             input_MtOtMemo = s.toString();
                             tv_maintenanceOtherItemMemoCount.setText(input_MtOtMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
-
                             // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                            //todo 1-3
                             carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
-                            //todo 1-3
-                            Log.i("input_MtOtMemo", String.valueOf(input_MtOtMemo));
-                        } else {
+                        }
+                        if (TextUtils.isEmpty(s.toString()) && s.toString().equals("")) {
                             input_MtOtMemo = "";
                             tv_maintenanceOtherItemMemoCount.setText("0" + context.getString(R.string.ItemMemoCharacterLimit));
-
-                            // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                            Log.i("포시젼", String.valueOf(position));
-                            //todo 1-3
                             carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
-                            //todo 1-3
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -175,7 +165,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(ItemPrice)) {
-
                         try {
                             ItemPrice = s.toString().replace(",", "");
                             // 숫자가 아닌 문자열이 들어왔을때에 대한 예외처리
@@ -185,10 +174,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                                 // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
                                 if (carbookRecordItems != null) {
                                     // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                                    //todo 1-3
-                                    //carbookRecordItemExpenseCostList.put(position, ItemPrice);
                                     carbookRecordItems.get(position).carbookRecordItemExpenseCost = ItemPrice;
-                                    //todo 1-3
                                 }
 
                                 ItemPrice = stringFormat.makeStringComma(ItemPrice);
@@ -201,14 +187,12 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                         // 위처럼 setSelection()로 다이렉트로 커서 위치 시키면 바로 되는 것을 아래처럼 하는 이유를 조사해서 알기전까진 위 방법으로 할 생각이다.
                     /*Editable editable = et_cumulativeMileage.getText();
                     Selection.setSelection(editable, CumulativeMileage.length());*/
-                    } else if (s.toString().equals("0") || s.toString().equals("")) {
+                    }
+                    if (s.toString().equals("0") || s.toString().equals("")) {
                         // edittext에 데이터가 ""이면 그냥 "0"으로 넣는다.
                         if (carbookRecordItems != null) {
                             // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                            //todo 1-3
-                            //carbookRecordItemExpenseCostList.put(position, "0");
                             carbookRecordItems.get(position).carbookRecordItemExpenseCost = "0";
-                            //todo 1-3
                         }
                     }
                 }
