@@ -28,6 +28,8 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
     // 툴 클래스
     StringFormat stringFormat = new StringFormat();
     boolean isFirstNotifyDataSetChanged = true;
+    TextWatcher textWatcherMemo = null;
+    TextWatcher textWatcherCost = null;
 
     public MaintenanceOtherRecordRecyclerViewAdapter(Context context, ArrayList<CarbookRecordItem> carbookRecordItems) {
         this.context = context;
@@ -47,6 +49,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
         Log.i("항목어뎁터", String.valueOf(carbookRecordItems));
         setViewText(holder, holder.getAdapterPosition());
         holder.goneMaintenanceItemLine(position);
+        resetTextWatcher(holder);
         holder.setViewAction(position);
     }
 
@@ -75,6 +78,17 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
 
         } else {
             holder.tv_maintenanceOtherItemTitle.setText(carbookRecordItems.get(position).carbookRecordItemCategoryName);
+        }
+    }
+
+    public void resetTextWatcher(ViewHolder holder){
+        if(textWatcherMemo != null){
+            holder.et_maintenanceOtherItemMemo.removeTextChangedListener(textWatcherMemo);
+            textWatcherMemo = null;
+        }
+        if(textWatcherCost != null){
+            holder.et_maintenanceOtherItemCost.removeTextChangedListener(textWatcherCost);
+            textWatcherCost = null;
         }
     }
 
@@ -109,8 +123,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
         }
 
         public void setViewAction(int position) {
-            TextWatcher textWatcherMemo = null;
-            TextWatcher textWatcherCost = null;
             Log.i("setViewAction", "setViewAction");
             // editText 무한 루프를 방지하기 위해 연결을 자유롭게 끊기 위해 따로 만듬
             // 메모 실시간 글자 수 세주기
@@ -210,8 +222,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 public void afterTextChanged(Editable s) {
                 }
             };
-            et_maintenanceOtherItemMemo.removeTextChangedListener(textWatcherMemo);
-            et_maintenanceOtherItemCost.removeTextChangedListener(textWatcherCost);
             et_maintenanceOtherItemMemo.addTextChangedListener(textWatcherMemo);
             et_maintenanceOtherItemCost.addTextChangedListener(textWatcherCost);
             et_maintenanceOtherItemCost.setOnFocusChangeListener(new View.OnFocusChangeListener() {
