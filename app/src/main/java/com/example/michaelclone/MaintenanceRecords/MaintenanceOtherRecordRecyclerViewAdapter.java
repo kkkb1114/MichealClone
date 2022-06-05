@@ -49,7 +49,10 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //isFocus = false;
-        Log.i("항목어뎁터", String.valueOf(carbookRecordItems));
+        Log.i("항목어뎁터._id", String.valueOf(carbookRecordItems.get(position)._id));
+        Log.i("항목어뎁터.carbookRecordItemCategoryName", String.valueOf(carbookRecordItems.get(position).carbookRecordItemCategoryName));
+        Log.i("항목어뎁터.carbookRecordItemExpenseMemo", String.valueOf(carbookRecordItems.get(position).carbookRecordItemExpenseMemo));
+        Log.i("항목어뎁터.carbookRecordItemExpenseCost", String.valueOf(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
         setViewText(holder, holder.getAdapterPosition());
         holder.goneMaintenanceItemLine(position);
         holder.setViewAction(position);
@@ -91,6 +94,9 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
         View View_maintenanceOtherItemLine;
         LinearLayout Ln_maintenanceOtherItemRemove;
 
+        String input_MtOtMemo = "";
+        String ItemPrice = "";
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             setView();
@@ -118,7 +124,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
             // editText 무한 루프를 방지하기 위해 연결을 자유롭게 끊기 위해 따로 만듬
             // 메모 실시간 글자 수 세주기
             TextWatcher textWatcherMemo = new TextWatcher() {
-                String input_MtOtMemo = "";
 
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -133,9 +138,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                             if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(input_MtOtMemo)) {
                                 input_MtOtMemo = s.toString();
                                 tv_maintenanceOtherItemMemoCount.setText(input_MtOtMemo.length() + context.getString(R.string.ItemMemoCharacterLimit));
-                                // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                                carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
-                                Log.i("isFocus_carbookRecordItems.get(position).carbookRecordItemExpenseMemo ", String.valueOf(carbookRecordItems.get(position).carbookRecordItemExpenseMemo));
                             }
                             if (TextUtils.isEmpty(s.toString()) && s.toString().equals("")) {
                                 input_MtOtMemo = "";
@@ -158,7 +160,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
             // 누적 지출금액 천단위 콤마 적용
             // 누적 지출 금액 입력할때마다 동작
             TextWatcher textWatcherCost = new TextWatcher() {
-                String ItemPrice = "";
 
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -176,15 +177,7 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                                 // (간혹 해외폰에서 숫자키패드 제한을 걸어도 문자 키패드가 나타나는 경우가 있어 걸어놓은 제한)
                                 if (ItemPrice.matches("^[0-9]*$")) {
                                     ItemPrice = String.valueOf(Integer.parseInt(ItemPrice));
-                                    // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
-                                    if (carbookRecordItems != null) {
-                                        // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
-                                        carbookRecordItems.get(position).carbookRecordItemExpenseCost = ItemPrice;
-                                        Log.i("isFocus_carbookRecordItems.get(position).carbookRecordItemExpenseCost ", String.valueOf(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
-                                    }
-
                                     ItemPrice = stringFormat.makeStringComma(ItemPrice);
-
                                 }
                                 if (s.toString().equals("0") || s.toString().equals("")) {
                                     // edittext에 데이터가 ""이면 그냥 "0"으로 넣는다.
@@ -210,16 +203,21 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                 }
             };
             et_maintenanceOtherItemMemo.addTextChangedListener(textWatcherMemo);
-          /*  et_maintenanceOtherItemMemo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            et_maintenanceOtherItemMemo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus) {
-                        isFocus = true;
+
                     }else {
-                        isFocus = false;
+                        // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
+                        if(carbookRecordItems != null){
+                            if(carbookRecordItems.size() > position){
+                                carbookRecordItems.get(position).carbookRecordItemExpenseMemo = input_MtOtMemo;
+                            }
+                        }
                     }
                 }
-            });*/
+            });
             et_maintenanceOtherItemCost.addTextChangedListener(textWatcherCost);
             et_maintenanceOtherItemCost.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -229,14 +227,22 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
                         if (hasFocus) {
                             String cost = et_maintenanceOtherItemCost.getText().toString();
                             et_maintenanceOtherItemCost.setText(cost.replace(",", ""));
-                            //isFocus = true;
+
                         } else {
                             String cost = et_maintenanceOtherItemCost.getText().toString();
                             if (!cost.equals("") || !cost.equals("0")) {
                                 // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
                                 et_maintenanceOtherItemCost.setText(stringFormat.makeStringComma(cost));
                             }
-                            //isFocus = false;
+                            // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
+                            if (carbookRecordItems != null) {
+                                // MainRecord_Data의 MainRecordItem 리스트에 메모 삽입
+                                ItemPrice = ItemPrice.replace(",", "");
+                                if(carbookRecordItems.size() > position){
+                                    carbookRecordItems.get(position).carbookRecordItemExpenseCost = ItemPrice;
+                                    Log.i("isFocus_carbookRecordItems.get(position).carbookRecordItemExpenseCost ", String.valueOf(carbookRecordItems.get(position).carbookRecordItemExpenseCost));
+                                }
+                             }
                         }
                 }
             });

@@ -95,6 +95,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     // 수정모드로 들어왔을때 동작 변수
     int carbookRecordId;
     boolean isModifyMode;
+    boolean isFirstRecord = true;
     CarbookRecord carbookRecords;
     ArrayList<CarbookRecordItem> carbookRecordItems;
     ArrayList<String> MainrecordActivitySelectItemTitleList;
@@ -302,8 +303,12 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 break;
             case R.id.tv_addRecordItem:
                 //requireActivity().finish();
-                Intent intent = new Intent(requireContext(), SelectMaintenanceItemActivity.class);
-                startActivity(intent);
+                if(isFirstRecord){
+                    Intent intent = new Intent(requireContext(), SelectMaintenanceItemActivity.class);
+                    startActivity(intent);
+                }else {
+
+                }
                 break;
         }
     }
