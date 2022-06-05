@@ -194,8 +194,11 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         // 데이터 수정 리스트 기준으로 돌려야 삭제까지 가능
                         /*기록과 수정 둘다 이 메모, 비용 세팅할때 타이틀은 carbookRecordItemsTitleStandardArrayList로 따로
                         가져가고 메모, 비용은 아이템 객체로 가져가서 문제인것 같다.*/
+                        Log.i("2222222222222222222222", String.valueOf(carbookRecordItems));
                         for (int i = 0; i < carbookRecordItems.size(); i++) {
                             Log.i("iiiiiiiiii", String.valueOf(i));
+                            Log.i("iiiiiiiiiifor", String.valueOf(carbookRecordItems.get(i).carbookRecordItemCategoryName));
+                            Log.i("iiiiiiiiiifor", String.valueOf(carbookRecordItems.get(i).carbookRecordItemExpenseCost));
                             if (carbookRecordItems.size() > i) {
                                 if (carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
                                     memo = "";
@@ -211,20 +214,9 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                 memo = "";
                                 cost = "0";
                             }
+                            Log.i("iiiiiiiiiimemo", String.valueOf(memo));
+                            Log.i("iiiiiiiiiicost", String.valueOf(cost));
 
-                            // 수정된 데이터 리스트에 i번째 기존 리스트 항목이 있다면 업데이트, 없다면 지운다.
-                            /*if (carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))) {
-                                mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordId,
-                                        "123",
-                                        carbookRecordItems.get(i).carbookRecordItemCategoryName,
-                                        memoUpdate,
-                                        costUpdate,
-                                        0,
-                                        nowTime,
-                                        nowTime), carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId);
-                            } else {
-                                mainRecordItemDataBridge.MainRecordItemDelete(carbookRecordItemsStandardArrayList.get(i)._id);
-                            }*/
                             if (carbookRecordItemsTitleStandardArrayList.contains(carbookRecordItemsTitleModifyArrayList.get(i))) {
                                 mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordId,
                                         "123",
@@ -234,6 +226,9 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                         0,
                                         nowTime,
                                         nowTime), carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId);
+                                Log.i("iiiiiiiiiiMainRecordItemUpdate", String.valueOf(carbookRecordItems.get(i)._id));
+                                Log.i("iiiiiiiiiiMainRecordItemUpdate", String.valueOf(carbookRecordItems.get(i).carbookRecordItemCategoryName));
+                                Log.i("iiiiiiiiiiMainRecordItemUpdate", String.valueOf(carbookRecordItems.get(i).carbookRecordItemExpenseCost));
                             } else {
                                 mainRecordItemDataBridge.MainRecordItemInsert(new CarbookRecordItem(0, carbookRecordId,
                                         "123",
@@ -243,15 +238,23 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                         0,
                                         nowTime,
                                         nowTime));
+                                Log.i("iiiiiiiiiiMainRecordItemInsert", String.valueOf(carbookRecordItems.get(i).carbookRecordItemCategoryName));
+                                Log.i("iiiiiiiiiiMainRecordItemInsert", String.valueOf(carbookRecordItems.get(i).carbookRecordItemExpenseCost));
                             }
                         }
 
                         // 수정, 삭제 후에는 수정된 리스트를 기준으로 i번째 기준 리스트 id가 없다면 insert
                         for (int i = 0; i < carbookRecordItemsTitleStandardArrayList.size(); i++) {
-                            if (!carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))){
+                            if (!carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))) {
                                 mainRecordItemDataBridge.MainRecordItemDelete(carbookRecordItemsStandardArrayList.get(i)._id);
+                                Log.i("iiiiiiiiiiMainRecordItemDelete", String.valueOf(carbookRecordItems.get(i).carbookRecordItemCategoryName));
+                                Log.i("iiiiiiiiiiMainRecordItemDelete", String.valueOf(carbookRecordItems.get(i).carbookRecordItemExpenseCost));
                             }
                         }
+                        Log.i("iiiiiiiiiicarbookRecordItems", String.valueOf(carbookRecordItems));
+                        Log.i("iiiiiiiiiicarbookRecordItemsStandardArrayList", String.valueOf(carbookRecordItemsStandardArrayList));
+                        Log.i("iiiiiiiiiicarbookRecordItemsTitleModifyArrayList", String.valueOf(carbookRecordItemsTitleModifyArrayList));
+                        Log.i("iiiiiiiiiicarbookRecordItemsTitleStandardArrayList", String.valueOf(carbookRecordItemsTitleStandardArrayList));
                         // 수정 체크용 리스트 변수 초기화
                         carbookRecordItemsTitleStandardArrayList = null;
                         carbookRecordItemsTitleModifyArrayList = null;
@@ -315,7 +318,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
     public void setFragment(int fragment, ArrayList<String> selectItemTitleList) {
         fragmentManager = getSupportFragmentManager();
-        maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment(selectItemTitleList, carbookRecordId, isModifyMode);
+        maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment(selectItemTitleList, carbookRecordId, isModifyMode, carbookRecordItemsTitleStandardArrayList, carbookRecordItemsStandardArrayList);
         locationSearchFragment = new LocationSearchFragment();
         fragmentTransaction = fragmentManager.beginTransaction();
         switch (fragment) {

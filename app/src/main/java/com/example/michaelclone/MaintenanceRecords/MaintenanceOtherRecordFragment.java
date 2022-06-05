@@ -98,15 +98,20 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     CarbookRecord carbookRecords;
     ArrayList<CarbookRecordItem> carbookRecordItems;
     ArrayList<String> MainrecordActivitySelectItemTitleList;
+    ArrayList<String> carbookRecordItemsTitleStandardArrayList;
+    ArrayList<CarbookRecordItem> carbookRecordItemsStandardArrayList;
 
 
     // 카메라 찍을때 처음 일반 촬영하고 크롭으로 넘어가게끔 만들기 위한 변수
     boolean imageCrop = false;
 
-    public MaintenanceOtherRecordFragment(ArrayList<String> selectItemTitleList, int carbookRecordId, boolean isModifyMode) {
+    public MaintenanceOtherRecordFragment(ArrayList<String> selectItemTitleList, int carbookRecordId, boolean isModifyMode,
+                                          ArrayList<String> carbookRecordItemsTitleStandardArrayList, ArrayList<CarbookRecordItem> carbookRecordItemsStandardArrayList) {
         this.selectItemTitleList = selectItemTitleList;
         this.carbookRecordId = carbookRecordId;
         this.isModifyMode = isModifyMode;
+        this.carbookRecordItemsTitleStandardArrayList = carbookRecordItemsTitleStandardArrayList;
+        this.carbookRecordItemsStandardArrayList = carbookRecordItemsStandardArrayList;
     }
 
     public String getTotalDistance() {
@@ -646,11 +651,18 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                 String nowTime = time_dataBridge.getRealTime();
 
                                 // 항목 객체 리스트를 이용한 (이름, 비용, 메모)리스트, 현재 시간 변수 생성
+                                int _id = 0;
                                 for (int i = 0; i < MainrecordActivitySelectItemTitleList.size(); i++) {
                                     if (!carbookRecordItemNameList.contains(MainrecordActivitySelectItemTitleList.get(i))) {
+                                        // 나중에 업데이트를 위해 선택한 타이틀 리스트에 기준 타이틀 리스트를 비교하여 있다면 i번째 id 세팅
+
+                                        if(carbookRecordItemsTitleStandardArrayList.size() > i &&
+                                                MainrecordActivitySelectItemTitleList.contains(carbookRecordItemsTitleStandardArrayList.get(i))){
+                                            _id = carbookRecordItemsStandardArrayList.get(i)._id;
+                                        }
                                         // carbookRecordItemMemoList i번째에 데이터가 있다면 메모, 비용을 넣고 없다면 빈값을 넣는다.
                                         carbookRecordItemaddList.add(new CarbookRecordItem(
-                                                0,
+                                                _id,
                                                 carbookRecordId,
                                                 "123",
                                                 MainrecordActivitySelectItemTitleList.get(i),
@@ -663,11 +675,11 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                 }
                                 // selectActivity에서 항목 선택 완료했을때 해당 핸들러로 완료한 리스트를 보내 해당 리스트를 기준으로 비교해서 포함되지 않은 기존 데이터는 지우고 기존에 없던
                                 // 데이터는 추가한다.
-                                for (int i=0; i<carbookRecordItemaddList.size(); i++){
-                                    carbookRecordItems.add(carbookRecordItemaddList.get(i));
-                                }
                                 for (int i=0; i<carbookRecordItemremoveList.size(); i++){
                                     carbookRecordItems.remove(carbookRecordItemremoveList.get(i));
+                                }
+                                for (int i=0; i<carbookRecordItemaddList.size(); i++){
+                                    carbookRecordItems.add(carbookRecordItemaddList.get(i));
                                 }
                                 maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
                                 Log.i("항목선택완료핸들러시작후", String.valueOf(carbookRecordItems));

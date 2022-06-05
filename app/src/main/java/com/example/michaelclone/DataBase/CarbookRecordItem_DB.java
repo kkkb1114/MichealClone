@@ -44,6 +44,7 @@ public class CarbookRecordItem_DB {
         try {
             db.beginTransaction();
             Log.i("?????", String.valueOf(carbookRecordItem));
+            Log.i("?????", String.valueOf(_id));
             db.execSQL("UPDATE carbookRecordItem SET _id = "+ _id +", carbookRecordId = " + carbookRecordItem.carbookRecordId + ", "
                     + "carbookRecordItemCategoryCode = " + "'" + carbookRecordItem.carbookRecordItemCategoryCode + "'" + ","
                     + "carbookRecordItemCategoryName = " + "'" + carbookRecordItem.carbookRecordItemCategoryName + "'" + ","
