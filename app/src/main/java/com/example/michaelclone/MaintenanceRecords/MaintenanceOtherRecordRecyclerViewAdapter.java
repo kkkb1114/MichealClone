@@ -214,8 +214,6 @@ public class MaintenanceOtherRecordRecyclerViewAdapter extends RecyclerView.Adap
             et_maintenanceOtherItemCost.removeTextChangedListener(textWatcherCost);
             et_maintenanceOtherItemMemo.addTextChangedListener(textWatcherMemo);
             et_maintenanceOtherItemCost.addTextChangedListener(textWatcherCost);
-            textWatcherMemo = null;
-            textWatcherCost = null;
             et_maintenanceOtherItemCost.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
