@@ -669,8 +669,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                 for (int i=0; i<carbookRecordItemremoveList.size(); i++){
                                     carbookRecordItems.remove(carbookRecordItemremoveList.get(i));
                                 }
-                                //carbookRecordItems.addAll(carbookRecordItemaddList);
-                                //carbookRecordItems.removeAll(carbookRecordItemremoveList);
                                 maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
                                 Log.i("항목선택완료핸들러시작후", String.valueOf(carbookRecordItems));
                                 break;
