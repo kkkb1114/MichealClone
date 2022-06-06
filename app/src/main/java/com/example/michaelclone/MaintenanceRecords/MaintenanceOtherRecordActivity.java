@@ -196,9 +196,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         가져가고 메모, 비용은 아이템 객체로 가져가서 문제인것 같다.*/
                         Log.i("2222222222222222222222", String.valueOf(carbookRecordItems));
                         for (int i = 0; i < carbookRecordItems.size(); i++) {
-                            Log.i("iiiiiiiiii", String.valueOf(i));
-                            Log.i("iiiiiiiiiifor", String.valueOf(carbookRecordItems.get(i).carbookRecordItemCategoryName));
-                            Log.i("iiiiiiiiiifor", String.valueOf(carbookRecordItems.get(i).carbookRecordItemExpenseCost));
                             if (carbookRecordItems.size() > i) {
                                 if (carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
                                     memo = "";
@@ -214,8 +211,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                 memo = "";
                                 cost = "0";
                             }
-                            Log.i("iiiiiiiiiimemo", String.valueOf(memo));
-                            Log.i("iiiiiiiiiicost", String.valueOf(cost));
 
                             if (carbookRecordItemsTitleStandardArrayList.contains(carbookRecordItemsTitleModifyArrayList.get(i))) {
                                 mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordId,
@@ -226,9 +221,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                         0,
                                         nowTime,
                                         nowTime), carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId);
-                                Log.i("iiiiiiiiiiMainRecordItemUpdate", String.valueOf(carbookRecordItems.get(i)._id));
-                                Log.i("iiiiiiiiiiMainRecordItemUpdate", String.valueOf(carbookRecordItems.get(i).carbookRecordItemCategoryName));
-                                Log.i("iiiiiiiiiiMainRecordItemUpdate", String.valueOf(carbookRecordItems.get(i).carbookRecordItemExpenseCost));
                             } else {
                                 mainRecordItemDataBridge.MainRecordItemInsert(new CarbookRecordItem(0, carbookRecordId,
                                         "123",
@@ -238,8 +230,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                                         0,
                                         nowTime,
                                         nowTime));
-                                Log.i("iiiiiiiiiiMainRecordItemInsert", String.valueOf(carbookRecordItems.get(i).carbookRecordItemCategoryName));
-                                Log.i("iiiiiiiiiiMainRecordItemInsert", String.valueOf(carbookRecordItems.get(i).carbookRecordItemExpenseCost));
                             }
                         }
 
@@ -247,14 +237,8 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         for (int i = 0; i < carbookRecordItemsTitleStandardArrayList.size(); i++) {
                             if (!carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))) {
                                 mainRecordItemDataBridge.MainRecordItemDelete(carbookRecordItemsStandardArrayList.get(i)._id);
-                                Log.i("iiiiiiiiiiMainRecordItemDelete", String.valueOf(carbookRecordItems.get(i).carbookRecordItemCategoryName));
-                                Log.i("iiiiiiiiiiMainRecordItemDelete", String.valueOf(carbookRecordItems.get(i).carbookRecordItemExpenseCost));
                             }
                         }
-                        Log.i("iiiiiiiiiicarbookRecordItems", String.valueOf(carbookRecordItems));
-                        Log.i("iiiiiiiiiicarbookRecordItemsStandardArrayList", String.valueOf(carbookRecordItemsStandardArrayList));
-                        Log.i("iiiiiiiiiicarbookRecordItemsTitleModifyArrayList", String.valueOf(carbookRecordItemsTitleModifyArrayList));
-                        Log.i("iiiiiiiiiicarbookRecordItemsTitleStandardArrayList", String.valueOf(carbookRecordItemsTitleStandardArrayList));
                         // 수정 체크용 리스트 변수 초기화
                         carbookRecordItemsTitleStandardArrayList = null;
                         carbookRecordItemsTitleModifyArrayList = null;
@@ -271,7 +255,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
                         String memoInsert;
                         String costInsert;
-                        Log.i("carbookRecordItemsasdasdsad", String.valueOf(carbookRecordItems.size()));
                         for (int i = 0; i < selectItemTitleList.size(); i++) {
                             if (carbookRecordItems.get(i) == null || carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
                                 memoInsert = "";

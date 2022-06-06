@@ -154,16 +154,15 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                     bundle.putStringArrayList("", );
                     message.setData(bundle);
                     message.what = 1;*/
+                    finish();
                     MaintenanceOtherRecordFragment.recordDataHandler.obtainMessage(1).sendToTarget();
                 } else {
                     Intent intent = new Intent(SelectMaintenanceItemActivity.this, MaintenanceOtherRecordActivity.class);
                     intent.putExtra("selectItemTitleList", beforeSelectItemTitleList);
                     startActivity(intent);
+                    finish();
                 }
                 Log.i("항목선택완료", String.valueOf(carbookRecordItems));
-                // 완료시 임시 항목 선택 리스트 초기화
-                //MainrecordActivity.removeBeforeSelectItemTitleList();
-                finish();
             }
         });
         // 클릭 이벤트를 지정한 후에 막아야 막힌다.
