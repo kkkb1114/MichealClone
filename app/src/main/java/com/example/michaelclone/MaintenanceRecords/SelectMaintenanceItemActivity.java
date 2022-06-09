@@ -12,7 +12,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.michaelclone.DataBase.CarbookRecordItem;
@@ -51,6 +55,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maintenance_records);
+
         context = this;
 
         // 뷰 초기화
@@ -67,26 +72,25 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         if (!isModify) { // 기록모드
             beforeSelectItemTitleListReset();
         } else { // 수정 모드
-            // 처음 선택 항목은 넣어놓는다. (항목 선택 화면에만 쓰이기에 들어올때마다 항상 클리어를 해줘야함)
-            beforeSelectItemTitleListReset();
-            for (int i = 0; i < carbookRecordItems.size(); i++){
-                beforeSelectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
-            }
-            if (beforeSelectItemTitleList.size() > 0) {
-                tv_itemCount.setText(String.valueOf(beforeSelectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
-                tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
-                tv_selectionConfirm.setClickable(true);
-            } else {
-                if (beforeSelectItemTitleList.size() <= 0) {
-                    tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
-                    tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
-                    tv_selectionConfirm.setClickable(false);
-                } else {
+                beforeSelectItemTitleListReset();
+                for (int i = 0; i < carbookRecordItems.size(); i++) {
+                    beforeSelectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
+                }
+                if (beforeSelectItemTitleList.size() > 0) {
                     tv_itemCount.setText(String.valueOf(beforeSelectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
                     tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
                     tv_selectionConfirm.setClickable(true);
+                } else {
+                    if (beforeSelectItemTitleList.size() <= 0) {
+                        tv_itemCount.setText(context.getResources().getString(R.string.PleaseSelectAnItem));
+                        tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#1A000000")));
+                        tv_selectionConfirm.setClickable(false);
+                    } else {
+                        tv_itemCount.setText(String.valueOf(beforeSelectItemTitleList.size() + context.getResources().getString(R.string.selectionCount)));
+                        tv_selectionConfirm.setTextColor(ColorStateList.valueOf(Color.parseColor("#80000000")));
+                        tv_selectionConfirm.setClickable(true);
+                    }
                 }
-            }
         }
     }
 
@@ -149,11 +153,6 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                 // if (ad_maintenancePage.getFragment(0) instanceof MaintenanceFragment && ad_maintenancePage.getFragment(1) instanceof OtherFragment){}
                 // 수정모드면 기록페이지의 핸들러를 작동시키며 작성모드면 인텐트로 리스트객체를 전달한다.
                 if (isModify) {
-                    Message message = new Message();
-                    /*Bundle bundle = new Bundle();
-                    bundle.putStringArrayList("", );
-                    message.setData(bundle);
-                    message.what = 1;*/
                     finish();
                     MaintenanceOtherRecordFragment.recordDataHandler.obtainMessage(1).sendToTarget();
                 } else {
@@ -162,7 +161,6 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
                     startActivity(intent);
                     finish();
                 }
-                Log.i("항목선택완료", String.valueOf(carbookRecordItems));
             }
         });
         // 클릭 이벤트를 지정한 후에 막아야 막힌다.
@@ -191,7 +189,7 @@ public class SelectMaintenanceItemActivity extends AppCompatActivity implements 
         }).attach();
     }
 
-    public void beforeSelectItemTitleListReset(){
+    public void beforeSelectItemTitleListReset() {
         if (MainrecordActivity.beforeSelectItemTitleList == null) {
             // 확인 누르기 전 선택 항목 데이터 리스트 객체 생성
             MainrecordActivity.createBeforeSelectItemTitleList();

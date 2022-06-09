@@ -2,6 +2,7 @@ package com.example.michaelclone.MainRecord;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.michaelclone.DataBase.CarbookRecord;
+import com.example.michaelclone.DataBase.CarbookRecordItem;
 import com.example.michaelclone.DataBase.MainRecordPage;
 import com.example.michaelclone.DataBase.CarbookRecord_Data;
 import com.example.michaelclone.MaintenanceRecords.MaintenanceOtherRecordActivity;
@@ -30,6 +33,8 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
     // 2022.05,09
     // 키값을 연, 월로 지정해놓고 데이터를 포지션 값으로 지정하여 연, 월에 데이터가 있을 경우 해당 포지션 값에만 연, 월 뷰를 VISIBLE 하도록 한다.
     HashMap<String, Integer> YearMonthBundleCheckHashMap = new HashMap<>();
+    ArrayList<CarbookRecordItem> mainRecordPageRecordItemArrayList_getDB = CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB;
+    ArrayList<MainRecordPage> mainRecordPageArrayList = CarbookRecord_Data.mainRecordPageArrayList;
 
     public MainRecordPageRecyclerViewAdapter(Context context) {
         this.context = context;
@@ -55,11 +60,9 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
          * 2. 연, 월 뷰는 해당 position의 연, 월값을 키값으로 YearMonthBundleCheckHashMap에 들어있는 position값과 같으면 VISIBLE이며 다르면 GONE 처리한다.
          *
          **/
-        if (CarbookRecord_Data.mainRecordPageArrayList.size() > 0) {
-
-            MainRecordPage page = CarbookRecord_Data.mainRecordPageArrayList.get(position);
+        if (mainRecordPageArrayList.size() > 0) {
             // 날짜를 정수로 바꿔 0.01을 곱해도 되긴 하는데 그냥 문자열을 잘라 사이에 .을 붙여 만들었다. (이게 나은 방법인가?)
-            String beforeDate = CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordExpendDate.substring(4, 8);
+            String beforeDate = mainRecordPageArrayList.get(position).carbookRecordExpendDate.substring(4, 8);
             String submonth = beforeDate.substring(0, 2);
             String day = beforeDate.substring(2, 4);
             // 누적 거리 , 처리를 위한 DecimalFormat 선언
@@ -68,93 +71,77 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
             // 날짜
             String date = submonth + "." + day;
             // 항목 개수
-            int count = +CarbookRecord_Data.mainRecordPageArrayList.get(position).count - 1;
+            int count = +mainRecordPageArrayList.get(position).count - 1;
             // 항목 타이틀
             String tv_mainrecordTitle;
             if (count <= 0) {
-                tv_mainrecordTitle = CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemCategoryName;
+                tv_mainrecordTitle = mainRecordPageArrayList.get(position).carbookRecordItemCategoryName;
             } else {
-                tv_mainrecordTitle = CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemCategoryName + " 외 " + count + "건";
+                tv_mainrecordTitle = mainRecordPageArrayList.get(position).carbookRecordItemCategoryName + " 외 " + count + "건";
             }
             // 누적 거리에 ,처리와 뒤에 거리 단위, 공백을 추가한 문자열을 위한 부분
-            String Distance = " " + decimalFormat.format((int) CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordTotalDistance) + " " +
+            String Distance = " " + decimalFormat.format((long) mainRecordPageArrayList.get(position).carbookRecordTotalDistance) + " " +
                     context.getResources().getString(R.string.km);
 
             // 총 금액에 넣을 문자열
-            String totalCost = "₩" + decimalFormat.format((int) CarbookRecord_Data.mainRecordPageArrayList.get(position).totalCost);
+            String totalCost = "₩" + decimalFormat.format((long) mainRecordPageArrayList.get(position).totalCost);
 
             // 월 총 금액
-            String monthCost = "₩" + decimalFormat.format(carbookRecord_data.mainRecordPageMonthCostCalculation(CarbookRecord_Data.mainRecordPageArrayList.get(position).month));
+            String monthCost = "₩" + decimalFormat.format(carbookRecord_data.mainRecordPageMonthCostCalculation(mainRecordPageArrayList.get(position).month));
             // 연 총 금액
-            String yearCost = "₩" + decimalFormat.format(carbookRecord_data.mainRecordPageYearCostCalculation(CarbookRecord_Data.mainRecordPageArrayList.get(position).year));
+            String yearCost = "₩" + decimalFormat.format(carbookRecord_data.mainRecordPageYearCostCalculation(mainRecordPageArrayList.get(position).year));
 
-                if (!YearMonthBundleCheckHashMap.containsKey(CarbookRecord_Data.mainRecordPageArrayList.get(position).year)){
-                    YearMonthBundleCheckHashMap.put(CarbookRecord_Data.mainRecordPageArrayList.get(position).year, position);
-                }
+            if (!YearMonthBundleCheckHashMap.containsKey(mainRecordPageArrayList.get(position).year)) {
+                YearMonthBundleCheckHashMap.put(mainRecordPageArrayList.get(position).year, position);
+            }
 
-                if (!YearMonthBundleCheckHashMap.containsKey(CarbookRecord_Data.mainRecordPageArrayList.get(position).month)){
-                    YearMonthBundleCheckHashMap.put(CarbookRecord_Data.mainRecordPageArrayList.get(position).month, position);
-                }
+            if (!YearMonthBundleCheckHashMap.containsKey(mainRecordPageArrayList.get(position).month)) {
+                YearMonthBundleCheckHashMap.put(mainRecordPageArrayList.get(position).month, position);
+            }
 
-                if (YearMonthBundleCheckHashMap.get(CarbookRecord_Data.mainRecordPageArrayList.get(position).year) == position){
-                    holder.Ln_year.setVisibility(View.VISIBLE);
-                    holder.tv_mainrecordYearCost.setText(yearCost);
-                    holder.tv_mainrecordYear.setText(CarbookRecord_Data.mainRecordPageArrayList.get(position).year);
-                }else {
-                    holder.Ln_year.setVisibility(View.GONE);
-                }
+            if (YearMonthBundleCheckHashMap.get(mainRecordPageArrayList.get(position).year) == position) {
+                holder.Ln_year.setVisibility(View.VISIBLE);
+                holder.tv_mainrecordYearCost.setText(yearCost);
+                holder.tv_mainrecordYear.setText(mainRecordPageArrayList.get(position).year);
+            } else {
+                holder.Ln_year.setVisibility(View.GONE);
+            }
 
-                if (YearMonthBundleCheckHashMap.get(CarbookRecord_Data.mainRecordPageArrayList.get(position).month) == position){
-                    holder.Ln_month.setVisibility(View.VISIBLE);
-                    holder.tv_mainrecordMonthCost.setText(monthCost);
-                    holder.tv_mainrecordMonth.setText(submonth);
-                }else {
-                    holder.Ln_month.setVisibility(View.GONE);
-                }
+            if (YearMonthBundleCheckHashMap.get(mainRecordPageArrayList.get(position).month) == position) {
+                holder.Ln_month.setVisibility(View.VISIBLE);
+                holder.tv_mainrecordMonthCost.setText(monthCost);
+                holder.tv_mainrecordMonth.setText(submonth);
+            } else {
+                holder.Ln_month.setVisibility(View.GONE);
+            }
 
             holder.tv_mainrecordDate.setText(date);
             holder.tv_mainrecordTitle.setText(tv_mainrecordTitle);
             holder.tv_mainrecordDistance.setText(Distance);
             holder.tv_mainrecordCost.setText(totalCost);
-            Log.i("메인화면첫째이름", CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemCategoryName);
-            Log.i("메인화면첫째메모", CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo);
-            /*if(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo.equals("")){
-                holder.tv_mainrecordMemo.setVisibility(View.GONE);
-            }else {
-                holder.tv_mainrecordMemo.setText(String.valueOf(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo));
-            }*/
-            for (int i=0; i<CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.size(); i++){
-                Log.i("으아아아아111", CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo);
-                Log.i("으아아아아111", String.valueOf(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordIsHidden));
-                if(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(i).carbookRecordItemIsHidden == 1){
-                    Log.i("으아아아아222", CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordItemExpenseMemo);
-                    Log.i("으아아아아222", String.valueOf(CarbookRecord_Data.mainRecordPageArrayList.get(position).carbookRecordIsHidden));
-                    holder.tv_mainrecordMemo.setVisibility(View.GONE);
-                }else {
-                    if(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(position).carbookRecordItemExpenseMemo.equals("")){
+            for (int i = 0; i < mainRecordPageRecordItemArrayList_getDB.size(); i++) {
+                if (mainRecordPageArrayList.get(position).id == mainRecordPageRecordItemArrayList_getDB.get(i).carbookRecordId) {
+                    if (TextUtils.isEmpty(mainRecordPageRecordItemArrayList_getDB.get(i).carbookRecordItemExpenseMemo)) {
                         holder.tv_mainrecordMemo.setVisibility(View.GONE);
-                    }else {
-                        holder.tv_mainrecordMemo.setText(String.valueOf(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(position).carbookRecordItemExpenseMemo));
+                    } else {
+                        holder.tv_mainrecordMemo.setText(String.valueOf(mainRecordPageRecordItemArrayList_getDB.get(i).carbookRecordItemExpenseMemo));
                     }
-                    Log.i("으아아아아333", CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(position).carbookRecordItemExpenseMemo);
-                    Log.i("으아아아아333", String.valueOf(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(position).carbookRecordItemIsHidden));
-                    Log.i("으아아아아333", String.valueOf(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(position)));
                     break;
                 }
             }
 
             ArrayList<String> nameList = new ArrayList<>();
             ArrayList<String> costList = new ArrayList<>();
-            for (int i2 = 0; i2 < CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.size(); i2++) {
+            for (int i2 = 0; i2 < mainRecordPageRecordItemArrayList_getDB.size(); i2++) {
 
-                if (CarbookRecord_Data.mainRecordPageArrayList.get(position).id == CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordId) {
-                    if (!CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemCategoryName.contains("null") &&
-                            !CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemExpenseCost.contains("null") &&
-                            CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemCategoryName != null &&
-                            CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemExpenseCost != null) {
+                if (mainRecordPageArrayList.get(position).id == mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordId) {
+                    if (!mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemCategoryName.contains("null") &&
+                            !mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemExpenseCost.contains("null") &&
+                            mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemCategoryName != null &&
+                            mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemExpenseCost != null) {
 
-                        nameList.add(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemCategoryName);
-                        costList.add(CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemExpenseCost);
+                        nameList.add(mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemCategoryName);
+                        costList.add(mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemExpenseCost);
                     }
                 }
             }
@@ -177,14 +164,14 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
         holder.rv_mainrecordItem.setLayoutManager(linearLayoutManager);
     }
 
-    public void moveRecordItemModifyPage(ViewHolder holder, int position){
+    public void moveRecordItemModifyPage(ViewHolder holder, int position) {
         holder.Ln_mainRecordItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 메인 기록 클릭해서 들어갈경우 수정모드로
                 MainrecordActivity.isModify = true;
                 Intent intent = new Intent(v.getContext(), MaintenanceOtherRecordActivity.class);
-                intent.putExtra("mainRecordItemCarbookRecordId", CarbookRecord_Data.mainRecordPageArrayList.get(position).id);
+                intent.putExtra("mainRecordItemCarbookRecordId", mainRecordPageArrayList.get(position).id);
                 context.startActivity(intent);
             }
         });
@@ -192,7 +179,7 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
 
     @Override
     public int getItemCount() {
-        return CarbookRecord_Data.mainRecordPageArrayList.size();
+        return mainRecordPageArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

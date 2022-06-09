@@ -28,7 +28,6 @@ public class CarbookRecordItem_DB {
                     + "'" + carbookRecordItem.carbookRecordItemCategoryName + "'" + ", " + "'" + carbookRecordItem.carbookRecordItemExpenseMemo + "'" + ", "
                     + "'" + carbookRecordItem.carbookRecordItemExpenseCost + "'" + " , " + carbookRecordItem.carbookRecordItemIsHidden + " , " + "'" + carbookRecordItem.carbookRecordItemRegTime + "'"
                     + " , " + "'" + carbookRecordItem.carbookRecordItemUpdateTime + "'" + " );");
-
             db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,13 +38,11 @@ public class CarbookRecordItem_DB {
         }
     }
 
-    public void MainRecordItemDB_update(CarbookRecordItem carbookRecordItem, int _id, int carbookRecordId) {
+    public void MainRecordItemDB_update(CarbookRecordItem carbookRecordItem, int _id) {
         SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
         try {
             db.beginTransaction();
-            Log.i("?????", String.valueOf(carbookRecordItem));
-            Log.i("?????", String.valueOf(_id));
-            db.execSQL("UPDATE carbookRecordItem SET _id = "+ _id +", carbookRecordId = " + carbookRecordItem.carbookRecordId + ", "
+            db.execSQL("UPDATE carbookRecordItem SET _id = " + _id + ", carbookRecordId = " + carbookRecordItem.carbookRecordId + ", "
                     + "carbookRecordItemCategoryCode = " + "'" + carbookRecordItem.carbookRecordItemCategoryCode + "'" + ","
                     + "carbookRecordItemCategoryName = " + "'" + carbookRecordItem.carbookRecordItemCategoryName + "'" + ","
                     + "carbookRecordItemExpenseMemo = " + "'" + carbookRecordItem.carbookRecordItemExpenseMemo + "'" + ","
@@ -58,47 +55,28 @@ public class CarbookRecordItem_DB {
             db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (db != null){
+        } finally {
+            if (db != null) {
                 // 위 쿼리 실행이 끝난후 해당 동작이 끝났다는것을 알림.
                 db.endTransaction();
             }
         }
     }
 
-    // 가끔 editText에서 에러터져서 null값이 들어가서 테스트환경에서 그런 데이터를 지우기위해 만든 메소드(원래는 delete를 하지않기에 쓰지 않는다.)
-    public void test_delete(int _id) {
-        try {
-            SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
-            db.execSQL("DELETE FROM carbookRecordItem WHERE _id =" + _id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void MainRecordItemDB_delete(int _id) {
         try {
             SQLiteDatabase db = MichaelClone_DBHelper.writeableDataBase;
-            db.execSQL("UPDATE carbookRecordItem SET carbookRecordItemIsHidden = "+ 1 +" WHERE _id = " + _id);
+            db.execSQL("UPDATE carbookRecordItem SET carbookRecordItemIsHidden = " + 1 + " WHERE _id = " + _id);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public ArrayList<CarbookRecordItem> getMainRecordItemList() {
-            /*ArrayList<MainRecordItem> mainRecordItems = new ArrayList<>();
-            mainRecordItems = getMainRecordItemArrayList();*/
-        return getMainRecordItemArrayList();
-    }
-
-    public ArrayList<CarbookRecordItem> getMainRecordItemArrayList() {
         try {
-            Cursor cursor = null;
+            Cursor cursor;
             cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordItemIsHidden = " + 0, null);
-
-            ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
-            carbookRecordItemArrayList = getMainRecordItemCursor(cursor, carbookRecordItemArrayList);
-            return carbookRecordItemArrayList;
+            return getMainRecordItemCursor(cursor);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,29 +86,24 @@ public class CarbookRecordItem_DB {
     public ArrayList<CarbookRecordItem> getMainRecordItemItemArrayList(int mainRecordItemCarbookRecordId) {
         try {
             Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecordItem WHERE carbookRecordId = " + mainRecordItemCarbookRecordId + " AND carbookRecordItemIsHidden = " + 0, null);
-            ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
-            carbookRecordItemArrayList = getMainRecordItemCursor(cursor, carbookRecordItemArrayList);
-            return carbookRecordItemArrayList;
+            return getMainRecordItemCursor(cursor);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private ArrayList<CarbookRecordItem> getMainRecordItemCursor(Cursor cursor, ArrayList<CarbookRecordItem> carbookRecordItems) {
+    private ArrayList<CarbookRecordItem> getMainRecordItemCursor(Cursor cursor) {
+        ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
         while (cursor.moveToNext()) {
             //todo 여기서 real타입 데이터를 string으로 받아서 데이터가 cursor.getString(5) => 5e+06 이렇게 받아와졌다.
             //todo 이걸 해결하기위해 cursor.getString을 cursor.getLong으로 바꾸었다.
             CarbookRecordItem carbookRecordItem = new CarbookRecordItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getString(3),
                     cursor.getString(4), cursor.getString(5), cursor.getInt(6), cursor.getString(7),
                     cursor.getString(8));
-
-            Log.i("비용불러옴", String.valueOf(cursor.getString(5)));
-
-            carbookRecordItems.add(carbookRecordItem);
+            carbookRecordItemArrayList.add(carbookRecordItem);
         }
         cursor.close();
-        return carbookRecordItems;
+        return carbookRecordItemArrayList;
     }
-
 }

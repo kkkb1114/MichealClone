@@ -280,7 +280,6 @@
             android:layout_marginRight="10dp"
             android:textColor="@color/blackTransparent_50"
             android:textSize="@dimen/mainhistoryPageYearTextSize"
-            android:text="zzz"
             android:padding="10dp"
             android:background="@drawable/vp_item_background_round"/>
 

@@ -30,7 +30,6 @@ public class MainrecordFragment extends Fragment {
     Context context;
     TabLayout tl_mainhistorypage;
     ArrayList<String> mainhistoryTabNameList = new ArrayList<>();
-    MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter;
 
     // 뷰페이저2
     private ViewPager2 vp_mainhistory;
@@ -40,14 +39,10 @@ public class MainrecordFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         context = getContext();
-        mainRecordPageRecyclerViewAdapter = new MainRecordPageRecyclerViewAdapter(context);
         View view = inflater.inflate(R.layout.fragment_mainrecordpage, container, false);
         setView(view);
         getMainrecordDataList();
-        setTabLayout();
-        // 핸들러 준비
-        initHandler();
-
+        setTabLayout(new MainRecordPageRecyclerViewAdapter(context));
         return view;
     }
 
@@ -57,7 +52,7 @@ public class MainrecordFragment extends Fragment {
 
     }
 
-    public void setTabLayout() {
+    public void setTabLayout(MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter) {
         mainhistoryTabNameList.add(getResources().getString(R.string.HistoryPageFullTab));
         mainhistoryTabNameList.add(getResources().getString(R.string.HistoryPageMaintenanceOthers));
 
@@ -79,36 +74,5 @@ public class MainrecordFragment extends Fragment {
 
         CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
         CarbookRecord_Data.mainRecordPageArrayList = mainRecordDataBridge.getMainRecordData();
-        Log.i("CarbookRecord_DatamainRecordPageArrayList", String.valueOf(CarbookRecord_Data.mainRecordPageArrayList));
-
-        // 가끔 editText에서 에러터져서 null값이 들어가서 테스트환경에서 그런 데이터를 지우기위해 만든 메소드(원래는 delete를 하지않기에 쓰지 않는다.)
-        //mainRecordItem_dataBridge.test_delete(37);
     }
-
-    public static Handler viewHandler = null;
-
-    private void initHandler() {
-        try {
-            viewHandler = new Handler(new Handler.Callback() {
-                @Override
-                public boolean handleMessage(@NonNull Message msg) {
-                    try {
-                        switch (msg.what) {
-                            case 1:
-                                /*Log.i("뷰핸들러", "시작");
-                                getMainrecordDataList();
-                                mainRecordPageRecyclerViewAdapter.notifyDataSetChanged();*/
-                                break;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return false;
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

@@ -27,9 +27,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableRow;
@@ -158,17 +160,17 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
         }
     }
 
-    public void setCarbookRecords(ArrayList<String> selectItemTitleList){
-        if(isModifyMode){
+    // 수정모드: db 데이터를 기준으로 데이터를 표시한다, 기록모드: 항목 선택화면에서 선택한 항목에 따라 항목 객체 리스트를 만들며 각 항목의 비어있는 데이터는 더미 데이터를 넣는다.
+    public void setCarbookRecords(ArrayList<String> selectItemTitleList) {
+        if (isModifyMode) {
             carbookRecords = MaintenanceOtherRecordActivity.carbookRecords;
             carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
-        }else {
+        } else {
             Time_DataBridge time_dataBridge = new Time_DataBridge();
             String nowTime = time_dataBridge.getRealTime();
             MaintenanceOtherRecordActivity.carbookRecordItems = new ArrayList<>();
             carbookRecordItems = MaintenanceOtherRecordActivity.carbookRecordItems;
-            Log.i("asdasdasdsad", String.valueOf(selectItemTitleList));
-            for (int i = 0; i < selectItemTitleList.size(); i++){
+            for (int i = 0; i < selectItemTitleList.size(); i++) {
                 carbookRecordItems.add(new CarbookRecordItem(
                         0,
                         carbookRecordId,
@@ -217,22 +219,6 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
     // 뷰들 예외처리 모음
     public void setViewAction() {
         // 누적 주행거리 천단위 콤마 적용
-        /*et_cumulativeMileage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String Mileage = v.getText().toString();
-                *//**
-         * 텍스트 두번 가져오면 ,가 포함되서 Long.parseLong가 안되는거다. 그래서 두번째 계산에서 터짐
-         * **//*
-                long cumulativeMileage = Long.parseLong(Mileage.replace(",", ""));
-                DecimalFormat decimalFormat = new DecimalFormat("###,###");
-                String calculatedCumulativeMileage = decimalFormat.format(cumulativeMileage);
-                et_cumulativeMileage.setText(calculatedCumulativeMileage);
-                return false;
-            }
-        });*/
-
-        et_cumulativeMileage.addTextChangedListener(textWatcherCumulativeMileage);
         et_cumulativeMileage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -242,46 +228,13 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                     et_cumulativeMileage.setText(cost.replace(",", ""));
                 } else {
                     String cost = et_cumulativeMileage.getText().toString();
-                    if (!cost.equals("") || !cost.equals("0")) {
+                    if (!(TextUtils.isEmpty(cost) || cost.equals("0"))) {
                         // 콤마 찍기 전에 먼저 DB에 넣을 HashMap에 넣고 콤마를 찍는다.
                         et_cumulativeMileage.setText(stringFormat.makeStringComma(cost));
                     }
                 }
             }
         });
-    }
-
-    // 텍스트 바뀔때마다 MainRecord_Data.mainRecordArrayList안에 있는 mainRecord에 데이터 삽입
-    // todo 일단 얘는 작성때마다의 동작은 대기
-    TextWatcher textWatcherCumulativeMileage = new TextWatcher() {
-
-        String CumulativeMileage = "";
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(CumulativeMileage)) {
-               
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-        }
-    };
-
-    // 천단위 콤마 메소드
-    protected String makeStringComma(String data) {
-        if (data.length() == 0) {
-            return "";
-        } else {
-            long value = Long.parseLong(data);
-            DecimalFormat format = new DecimalFormat("###,###");
-            return format.format(value);
-        }
     }
 
     public void setOnClick() {
@@ -306,9 +259,12 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                 setRepairState(1);
                 break;
             case R.id.tv_addRecordItem:
-                //requireActivity().finish();
-                Intent intent = new Intent(requireContext(), SelectMaintenanceItemActivity.class);
-                startActivity(intent);
+                try {
+                    Intent intent = new Intent(requireContext(), SelectMaintenanceItemActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
@@ -367,12 +323,9 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             for (int i = 0; i < carbookRecordItems.size(); i++) {
                 MainrecordActivitySelectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
             }
-            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, carbookRecordItems);
-        } else {
-            maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, carbookRecordItems);
         }
+        maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, carbookRecordItems);
         rv_MtOtRecorditemList.setAdapter(maintenanceOtherRecordRecyclerViewAdapter);
-        maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     // 뷰페이저 세팅
@@ -619,14 +572,10 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                     try {
                         switch (msg.what) {
                             case 1:
-                                /**
+                                /*
                                  * 1. 항목선택 화면에서 선택완료 버튼 클릭시 선택한 항목 문자열 리스트(해당 리스트는 전역변수이기에 MainrecordActivitySelectItemTitleList로 선언)
                                  *    를 이용하여 )
                                  * **/
-
-                                Log.i("항목선택완료핸들러시작전", String.valueOf(carbookRecordItems));
-                                // 항목 선택이 완료되면 MainrecordActivity.resultSelectItemTitleList에 MainrecordActivity.beforeSelectItemTitleList를 덮어 씌운다.
-                                //MainrecordActivity.resultSelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
                                 ArrayList<String> beforeSelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
                                 MainrecordActivitySelectItemTitleList.clear();
                                 MainrecordActivitySelectItemTitleList.addAll(beforeSelectItemTitleList);
@@ -648,41 +597,45 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                 }
 
                                 Time_DataBridge time_dataBridge = new Time_DataBridge();
-                                String nowTime = time_dataBridge.getRealTime();
-
-                                // 항목 객체 리스트를 이용한 (이름, 비용, 메모)리스트, 현재 시간 변수 생성
                                 int _id = 0;
                                 for (int i = 0; i < MainrecordActivitySelectItemTitleList.size(); i++) {
-                                    if (!carbookRecordItemNameList.contains(MainrecordActivitySelectItemTitleList.get(i))) {
-                                        // 나중에 업데이트를 위해 선택한 타이틀 리스트에 기준 타이틀 리스트를 비교하여 있다면 i번째 id 세팅
-
-                                        if(carbookRecordItemsTitleStandardArrayList.size() > i &&
-                                                MainrecordActivitySelectItemTitleList.contains(carbookRecordItemsTitleStandardArrayList.get(i))){
-                                            _id = carbookRecordItemsStandardArrayList.get(i)._id;
+                                    String Title = MainrecordActivitySelectItemTitleList.get(i);
+                                    if (carbookRecordItemsTitleStandardArrayList.contains(Title)) {
+                                        for (int i2 = 0; i2 < carbookRecordItemsTitleStandardArrayList.size(); i2++) {
+                                            if (Title.equals(carbookRecordItemsTitleStandardArrayList.get(i2))) {
+                                                _id = carbookRecordItemsStandardArrayList.get(i2)._id;
+                                            }
                                         }
+                                    }
+                                    if (!carbookRecordItemNameList.contains(Title)) {
+                                        // 나중에 업데이트를 위해 선택한 타이틀 리스트에 기준 타이틀 리스트를 비교하여 있다면 i번째 id 세팅
                                         // carbookRecordItemMemoList i번째에 데이터가 있다면 메모, 비용을 넣고 없다면 빈값을 넣는다.
                                         carbookRecordItemaddList.add(new CarbookRecordItem(
                                                 _id,
                                                 carbookRecordId,
                                                 "123",
-                                                MainrecordActivitySelectItemTitleList.get(i),
+                                                Title,
                                                 "",
                                                 "",
                                                 0,
-                                                nowTime,
-                                                nowTime));
+                                                time_dataBridge.getRealTime(),
+                                                time_dataBridge.getRealTime()));
                                     }
+                                    _id = 0;
                                 }
+
                                 // selectActivity에서 항목 선택 완료했을때 해당 핸들러로 완료한 리스트를 보내 해당 리스트를 기준으로 비교해서 포함되지 않은 기존 데이터는 지우고 기존에 없던
                                 // 데이터는 추가한다.
-                                for (int i=0; i<carbookRecordItemremoveList.size(); i++){
+                                for (int i = 0; i < carbookRecordItemremoveList.size(); i++) {
                                     carbookRecordItems.remove(carbookRecordItemremoveList.get(i));
                                 }
-                                for (int i=0; i<carbookRecordItemaddList.size(); i++){
+                                for (int i = 0; i < carbookRecordItemaddList.size(); i++) {
                                     carbookRecordItems.add(carbookRecordItemaddList.get(i));
                                 }
-                                maintenanceOtherRecordRecyclerViewAdapter.notifyDataSetChanged();
-                                Log.i("항목선택완료핸들러시작후", String.valueOf(carbookRecordItems));
+                                // 여기서 해당 어뎁터를 초기화해야한다. (그래야 기존 어뎁터가 가지고 있던 데이터를 가지고 있던 기본 변수들이 초기화되기 떄문)
+                                // 나는 계속 초기화하지 않고 하나를 계속 새로고침하여 해당 어뎁터안에 있는 editText에 계속 textWatcher가 add되었다.
+                                maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, carbookRecordItems);
+                                rv_MtOtRecorditemList.setAdapter(maintenanceOtherRecordRecyclerViewAdapter);
                                 break;
                         }
                     } catch (Exception e) {

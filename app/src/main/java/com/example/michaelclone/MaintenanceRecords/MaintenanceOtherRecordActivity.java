@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -81,13 +84,14 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
             // 해당 페이지에서 수정모드와 작성모드를 하나의 조건문으로 구분 지어야하기에 보기 쉽게 boolean값 isModifyMode으로 기준 잡았다.
             if (isModifyMode) {
 
-                // 확인 누르기 전 선택 항목 데이터 리스트 객체 생성
+                // 확인 누르기 전 선택 항목 데이터 리스트 초기화
                 if (MainrecordActivity.beforeSelectItemTitleList == null) {
                     MainrecordActivity.createBeforeSelectItemTitleList();
                 } else {
                     MainrecordActivity.removeBeforeSelectItemTitleList();
                     MainrecordActivity.createBeforeSelectItemTitleList();
                 }
+
                 Intent intent = getIntent();
                 carbookRecordId = getModifyIntentData(intent);
                 CarbookRecord_DataBridge carbookRecord_dataBridge = new CarbookRecord_DataBridge();
@@ -149,9 +153,7 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
      */
     public ArrayList<String> getItemSelectIntentDate() {
         if (MainrecordActivity.beforeSelectItemTitleList != null) {
-            //selectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
-            Log.i("123123123", String.valueOf(firstRecordSelectItemTitleList));
-            selectItemTitleList = firstRecordSelectItemTitleList; // todo 여기 건들임
+            selectItemTitleList = firstRecordSelectItemTitleList;
         }
         return selectItemTitleList;
     }
@@ -194,34 +196,23 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         // 데이터 수정 리스트 기준으로 돌려야 삭제까지 가능
                         /*기록과 수정 둘다 이 메모, 비용 세팅할때 타이틀은 carbookRecordItemsTitleStandardArrayList로 따로
                         가져가고 메모, 비용은 아이템 객체로 가져가서 문제인것 같다.*/
-                        Log.i("2222222222222222222222", String.valueOf(carbookRecordItems));
-                        for (int i = 0; i < carbookRecordItems.size(); i++) {
-                            if (carbookRecordItems.size() > i) {
-                                if (carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
+                        for (int i = 0; i < carbookRecordItemsTitleModifyArrayList.size(); i++) {
+                            if (!carbookRecordItemsTitleStandardArrayList.contains(carbookRecordItemsTitleModifyArrayList.get(i))) {
+                                if (carbookRecordItems.size() > i) {
+                                    if (carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
+                                        memo = "";
+                                    } else {
+                                        memo = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
+                                    }
+                                    if (carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
+                                        cost = "0";
+                                    } else {
+                                        cost = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
+                                    }
+                                } else {
                                     memo = "";
-                                } else {
-                                    memo = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
-                                }
-                                if (carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
                                     cost = "0";
-                                } else {
-                                    cost = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
                                 }
-                            } else {
-                                memo = "";
-                                cost = "0";
-                            }
-
-                            if (carbookRecordItemsTitleStandardArrayList.contains(carbookRecordItemsTitleModifyArrayList.get(i))) {
-                                mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordId,
-                                        "123",
-                                        carbookRecordItems.get(i).carbookRecordItemCategoryName,
-                                        memo,
-                                        cost,
-                                        0,
-                                        nowTime,
-                                        nowTime), carbookRecordItems.get(i)._id, carbookRecordItems.get(i).carbookRecordId);
-                            } else {
                                 mainRecordItemDataBridge.MainRecordItemInsert(new CarbookRecordItem(0, carbookRecordId,
                                         "123",
                                         carbookRecordItemsTitleModifyArrayList.get(i),
@@ -233,6 +224,34 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                             }
                         }
 
+                        for (int i = 0; i < carbookRecordItemsTitleModifyArrayList.size(); i++) {
+                            if (carbookRecordItemsTitleStandardArrayList.contains(carbookRecordItemsTitleModifyArrayList.get(i))) {
+                                if (carbookRecordItems.size() > i) {
+                                    if (carbookRecordItems.get(i).carbookRecordItemExpenseMemo.equals("")) {
+                                        memo = "";
+                                    } else {
+                                        memo = carbookRecordItems.get(i).carbookRecordItemExpenseMemo;
+                                    }
+                                    if (carbookRecordItems.get(i).carbookRecordItemExpenseCost.equals("")) {
+                                        cost = "0";
+                                    } else {
+                                        cost = carbookRecordItems.get(i).carbookRecordItemExpenseCost;
+                                    }
+                                } else {
+                                    memo = "";
+                                    cost = "0";
+                                }
+                                mainRecordItemDataBridge.MainRecordItemUpdate(new CarbookRecordItem(carbookRecordItems.get(i)._id, carbookRecordId,
+                                        "123",
+                                        carbookRecordItems.get(i).carbookRecordItemCategoryName,
+                                        memo,
+                                        cost,
+                                        0,
+                                        nowTime,
+                                        nowTime), carbookRecordItems.get(i)._id);
+                            }
+                        }
+
                         // 수정, 삭제 후에는 수정된 리스트를 기준으로 i번째 기준 리스트 id가 없다면 insert
                         for (int i = 0; i < carbookRecordItemsTitleStandardArrayList.size(); i++) {
                             if (!carbookRecordItemsTitleModifyArrayList.contains(carbookRecordItemsTitleStandardArrayList.get(i))) {
@@ -241,7 +260,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                         }
                         // 수정 체크용 리스트 변수 초기화
                         carbookRecordItemsTitleStandardArrayList = null;
-                        carbookRecordItemsTitleModifyArrayList = null;
                     } else { // < 작성 모드 >
 
                         // 기록 테이블은 하나씩 저장되니 반복문 필요 없다.
@@ -301,7 +319,8 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
     public void setFragment(int fragment, ArrayList<String> selectItemTitleList) {
         fragmentManager = getSupportFragmentManager();
-        maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment(selectItemTitleList, carbookRecordId, isModifyMode, carbookRecordItemsTitleStandardArrayList, carbookRecordItemsStandardArrayList);
+        maintenanceOtherRecordFragment = new MaintenanceOtherRecordFragment(selectItemTitleList, carbookRecordId, isModifyMode, carbookRecordItemsTitleStandardArrayList,
+                carbookRecordItemsStandardArrayList);
         locationSearchFragment = new LocationSearchFragment();
         fragmentTransaction = fragmentManager.beginTransaction();
         switch (fragment) {
@@ -325,7 +344,6 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         if (isModifyMode) {
             CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
             carbookRecords = mainRecordDataBridge.getSelectCarbookRecord(carbookRecordId);
-            Log.i("carbookRecords", String.valueOf(carbookRecords));
 
             CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
             carbookRecordItems = carbookRecordItem_dataBridge.getMainRecordItemItemData(carbookRecordId);
@@ -336,5 +354,19 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
                 selectItemTitleList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
             }
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View view = getCurrentFocus();
+        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+            int scrcoords[] = new int[2];
+            view.getLocationOnScreen(scrcoords);
+            float x = ev.getRawX() + view.getLeft() - scrcoords[0];
+            float y = ev.getRawY() + view.getTop() - scrcoords[1];
+            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
+                ((InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

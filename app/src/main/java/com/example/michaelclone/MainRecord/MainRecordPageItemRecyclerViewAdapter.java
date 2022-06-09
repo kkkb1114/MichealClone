@@ -1,6 +1,7 @@
 package com.example.michaelclone.MainRecord;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,10 +48,9 @@ public class MainRecordPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
             cost = costList.get(position);
         }
 
-        if(cost.equals("")){
+        if(TextUtils.isEmpty(cost)){
             costResult = "₩ 0";
         }else {
-            Log.i("계산", cost);
             // 항목 금액
             costResult = "₩ " + decimalFormat.format(Long.parseLong(cost));
         }

@@ -113,7 +113,6 @@ public class MaintenanceRecyclerViewAdapter extends RecyclerView.Adapter<Mainten
          * 2. itemTitleList를 기준으로 for문을 돌려 carbookRecordItemTitleList에 문자열이 있다면 해당 회차는 checkedHashMap_maintenance에 true값을 넣는다.
          * **/
         if (carbookRecordItems != null) {
-
             for (int i = 0; i < itemTitleList.size(); i++) {
                 if (beforeSelectItemTitleList.contains(itemTitleList.get(i))) {
                     checkedHashMap_maintenance.put(i, true);
