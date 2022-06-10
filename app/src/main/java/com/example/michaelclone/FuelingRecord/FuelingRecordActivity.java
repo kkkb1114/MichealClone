@@ -243,7 +243,7 @@ public class FuelingRecordActivity extends AppCompatActivity {
                     public void onActivityResult(ActivityResult result) {
                         if (result != null){
                             data_Record = new Data_Record();
-                            if (data_Record.getType() == 0 && result.getResultCode() == RESULT_OK) { //todo 카메라
+                            if (data_Record.getType() == 0 && result.getResultCode() == RESULT_OK) { // 카메라
                                 Intent intent = result.getData();
 
                                 //cropImage();
@@ -264,7 +264,7 @@ public class FuelingRecordActivity extends AppCompatActivity {
                                 }
                                 // 리사이클러뷰 새로고침
                                 vpAp_fueling.notifyDataSetChanged();
-                            }else if (data_Record.getType() == 1 && result.getResultCode() == RESULT_OK){ //todo 앨범
+                            }else if (data_Record.getType() == 1 && result.getResultCode() == RESULT_OK){ // 앨범
 
                                 // 여러장을 선택 가능하게 해놓았기에 getClipData()에서 가져와야한다.
                                 if (result != null){

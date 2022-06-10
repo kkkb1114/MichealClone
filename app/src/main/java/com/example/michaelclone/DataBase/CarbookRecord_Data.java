@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class CarbookRecord_Data {
 
     public static ArrayList<CarbookRecordItem> mainRecordPageRecordItemArrayList_getDB = new ArrayList<>();
-
     public static ArrayList<MainRecordPage> mainRecordPageArrayList = new ArrayList<>();
 
     // 연별 비용 계산 메소드

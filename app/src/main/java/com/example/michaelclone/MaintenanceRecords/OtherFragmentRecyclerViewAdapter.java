@@ -34,7 +34,7 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
     MaintenanceRecyclerViewAdapter maintenanceRecyclerViewAdapter;
     boolean otherSingleItemboolean = false;
     // 단일 항목 클릭시 해당 단일 항목만 block 처리를 안하기 위한 예외처리용 변수
-    String singleItemTitle = "null";
+    String singleItemTitle = "";
     // itemBlock()메소드는 기타항목에서 단일 항목을 클릭했을때만 돌아야하기에 해당 boolean값으로 조건을 건다.
     boolean isExecutionViewHandler = false;
 
@@ -228,7 +228,7 @@ public class OtherFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Other
 
             } else {
                 otherSingleItemboolean = false;
-                singleItemTitle = "null";
+                singleItemTitle = "";
                 singleItemTitleList.remove(holder.tv_other_itemTitle.getText().toString());
 
                 // 새로운

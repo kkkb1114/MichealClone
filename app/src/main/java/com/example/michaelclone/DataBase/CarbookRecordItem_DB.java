@@ -96,8 +96,6 @@ public class CarbookRecordItem_DB {
     private ArrayList<CarbookRecordItem> getMainRecordItemCursor(Cursor cursor) {
         ArrayList<CarbookRecordItem> carbookRecordItemArrayList = new ArrayList<>();
         while (cursor.moveToNext()) {
-            //todo 여기서 real타입 데이터를 string으로 받아서 데이터가 cursor.getString(5) => 5e+06 이렇게 받아와졌다.
-            //todo 이걸 해결하기위해 cursor.getString을 cursor.getLong으로 바꾸었다.
             CarbookRecordItem carbookRecordItem = new CarbookRecordItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getString(3),
                     cursor.getString(4), cursor.getString(5), cursor.getInt(6), cursor.getString(7),
                     cursor.getString(8));

@@ -30,7 +30,6 @@ public class MainrecordFragment extends Fragment {
     Context context;
     TabLayout tl_mainhistorypage;
     ArrayList<String> mainhistoryTabNameList = new ArrayList<>();
-
     // 뷰페이저2
     private ViewPager2 vp_mainhistory;
     private MainRecordPageViewPagerAdapter ad_mainhistory;
@@ -49,16 +48,13 @@ public class MainrecordFragment extends Fragment {
     public void setView(View view) {
         tl_mainhistorypage = view.findViewById(R.id.tl_mainhistorypage);
         vp_mainhistory = view.findViewById(R.id.vp_maintenanceOther);
-
     }
 
     public void setTabLayout(MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter) {
         mainhistoryTabNameList.add(getResources().getString(R.string.HistoryPageFullTab));
         mainhistoryTabNameList.add(getResources().getString(R.string.HistoryPageMaintenanceOthers));
-
         ad_mainhistory = new MainRecordPageViewPagerAdapter(requireActivity(), 2, context, mainRecordPageRecyclerViewAdapter);
         vp_mainhistory.setAdapter(ad_mainhistory);
-
         new TabLayoutMediator(tl_mainhistorypage, vp_mainhistory, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
@@ -71,7 +67,6 @@ public class MainrecordFragment extends Fragment {
     public void getMainrecordDataList() {
         CarbookRecordItem_DataBridge carbookRecordItem_dataBridge = new CarbookRecordItem_DataBridge();
         CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB = carbookRecordItem_dataBridge.MainRecordItemSelect();
-
         CarbookRecord_DataBridge mainRecordDataBridge = new CarbookRecord_DataBridge();
         CarbookRecord_Data.mainRecordPageArrayList = mainRecordDataBridge.getMainRecordData();
     }

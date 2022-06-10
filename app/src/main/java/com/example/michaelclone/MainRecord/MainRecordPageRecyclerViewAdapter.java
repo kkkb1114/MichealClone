@@ -30,7 +30,6 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
     Context context;
     CarbookRecord_Data carbookRecord_data;
 
-    // 2022.05,09
     // 키값을 연, 월로 지정해놓고 데이터를 포지션 값으로 지정하여 연, 월에 데이터가 있을 경우 해당 포지션 값에만 연, 월 뷰를 VISIBLE 하도록 한다.
     HashMap<String, Integer> YearMonthBundleCheckHashMap = new HashMap<>();
     ArrayList<CarbookRecordItem> mainRecordPageRecordItemArrayList_getDB = CarbookRecord_Data.mainRecordPageRecordItemArrayList_getDB;
@@ -54,11 +53,9 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         /**
          * 1. YearMonthBundleCheckHashMap기준으로 해당 해쉬맵에 해당 position의 연, 월이 들어있지 않으면 연, 월은 키값 해당 position값은 value로 넣고 들어있으면 넘어간다.
          * 2. 연, 월 뷰는 해당 position의 연, 월값을 키값으로 YearMonthBundleCheckHashMap에 들어있는 position값과 같으면 VISIBLE이며 다르면 GONE 처리한다.
-         *
          **/
         if (mainRecordPageArrayList.size() > 0) {
             // 날짜를 정수로 바꿔 0.01을 곱해도 되긴 하는데 그냥 문자열을 잘라 사이에 .을 붙여 만들었다. (이게 나은 방법인가?)
@@ -67,25 +64,24 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
             String day = beforeDate.substring(2, 4);
             // 누적 거리 , 처리를 위한 DecimalFormat 선언
             DecimalFormat decimalFormat = new DecimalFormat("###,###");
-
             // 날짜
             String date = submonth + "." + day;
             // 항목 개수
             int count = +mainRecordPageArrayList.get(position).count - 1;
             // 항목 타이틀
             String tv_mainrecordTitle;
+
             if (count <= 0) {
                 tv_mainrecordTitle = mainRecordPageArrayList.get(position).carbookRecordItemCategoryName;
             } else {
                 tv_mainrecordTitle = mainRecordPageArrayList.get(position).carbookRecordItemCategoryName + " 외 " + count + "건";
             }
+
             // 누적 거리에 ,처리와 뒤에 거리 단위, 공백을 추가한 문자열을 위한 부분
             String Distance = " " + decimalFormat.format((long) mainRecordPageArrayList.get(position).carbookRecordTotalDistance) + " " +
                     context.getResources().getString(R.string.km);
-
             // 총 금액에 넣을 문자열
             String totalCost = "₩" + decimalFormat.format((long) mainRecordPageArrayList.get(position).totalCost);
-
             // 월 총 금액
             String monthCost = "₩" + decimalFormat.format(carbookRecord_data.mainRecordPageMonthCostCalculation(mainRecordPageArrayList.get(position).month));
             // 연 총 금액
@@ -133,11 +129,8 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
             ArrayList<String> nameList = new ArrayList<>();
             ArrayList<String> costList = new ArrayList<>();
             for (int i2 = 0; i2 < mainRecordPageRecordItemArrayList_getDB.size(); i2++) {
-
                 if (mainRecordPageArrayList.get(position).id == mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordId) {
-                    if (!mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemCategoryName.contains("null") &&
-                            !mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemExpenseCost.contains("null") &&
-                            mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemCategoryName != null &&
+                    if (mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemCategoryName != null &&
                             mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemExpenseCost != null) {
 
                         nameList.add(mainRecordPageRecordItemArrayList_getDB.get(i2).carbookRecordItemCategoryName);
@@ -145,7 +138,6 @@ public class MainRecordPageRecyclerViewAdapter extends RecyclerView.Adapter<Main
                     }
                 }
             }
-
             // 각 기록에 속한 항목 삽입
             setViewHolderRecyclerView(holder, nameList, costList);
         }

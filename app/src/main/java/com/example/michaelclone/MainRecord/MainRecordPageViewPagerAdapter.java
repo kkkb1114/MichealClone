@@ -12,8 +12,6 @@ import java.util.ArrayList;
 public class MainRecordPageViewPagerAdapter extends FragmentStateAdapter {
 
     int pageNum;
-    ArrayList<Integer> ViewTypeList = new ArrayList<>();
-
     MainRecordPageRecyclerViewAdapter mainRecordPageRecyclerViewAdapter;
     Context context;
 
@@ -41,5 +39,4 @@ public class MainRecordPageViewPagerAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return pageNum;
     }
-
 }

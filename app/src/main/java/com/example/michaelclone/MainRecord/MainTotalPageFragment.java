@@ -47,9 +47,7 @@ public class MainTotalPageFragment extends Fragment {
     public void setRecyclerView(RecyclerView rv_mainTotalPage){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-
         rv_mainTotalPage.setLayoutManager(linearLayoutManager);
         rv_mainTotalPage.setAdapter(mainRecordPageRecyclerViewAdapter);
-        mainRecordPageRecyclerViewAdapter.notifyDataSetChanged();
     }
 }

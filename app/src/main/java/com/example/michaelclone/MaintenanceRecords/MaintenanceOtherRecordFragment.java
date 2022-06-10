@@ -471,7 +471,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                     public void onActivityResult(ActivityResult result) {
                         if (result != null) {
                             data_record = new Data_Record();
-                            if (data_record.getType() == 0 && result.getResultCode() == RESULT_OK) { //todo 카메라
+                            if (data_record.getType() == 0 && result.getResultCode() == RESULT_OK) { // 카메라
 
                                 // 처음 촬영을 하고 크롭을 시킨다.
                                 if (!imageCrop) {
@@ -502,7 +502,7 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                     imageCrop = false;
                                 }
 
-                            } else if (data_record.getType() == 1 && result.getResultCode() == RESULT_OK) { //todo 앨범
+                            } else if (data_record.getType() == 1 && result.getResultCode() == RESULT_OK) { // 앨범
 
                                 // 여러장을 선택 가능하게 해놓았기에 getClipData()에서 가져와야한다.
                                 if (result != null) {
@@ -579,24 +579,23 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
                                 ArrayList<String> beforeSelectItemTitleList = MainrecordActivity.beforeSelectItemTitleList;
                                 MainrecordActivitySelectItemTitleList.clear();
                                 MainrecordActivitySelectItemTitleList.addAll(beforeSelectItemTitleList);
-
-                                // 기존 항목 객체 리스트를 기준으로 i번째 이름이 수정된 항목 static 이름 리스트에 없다면 제거 리스트에 올린후 마지막에 한번에 지운다.
-                                ArrayList<CarbookRecordItem> carbookRecordItemremoveList = new ArrayList<>();
-                                for (int i = 0; i < carbookRecordItems.size(); i++) {
-                                    if (!MainrecordActivitySelectItemTitleList.contains(carbookRecordItems.get(i).carbookRecordItemCategoryName)) {
-                                        carbookRecordItemremoveList.add(carbookRecordItems.get(i));
-                                    }
-                                }
-
+                                Time_DataBridge time_dataBridge = new Time_DataBridge();
                                 ArrayList<String> carbookRecordItemNameList = new ArrayList<>();
                                 ArrayList<CarbookRecordItem> carbookRecordItemaddList = new ArrayList<>();
+                                ArrayList<CarbookRecordItem> carbookRecordItemremoveList = new ArrayList<>();
 
                                 // 항목 객체 리스트를 이용한 이름, 비용, 메모 리스트 생성
                                 for (int i = 0; i < carbookRecordItems.size(); i++) {
                                     carbookRecordItemNameList.add(carbookRecordItems.get(i).carbookRecordItemCategoryName);
                                 }
 
-                                Time_DataBridge time_dataBridge = new Time_DataBridge();
+                                // 기존 항목 객체 리스트를 기준으로 i번째 이름이 수정된 항목 static 이름 리스트에 없다면 제거 리스트에 올린후 마지막에 한번에 지운다.
+                                for (int i = 0; i < carbookRecordItemNameList.size(); i++) {
+                                    if (!MainrecordActivitySelectItemTitleList.contains(carbookRecordItemNameList.get(i))) {
+                                        carbookRecordItemremoveList.add(carbookRecordItems.get(i));
+                                    }
+                                }
+
                                 int _id = 0;
                                 for (int i = 0; i < MainrecordActivitySelectItemTitleList.size(); i++) {
                                     String Title = MainrecordActivitySelectItemTitleList.get(i);
@@ -626,12 +625,9 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
 
                                 // selectActivity에서 항목 선택 완료했을때 해당 핸들러로 완료한 리스트를 보내 해당 리스트를 기준으로 비교해서 포함되지 않은 기존 데이터는 지우고 기존에 없던
                                 // 데이터는 추가한다.
-                                for (int i = 0; i < carbookRecordItemremoveList.size(); i++) {
-                                    carbookRecordItems.remove(carbookRecordItemremoveList.get(i));
-                                }
-                                for (int i = 0; i < carbookRecordItemaddList.size(); i++) {
-                                    carbookRecordItems.add(carbookRecordItemaddList.get(i));
-                                }
+                                // 흠 이게 All메소드를 쓰면 문제가 없을것 같긴 한데 이게 정말 순서가 꼬이지 않고 들어갈까?
+                                carbookRecordItems.removeAll(carbookRecordItemremoveList);
+                                carbookRecordItems.addAll(carbookRecordItemaddList);
                                 // 여기서 해당 어뎁터를 초기화해야한다. (그래야 기존 어뎁터가 가지고 있던 데이터를 가지고 있던 기본 변수들이 초기화되기 떄문)
                                 // 나는 계속 초기화하지 않고 하나를 계속 새로고침하여 해당 어뎁터안에 있는 editText에 계속 textWatcher가 add되었다.
                                 maintenanceOtherRecordRecyclerViewAdapter = new MaintenanceOtherRecordRecyclerViewAdapter(context, carbookRecordItems);
@@ -648,6 +644,4 @@ public class MaintenanceOtherRecordFragment extends Fragment implements View.OnC
             e.printStackTrace();
         }
     }
-
-
 }

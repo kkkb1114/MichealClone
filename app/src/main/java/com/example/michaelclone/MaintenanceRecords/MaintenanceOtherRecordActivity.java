@@ -58,14 +58,11 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
     Date mDate;
     String selectDate;
 
-    // editText의 텍스트가 바뀔때마다 실시간으로 변경이 되어야 하기에 해당 동작마다 다른 클래스의 핸들러를 타서 add 방식이 괜찮을까 싶어 static으로 했다.
-    // TODO 이 해쉬맵들을 전부 지우고 해당 해쉬맵이 put되는곳에 항목 아이템 객체에 set시킨다. 1-3
     public static int carbookRecordRepairMode = 0;
-    // 일단 static으로 만들어 놓고 실제 차계부 만들때는 로직을 바꾸는게 좋을 것 같다.
     public static CarbookRecord carbookRecords = null;
     public static ArrayList<CarbookRecordItem> carbookRecordItems = null;
     ArrayList<String> firstRecordSelectItemTitleList = new ArrayList<>();
-    // 나중에 항목 수정사항 적용을 위한 기준 리스트
+    // 나중에 항목 수정사항 적용을 위한 최초 항목 데이터 리스트
     ArrayList<CarbookRecordItem> carbookRecordItemsStandardArrayList = new ArrayList<>();
     ArrayList<String> carbookRecordItemsTitleStandardArrayList = new ArrayList<>();
 
@@ -122,10 +119,11 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
 
     // 상단 날짜 텍스트뷰 동작 세팅
     public void setActionView() {
-        // carbookRecord가 null이 아니면 수정모드 / carbookRecord가 null이면 작성 모드인 것이다.
-        if (carbookRecord != null) {
-            Date date = getDate(carbookRecord.carbookRecordExpendDate);
-            tv_date.setText(getStrDate(date) + calendarData.getDateDay(date));
+        if (isModifyMode) {
+            if (carbookRecord != null) {
+                Date date = getDate(carbookRecord.carbookRecordExpendDate);
+                tv_date.setText(getStrDate(date) + calendarData.getDateDay(date));
+            }
         } else {
             mNow = System.currentTimeMillis(); // 디바이스 기준 표준 시간 적용
             mDate = new Date(mNow);            // Date 객체에 디바이스 표준 시간 적용
@@ -356,17 +354,29 @@ public class MaintenanceOtherRecordActivity extends AppCompatActivity implements
         }
     }
 
+    /*키보드가 올라간상태에서 항목 변경버튼을 클릭하여 화면으로 넘어갈시 키보드 잔상이 남아서
+    현재 엑티비티에서 editText를 클릭하여 키보드가 올라왔을때 해당 editText가 아닌 다른 영역을 클릭할 경우 키보드가 내려가게 함.*/
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        View view = getCurrentFocus();
-        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
-            int scrcoords[] = new int[2];
-            view.getLocationOnScreen(scrcoords);
+        View view = getCurrentFocus();          // 현재 터치 위치
+
+        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP
+                || ev.getAction() == MotionEvent.ACTION_MOVE)
+                && view instanceof EditText
+                && !view.getClass().getName().startsWith("android.webkit.")) {
+            // view 의 id 가 명시되어있지 않은 다른 부분을 터치 시
+            int[] scrcoords = new int[2];
+            view.getLocationOnScreen(scrcoords);        // 0 은 x 마지막 터치 위치에서 x 값
+            // 1은 y 마지막 터치 위치에서 y 값
+
             float x = ev.getRawX() + view.getLeft() - scrcoords[0];
             float y = ev.getRawY() + view.getTop() - scrcoords[1];
-            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
-                ((InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+
+            if (x < view.getLeft() || x > view.getRight()
+                    || y < view.getTop() || y > view.getBottom())
+                ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
         }
+
         return super.dispatchTouchEvent(ev);
     }
 }

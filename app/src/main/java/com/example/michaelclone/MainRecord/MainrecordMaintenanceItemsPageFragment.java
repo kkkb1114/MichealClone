@@ -37,7 +37,6 @@ public class MainrecordMaintenanceItemsPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_mainrecord_maintenanceitemspage, container, false);
         setView(view);
         setRecyclerView(rv_mainrecordMaintenanceItemspage);
-
         return view;
     }
 
@@ -48,7 +47,6 @@ public class MainrecordMaintenanceItemsPageFragment extends Fragment {
     public void setRecyclerView(RecyclerView rv_mainTotalPage){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-
         rv_mainTotalPage.setLayoutManager(linearLayoutManager);
         rv_mainTotalPage.setAdapter(mainRecordPageRecyclerViewAdapter);
         mainRecordPageRecyclerViewAdapter.notifyDataSetChanged();

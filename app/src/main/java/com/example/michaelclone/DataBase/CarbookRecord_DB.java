@@ -88,7 +88,6 @@ public class CarbookRecord_DB {
             Cursor cursor = MichaelClone_DBHelper.readableDataBase.rawQuery("SELECT * FROM carbookRecord WHERE _id = " + _id + " AND carbookRecordIsHidden = " + 0, null);
             CarbookRecord carbookRecords;
             carbookRecords = getMainRecordCursorSingle(cursor);
-
             return carbookRecords;
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,7 +124,6 @@ public class CarbookRecord_DB {
         while (cursor.moveToNext()) {
             CarbookRecord carbookRecord = new CarbookRecord(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4),
                     cursor.getString(5), cursor.getString(6));
-
             CarbookRecords.add(carbookRecord);
         }
         cursor.close();
@@ -138,7 +136,6 @@ public class CarbookRecord_DB {
             carbookRecord = new CarbookRecord(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4),
                     cursor.getString(5), cursor.getString(6));
         }
-
         cursor.close();
         return carbookRecord;
     }
